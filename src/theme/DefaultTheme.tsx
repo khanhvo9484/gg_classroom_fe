@@ -1,14 +1,13 @@
 import { createTheme } from "@mui/material/styles";
-import { shadows } from "./Shadows";
 
 const baselightTheme = createTheme({
   direction: "ltr",
   palette: {
-    primary: {
-      main: "#181823",
-      light: "#ECF2FF",
-      dark: "#0c3ba9b1",
-    },
+    // primary: {
+    //   main: "#181823",
+    //   light: "#ECF2FF",
+    //   dark: "#0c3ba9b1",
+    // },
     secondary: {
       main: "#9ec8f6",
       light: "#E8F7FF",
