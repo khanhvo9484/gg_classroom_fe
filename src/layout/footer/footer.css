@@ -1,0 +1,10 @@
+.info-text{
+    display: flex;
+    align-items: center;
+    margin-bottom: 9.6px;
+}
+
+.info-text > .icon{
+    color: #1976d2;
+    margin-right: 4px;
+}

@@ -2,16 +2,15 @@ import Avatar from "@mui/material/Avatar";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
+import { MemberModel } from "../../../models/member.model";
 
-export default function CardComponent({ member }) {
+interface Props {
+  member: MemberModel;
+}
+
+const CardComponent: React.FC<Props> = ({ member }) => {
   return (
     <Card sx={{ minWidth: 345 }}>
-      {/* <CardMedia
-        sx={{ height: 200 }}
-        image={member.image}
-        title="green iguana"
-      /> */}
-
       <CardContent
         sx={{
           textAlign: "center",
@@ -34,4 +33,6 @@ export default function CardComponent({ member }) {
       </CardContent>
     </Card>
   );
-}
+};
+
+export default CardComponent;

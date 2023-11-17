@@ -12,7 +12,11 @@ const pages = ["Tổng quan", "Tính năng", "Khách hàng"];
 
 function Header() {
   return (
-    <AppBar position="static" color="transparent">
+    <AppBar
+      position="static"
+      color="transparent"
+      sx={{ boxShadow: "0px 2px 4px -1px rgba(0,0,0,0.2)" }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />

@@ -20,8 +20,6 @@ const LandingPage = () => {
             sx={{
               display: "flex",
               justifyContent: "center",
-              width: "200px",
-              flexGrow: 1,
             }}
           >
             <Typography variant="h3">
@@ -47,13 +45,13 @@ const LandingPage = () => {
           <Box
             component="img"
             src={imageEdu}
-            sx={{ objectFit: "fit", width: "600px" }}
+            sx={{ objectFit: "fit", width: "580px" }}
           />
         </Box>
       </Container>
       <Box sx={{ backgroundColor: "" }}>
         <Container maxWidth="lg" sx={{ py: 3 }}>
-          <Typography variant="h5">Đội ngũ chúng tôi</Typography>
+          <Typography variant="h5">Đội ngũ của chúng tôi</Typography>
           <Stack
             spacing={4}
             direction={"row"}

@@ -1,24 +1,25 @@
-import image8 from "../assets/images/8.png";
-import image7 from "../assets/images/7.png";
-import image1 from "../assets/images/1.png";
+import image8 from "../assets/images/khanh.png";
+import image7 from "../assets/images/khang.png";
+import image1 from "../assets/images/jack.png";
+import { MemberModel } from "../models/member.model";
 
-export const members = [
+export const members: MemberModel[] = [
   {
     name: "Khang Duy",
     image: image7,
     description:
-      "Khang, với tư duy phân tích sắc bén, thường xuyên đắm chìm trong thế giới mã nguồn mở và lập trình. Sở thích của Khang không chỉ dừng lại ở việc giải quyết vấn đề, mà còn mở rộng ra việc nghiên cứu và áp dụng những công nghệ mới. ",
+      "Khang, tư duy sắc bén, đam mê mã nguồn mở và lập trình. Sở thích của anh không chỉ giải quyết vấn đề mà còn nghiên cứu và áp dụng công nghệ mới.",
   },
   {
     name: "Khanh Võ",
     image: image8,
     description:
-      "Khanh là một cá nhân sáng tạo và năng động, luôn tìm kiếm niềm vui trong việc code và khám phá những vấn đề mới. Với đam mê mã nguồn mở, Khanh không chỉ xem lập trình như công việc, mà còn như một cách để thách thức bản thân và đóng góp vào cộng đồng.",
+      "Khanh, người sáng tạo và năng động, tận hưởng niềm vui lập trình và đam mê mã nguồn mở để thách thức bản thân và đóng góp cho cộng đồng.",
   },
   {
     name: "Khoa Nguyễn",
     image: image1,
     description:
-      "Jack, người tràn đầy năng lượng tích cực, tận hưởng mọi khía cạnh của lập trình và nghiên cứu. Với tâm huyết mãnh liệt, Jack không chỉ giỏi trong việc giải quyết vấn đề mà còn thích thú trong việc chia sẻ kiến thức và kinh nghiệm",
+      "Jack, người đầy năng lượng tích cực, say mê mọi khía cạnh của lập trình và nghiên cứu. Với tâm huyết cao, Jack không chỉ giải quyết vấn đề một cách xuất sắc mà còn thích chia sẻ kiến thức và kinh nghiệm.",
   },
 ];
