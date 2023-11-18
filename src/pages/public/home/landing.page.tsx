@@ -8,6 +8,7 @@ import CardComponent from "../../../components/ui/card/card.component";
 import { members } from "../../../data/data";
 
 const LandingPage = () => {
+  document.title = "E-learning | Trang chủ";
   return (
     <Box sx={{}}>
       <Container

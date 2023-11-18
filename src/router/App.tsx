@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import DefaultLayout from "../layout/DefaultLayout";
+import DefaultLayout from "../layout/default.layout";
 import LandingPage from "../pages/public/home/landing.page";
 import EditProfilePage from "../pages/public/edit-profile.page";
 

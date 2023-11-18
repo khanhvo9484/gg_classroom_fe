@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { baselightTheme } from "./theme/DefaultTheme.tsx";
+import { baselightTheme } from "./theme/default.theme.tsx";
 import { ThemeProvider } from "@mui/material/styles";
 import configureStore from "./store";
 import App from "./router/App.tsx";
@@ -14,7 +14,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <ThemeProvider theme={baselightTheme}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          {" "}
           <Routes>
             <Route path="/*" element={<App />} />
           </Routes>

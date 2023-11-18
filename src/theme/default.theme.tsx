@@ -3,11 +3,12 @@ import { createTheme } from "@mui/material/styles";
 const baselightTheme = createTheme({
   direction: "ltr",
   palette: {
-    // primary: {
-    //   main: "#181823",
-    //   light: "#ECF2FF",
-    //   dark: "#0c3ba9b1",
-    // },
+    primary: {
+      main: "#1976d2",
+      light: "#42a5f5",
+      dark: "#1565c0",
+      contrastText: "#fff",
+    },
     secondary: {
       main: "#9ec8f6",
       light: "#E8F7FF",
@@ -48,6 +49,10 @@ const baselightTheme = createTheme({
     text: {
       primary: "#2A3547",
       secondary: "#5A6A85",
+    },
+    background: {
+      default: "#f6f9fc",
+      paper: "#ffffff",
     },
     action: {
       disabledBackground: "rgba(73,82,88,0.12)",
