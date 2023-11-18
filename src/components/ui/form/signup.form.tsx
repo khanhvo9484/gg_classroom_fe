@@ -8,11 +8,17 @@ import {
   TextField,
   IconButton,
   InputAdornment,
+  FormControlLabel,
+  Checkbox
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
-import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
-
+import Typography from "@mui/material/Typography";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs, { Dayjs } from 'dayjs';
+import { FormHelperText } from '@mui/material';
 /////////////////////////////////////////////////////////////
 const easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {
@@ -29,129 +35,191 @@ const SignupForm = ({ setAuth }) => {
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [showRePassword, setShowRePassword] = useState(false);
 
   const SignupSchema = Yup.object().shape({
-    firstName: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("First name required"),
-    lastName: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Last name required"),
+    policy: Yup.boolean()
+      .isTrue("Bàn cần phải đồng ý với điều khoản của chúng tôi"),
+    name: Yup.string()
+      .min(2, "Ít nhất 2 ký tự")
+      .max(50, "Tối đa 50 ký tự")
+      .required("Bạn cần nhập tên của mình"),
+    dateOfBirth: Yup.date()
+      .typeError("Bạn cần cung cấp ngày sinh của mình")
+      .required("Bạn cần cung cấp ngày sinh của mình"),
     email: Yup.string()
-      .email("Email must be a valid email address")
-      .required("Email is required"),
-    password: Yup.string().required("Password is required"),
+      .email("Email bạn nhập chưa đúng quy định")
+      .required("Bạn cần nhập email của mình"),
+    password: Yup.string().required("Bạn cần nhập mật khẩu"),
+    repassword: Yup.string()
+      .required("Bạn cần nhập lại mật khẩu")
+      .oneOf([Yup.ref("password")], "Mật khẩu nhập vào không trùng khớp"),
   });
 
   const formik = useFormik({
     initialValues: {
-      firstName: "",
-      lastName: "",
+      policy: false,
+      name: "",
       email: "",
       password: "",
+      repassword: "",
+      dateOfBirth: dayjs('2022-04-17'),
     },
     validationSchema: SignupSchema,
-    onSubmit: () => {
-      setTimeout(() => {
-        setAuth(true);
+    onSubmit: (values) => {
+        console.log(values);
+        console.log(touched.policy);
+        console.log(errors.policy);
         navigate("/", { replace: true });
-      }, 2000);
     },
   });
 
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
   return (
-    <FormikProvider value={formik}>
-      <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-        <Stack spacing={3}>
-          <Stack
-            component={motion.div}
-            initial={{ opacity: 0, y: 60 }}
-            animate={animate}
-            direction={{ xs: "column", sm: "row" }}
-            spacing={2}
-          >
-            <TextField
-              fullWidth
-              label="First name"
-              {...getFieldProps("firstName")}
-              error={Boolean(touched.firstName && errors.firstName)}
-              helperText={touched.firstName && errors.firstName}
-            />
-
-            <TextField
-              fullWidth
-              label="Last name"
-              {...getFieldProps("lastName")}
-              error={Boolean(touched.lastName && errors.lastName)}
-              helperText={touched.lastName && errors.lastName}
-            />
-          </Stack>
-
-          <Stack
-            spacing={3}
-            component={motion.div}
-            initial={{ opacity: 0, y: 40 }}
-            animate={animate}
-          >
-            <TextField
-              fullWidth
-              autoComplete="username"
-              type="email"
-              label="Email address"
-              {...getFieldProps("email")}
-              error={Boolean(touched.email && errors.email)}
-              helperText={touched.email && errors.email}
-            />
-
-            <TextField
-              fullWidth
-              autoComplete="current-password"
-              type={showPassword ? "text" : "password"}
-              label="Password"
-              {...getFieldProps("password")}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      edge="end"
-                      onClick={() => setShowPassword((prev) => !prev)}
-                    >
-                      <Icon
-                        icon={
-                          showPassword ? "eva:eye-fill" : "eva:eye-off-fill"
-                        }
-                      />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              error={Boolean(touched.password && errors.password)}
-              helperText={touched.password && errors.password}
-            />
-          </Stack>
-
+    <Box sx={{p: 2}}>
+      <FormikProvider value={formik}>
+        <Box sx={{p: 2}}>
           <Box
-            component={motion.div}
-            initial={{ opacity: 0, y: 20 }}
-            animate={animate}
-          >
-            <LoadingButton
-              fullWidth
-              size="large"
-              type="submit"
-              variant="contained"
-              loading={isSubmitting}
+            component="img"
+            src={"https://i.postimg.cc/CL7CmGSx/google-logo-png-29530.png"}
+            sx={{ objectFit: "fit", width: "250px"}}
+          />
+          <Typography
+            color = "text.primary"
+            gutterBottom
+            variant="h4"
+            component="div"
+            sx={{ fontWeight: 600 }}
+          >Đăng ký</Typography>
+          <Typography
+            color ="text.secondary"
+            gutterBottom
+            variant="h6"
+            component="div"
+            sx={{ fontWeight: 600 }}
+          >Tạo tài khoản K3 cho bạn</Typography>
+        </Box>
+        <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+          <Stack spacing={3}>
+            <Stack
+              spacing={3}
+              component={motion.div}
+              initial={{ opacity: 0, y: 40 }}
+              animate={animate}
             >
-              Sign up
-            </LoadingButton>
-          </Box>
-        </Stack>
-      </Form>
-    </FormikProvider>
+              <TextField
+                fullWidth
+                autoComplete="địa chỉ email"
+                type="email"
+                label="Địa chỉ email"
+                {...getFieldProps("email")}
+                error={Boolean(touched.email && errors.email)}
+                helperText={touched.email && errors.email}
+              />
+              <TextField
+                fullWidth
+                label="Họ và tên"
+                {...getFieldProps("name")}
+                error={Boolean(touched.name && errors.name)}
+                helperText={touched.name && errors.name}
+              />
+              <DatePicker
+                disableFuture
+                minDate={dayjs('1980-01-01')}
+                label="Ngày sinh"
+                format="DD/MM/YYYY"
+                sx={{ width: "100%" }}
+                slotProps={{
+                  textField: {
+                    size: "small",
+                    error: Boolean(touched.dateOfBirth && errors.dateOfBirth),
+                  }
+                }}
+                {...getFieldProps("dateOfBirth")}
+              />
+
+              <TextField
+                fullWidth
+                autoComplete="mật khẩu"
+                type={showPassword ? "text" : "password"}
+                label="Mật khẩu"
+                {...getFieldProps("password")}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowPassword((prev) => !prev)}
+                      >
+                        {showPassword ? (
+                          <Visibility fontSize="large" />
+                        ) : (
+                          <VisibilityOff fontSize="large" />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                error={Boolean(touched.password && errors.password)}
+                helperText={touched.password && errors.password}
+              />
+
+                <TextField
+                  fullWidth
+                  autoComplete="nhập lại mật khẩu"
+                  type={showRePassword ? "text" : "password"}
+                  label="Nhập Lại Mật khẩu"
+                  {...getFieldProps("repassword")}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowRePassword((prev) => !prev)}
+                        >
+                          {showPassword ? (
+                            <Visibility fontSize="large" />
+                          ) : (
+                            <VisibilityOff fontSize="large" />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                  error={Boolean(touched.repassword && errors.repassword)}
+                  helperText={touched.repassword && errors.repassword}
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      inputProps={{ 'aria-label': 'controlled' }}
+                      {...getFieldProps("policy")}/>
+                  }
+                  label="Tôi đồng ý với các điều khoản dịch vụ."/>
+                <FormHelperText id="policy-helper"
+                    error={Boolean(touched.policy && errors.policy)}>
+                      {touched.policy && errors.policy}
+                </FormHelperText>
+            </Stack>
+
+            <Box
+              component={motion.div}
+              initial={{ opacity: 0, y: 20 }}
+              animate={animate}
+            >
+              <LoadingButton
+                fullWidth
+                size="large"
+                type="submit"
+                variant="contained"
+                loading={isSubmitting}
+              >
+                Đăng ký
+              </LoadingButton>
+            </Box>
+          </Stack>
+        </Form>
+      </FormikProvider>
+    </Box>
   );
 };
 
