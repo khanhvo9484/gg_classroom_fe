@@ -3,7 +3,7 @@ import DefaultLayout from "../layout/DefaultLayout";
 import LandingPage from "../pages/public/home/landing.page";
 import EditProfilePage from "../pages/public/edit-profile.page";
 import SignInLayout from "../layout/SignInLayout";
-import LoginForm from "./../khoa/LoginForm";
+import LoginForm from "../components/ui/form/login.form";
 function App() {
   return (
     <Routes>
