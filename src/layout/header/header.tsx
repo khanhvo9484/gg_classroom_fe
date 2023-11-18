@@ -7,6 +7,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import AdbIcon from "@mui/icons-material/Adb";
+import { Link } from "react-router-dom";
 
 const pages = ["Tổng quan", "Tính năng", "Khách hàng"];
 
@@ -82,9 +83,11 @@ function Header() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Button variant="outlined" size="large">
-              Đăng nhập
-            </Button>
+            <Link to="/login" style={{ textDecoration: "none" }}>
+              <Button variant="outlined" size="large">
+                Đăng nhập
+              </Button>
+            </Link>
           </Box>
         </Toolbar>
       </Container>

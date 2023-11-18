@@ -9,7 +9,7 @@ import {
   IconButton,
   InputAdornment,
   FormControlLabel,
-  Checkbox
+  Checkbox,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { motion } from "framer-motion";
@@ -17,11 +17,10 @@ import Typography from "@mui/material/Typography";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import dayjs, { Dayjs } from 'dayjs';
-import { FormHelperText } from '@mui/material';
-import { customAxios } from "../../../api/custom-axios"
-import { setUser } from "../../../redux/auth.slice"
-/////////////////////////////////////////////////////////////
+import dayjs from "dayjs";
+import { FormHelperText } from "@mui/material";
+import { customAxios } from "../../../api/custom-axios";
+
 const easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {
   opacity: 1,
@@ -42,8 +41,9 @@ const SignupForm = () => {
   const [errorMessage, setErrorMessage] = useState(false);
 
   const SignupSchema = Yup.object().shape({
-    policy: Yup.boolean()
-      .isTrue("Bàn cần phải đồng ý với điều khoản của chúng tôi"),
+    policy: Yup.boolean().isTrue(
+      "Bàn cần phải đồng ý với điều khoản của chúng tôi"
+    ),
     name: Yup.string()
       .min(2, "Ít nhất 2 ký tự")
       .max(50, "Tối đa 50 ký tự")
@@ -67,30 +67,26 @@ const SignupForm = () => {
       email: "",
       password: "",
       repassword: "",
-      dateOfBirth: dayjs('2022-04-17'),
+      dateOfBirth: dayjs("2022-04-17"),
     },
     validationSchema: SignupSchema,
     onSubmit: async (values) => {
       try {
         console.log(values);
         const payload = {
-          "email":values.email,
-          "name":values.name,
-          "dob":values.dateOfBirth,
-          "role":"user",
-          "password":values.password
-        }
+          email: values.email,
+          name: values.name,
+          dob: values.dateOfBirth,
+          role: "user",
+          password: values.password,
+        };
         // 👇️ const data: CreateUserResponse
-        await customAxios.post(
-          '/api/v1/auth/sign-up',
-          payload,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Accept: 'application/json',
-            },
+        await customAxios.post("/auth/sign-up", payload, {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
           },
-        );
+        });
 
         navigate("/", { replace: true });
       } catch (error) {
@@ -98,33 +94,37 @@ const SignupForm = () => {
         setErrorMessage(error.response.data.message);
       }
     },
-});
+  });
 
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
   return (
-    <Box sx={{p: 2}}>
+    <Box sx={{ p: 2 }}>
       <FormikProvider value={formik}>
-        <Box sx={{p: 2}}>
+        <Box sx={{ p: 2 }}>
           <Box
             component="img"
             src={"https://i.postimg.cc/CL7CmGSx/google-logo-png-29530.png"}
-            sx={{ objectFit: "fit", width: "250px"}}
+            sx={{ objectFit: "fit", width: "250px" }}
           />
           <Typography
-            color = "text.primary"
+            color="text.primary"
             gutterBottom
             variant="h4"
             component="div"
             sx={{ fontWeight: 600 }}
-          >Đăng ký</Typography>
+          >
+            Đăng ký
+          </Typography>
           <Typography
-            color ="text.secondary"
+            color="text.secondary"
             gutterBottom
             variant="h6"
             component="div"
             sx={{ fontWeight: 600 }}
-          >Tạo tài khoản K3 cho bạn</Typography>
+          >
+            Tạo tài khoản K3 cho bạn
+          </Typography>
         </Box>
         <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
           <Stack spacing={3}>
@@ -152,7 +152,7 @@ const SignupForm = () => {
               />
               <DatePicker
                 disableFuture
-                minDate={dayjs('1980-01-01')}
+                minDate={dayjs("1980-01-01")}
                 label="Ngày sinh"
                 format="DD/MM/YYYY"
                 sx={{ width: "100%" }}
@@ -160,7 +160,7 @@ const SignupForm = () => {
                   textField: {
                     size: "small",
                     error: Boolean(touched.dateOfBirth && errors.dateOfBirth),
-                  }
+                  },
                 }}
                 {...getFieldProps("dateOfBirth")}
               />
@@ -190,45 +190,51 @@ const SignupForm = () => {
                 helperText={touched.password && errors.password}
               />
 
-                <TextField
-                  fullWidth
-                  autoComplete="nhập lại mật khẩu"
-                  type={showRePassword ? "text" : "password"}
-                  label="Nhập Lại Mật khẩu"
-                  {...getFieldProps("repassword")}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={() => setShowRePassword((prev) => !prev)}
-                        >
-                          {showPassword ? (
-                            <Visibility fontSize="large" />
-                          ) : (
-                            <VisibilityOff fontSize="large" />
-                          )}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                  error={Boolean(touched.repassword && errors.repassword)}
-                  helperText={touched.repassword && errors.repassword}
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      inputProps={{ 'aria-label': 'controlled' }}
-                      {...getFieldProps("policy")}/>
-                  }
-                  label="Tôi đồng ý với các điều khoản dịch vụ."/>
-                <FormHelperText id="policy-helper"
-                    error={Boolean(touched.policy && errors.policy)}>
-                      {touched.policy && errors.policy}
-                </FormHelperText>
-                <FormHelperText id="notify-helper"
-                    error={Boolean(signUpError && errorMessage)}>
-                      {signUpError && errorMessage}
-                </FormHelperText>
+              <TextField
+                fullWidth
+                autoComplete="nhập lại mật khẩu"
+                type={showRePassword ? "text" : "password"}
+                label="Nhập Lại Mật khẩu"
+                {...getFieldProps("repassword")}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowRePassword((prev) => !prev)}
+                      >
+                        {showPassword ? (
+                          <Visibility fontSize="large" />
+                        ) : (
+                          <VisibilityOff fontSize="large" />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                error={Boolean(touched.repassword && errors.repassword)}
+                helperText={touched.repassword && errors.repassword}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    inputProps={{ "aria-label": "controlled" }}
+                    {...getFieldProps("policy")}
+                  />
+                }
+                label="Tôi đồng ý với các điều khoản dịch vụ."
+              />
+              <FormHelperText
+                id="policy-helper"
+                error={Boolean(touched.policy && errors.policy)}
+              >
+                {touched.policy && errors.policy}
+              </FormHelperText>
+              <FormHelperText
+                id="notify-helper"
+                error={Boolean(signUpError && errorMessage)}
+              >
+                {signUpError && errorMessage}
+              </FormHelperText>
             </Stack>
 
             <Box

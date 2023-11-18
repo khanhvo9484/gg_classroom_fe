@@ -1,4 +1,4 @@
-import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
+import Grid from "@mui/material/Unstable_Grid2";
 import { CardActions, CardHeader, IconButton } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -7,18 +7,111 @@ import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { MemberModel } from "../../../models/member.model";
+import { IMember, IMemberRespone } from "../../../models/member.model";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import dayjs from "dayjs";
+import { Controller, useForm } from "react-hook-form";
+import { useState } from "react";
+import {
+  STRING_ERROR,
+  STRING_REQUIRED_NAME,
+  STRING_UPDATE_PROFILE_SUCCESS,
+} from "../../../constant/ui/ui.constant";
+import { formatDate, formatDate_YYYY_MM_DD } from "../../../utils/common.util";
+import { API_UPDATE_USER } from "../../../api/api.constant";
+import toast from "react-hot-toast";
+import CircularProgress from "@mui/material/CircularProgress";
+import { customAxios } from "../../../api/custom-axios";
+
 interface Props {
-  member: MemberModel;
+  member: IMember;
+  openEditForm: () => void;
+  updateUser: (user: IMember) => void;
 }
 
-const EditProfileForm: React.FC<Props> = ({ member }) => {
+type FormValue = {
+  name: string;
+  phoneNumber: string;
+  dob: string;
+  bio: string;
+};
+const EditProfileForm: React.FC<Props> = ({
+  member,
+  openEditForm,
+  updateUser,
+}) => {
+  const [userEdit, setUserEdit] = useState<IMember>(member);
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const { control, register, handleSubmit, formState, setValue } =
+    useForm<FormValue>({
+      defaultValues: {
+        name: userEdit.name,
+        phoneNumber: userEdit.phoneNumber,
+        dob: userEdit.dob,
+        bio: userEdit.bio,
+      },
+    });
+
+  const { errors } = formState;
+  //   const accessToken = useSelector((state) => state.auth.access_token);
+
+  const onSubmit = async (data: FormValue) => {
+    const valueForm = {
+      ...data,
+      dob: dayjs.isDayjs(data.dob)
+        ? data.dob.format("YYYY-MM-DD")
+        : formatDate_YYYY_MM_DD(data.dob),
+    };
+
+    setLoading(true);
+    try {
+      const { data: response } = await customAxios.put<IMemberRespone>(
+        API_UPDATE_USER,
+        valueForm
+      );
+
+      const formattedDob = response.data.dob
+        ? formatDate(response.data.dob)
+        : undefined;
+
+      const userRespone: IMember = {
+        ...response.data,
+        dob: formattedDob,
+      };
+
+      setLoading(false);
+      toast.success(STRING_UPDATE_PROFILE_SUCCESS);
+      updateUser(userRespone);
+    } catch (error) {
+      toast.error(STRING_ERROR);
+    }
+  };
+
+  const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newName = event.target.value;
+    const user = {
+      ...userEdit,
+      name: newName,
+    };
+
+    setUserEdit(user);
+    setValue("name", newName, { shouldValidate: true });
+  };
+
+  const handleChangeBio = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const user = {
+      ...userEdit,
+      bio: event.target.value,
+    };
+
+    setUserEdit(user);
+  };
+
   return (
-    <Grid container spacing={2} sx={{ height: "450px" }}>
+    <Grid container spacing={2} sx={{ height: "400px" }}>
       <Grid xs={4}>
         <Box sx={{ height: "100%" }}>
           <Card variant="outlined" sx={{ height: "100%" }}>
@@ -32,8 +125,7 @@ const EditProfileForm: React.FC<Props> = ({ member }) => {
               }}
             >
               <Avatar
-                alt="Remy Sharp"
-                src={member.image}
+                src={userEdit.avatar}
                 sx={{ width: 156, height: 156, mb: 3 }}
               />
               <Typography
@@ -42,10 +134,10 @@ const EditProfileForm: React.FC<Props> = ({ member }) => {
                 component="div"
                 sx={{ fontWeight: 600 }}
               >
-                {member.name}
+                {userEdit.name}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {member.description}
+                {userEdit.bio}
               </Typography>
             </CardContent>
             <CardActions sx={{ justifyContent: "center" }}>
@@ -74,68 +166,101 @@ const EditProfileForm: React.FC<Props> = ({ member }) => {
                 backgroundColor: "#f8f9fa",
               }}
             />
-
             <CardContent>
-              <Grid container spacing={3} sx={{ my: 1 }}>
-                <Grid xs={6}>
-                  <Typography gutterBottom sx={{ fontWeight: 550 }}>
-                    Họ
-                  </Typography>
-                  <TextField
-                    sx={{ width: "100%" }}
-                    size="small"
-                    id="outlined-basic"
+              <Box component={"form"} onSubmit={handleSubmit(onSubmit)}>
+                <Grid container spacing={3} sx={{ my: 1 }}>
+                  <Grid xs={6}>
+                    <Typography gutterBottom sx={{ fontWeight: 550 }}>
+                      Họ và Tên*
+                    </Typography>
+                    <TextField
+                      sx={{ width: "100%" }}
+                      size="small"
+                      id="outlined-basic"
+                      variant="outlined"
+                      value={userEdit.name}
+                      {...register("name", {
+                        required: STRING_REQUIRED_NAME,
+                      })}
+                      error={!!errors.name}
+                      helperText={errors.name?.message}
+                      onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                        handleChangeName(event)
+                      }
+                    />
+                  </Grid>
+                  <Grid xs={6}>
+                    <Typography gutterBottom sx={{ fontWeight: 550 }}>
+                      Số điện thoại
+                    </Typography>
+                    <TextField
+                      sx={{ width: "100%" }}
+                      size="small"
+                      id="outlined-basic"
+                      variant="outlined"
+                      defaultValue={userEdit.phoneNumber}
+                      {...register("phoneNumber")}
+                    />
+                  </Grid>
+                  <Grid xs={6}>
+                    <Typography gutterBottom sx={{ fontWeight: 550 }}>
+                      Ngày sinh
+                    </Typography>
+                    <Controller
+                      name="dob"
+                      control={control}
+                      render={({ field }) => (
+                        <DatePicker
+                          {...field}
+                          format="DD/MM/YYYY"
+                          sx={{ width: "100%" }}
+                          slotProps={{
+                            textField: { size: "small" },
+                          }}
+                          value={dayjs(userEdit.dob, "DD/MM/YYYY")}
+                        />
+                      )}
+                    />
+                  </Grid>
+                  <Grid xs={12}>
+                    <Typography gutterBottom sx={{ fontWeight: 550 }}>
+                      Mô tả
+                    </Typography>
+                    <TextField
+                      id="outlined-textarea"
+                      placeholder=""
+                      multiline
+                      rows={5}
+                      sx={{ width: "100%" }}
+                      size="small"
+                      defaultValue={userEdit.bio}
+                      {...register("bio")}
+                      onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                        handleChangeBio(event)
+                      }
+                    />
+                  </Grid>
+                </Grid>
+                <Box sx={{ my: 2, float: "right", display: "flex", gap: 2 }}>
+                  <Button
                     variant="outlined"
-                  />
-                </Grid>
-                <Grid xs={6}>
-                  <Typography gutterBottom sx={{ fontWeight: 550 }}>
-                    Tên
-                  </Typography>
-                  <TextField
-                    sx={{ width: "100%" }}
-                    size="small"
-                    id="outlined-basic"
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid xs={6}>
-                  <Typography gutterBottom sx={{ fontWeight: 550 }}>
-                    Số điện thoại
-                  </Typography>
-                  <TextField
-                    sx={{ width: "100%" }}
-                    size="small"
-                    id="outlined-basic"
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid xs={6}>
-                  <Typography gutterBottom sx={{ fontWeight: 550 }}>
-                    Email
-                  </Typography>
-                  <TextField
-                    sx={{ width: "100%" }}
-                    size="small"
-                    id="outlined-basic"
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid xs={6}>
-                  <Typography gutterBottom sx={{ fontWeight: 550 }}>
-                    Ngày sinh
-                  </Typography>
-                  <DatePicker
-                    format="DD/MM/YYYY"
-                    sx={{ width: "100%" }}
-                    slotProps={{
-                      textField: { size: "small" },
-                    }}
-                  />
-                </Grid>
-              </Grid>
-              <Box sx={{ pt: 0, float: "right" }}>
-                <Button variant="contained">Cập nhật</Button>
+                    color="error"
+                    onClick={() => openEditForm()}
+                  >
+                    Hủy
+                  </Button>{" "}
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    sx={{ minWidth: "110px" }}
+                  >
+                    {!isLoading ? (
+                      "Cập nhật"
+                    ) : (
+                      <CircularProgress size={25} sx={{ color: "white" }} />
+                    )}
+                  </Button>
+                </Box>
               </Box>
             </CardContent>
           </Card>

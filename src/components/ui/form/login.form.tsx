@@ -10,15 +10,14 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import { FormHelperText } from '@mui/material';
+import { FormHelperText } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { motion } from "framer-motion";
-import { customAxios } from "../../../api/custom-axios"
+import { customAxios } from "../../../api/custom-axios";
 import { useState } from "react";
-import { useDispatch } from 'react-redux'
-import {setUser} from "../../../redux/auth.slice"
+import { useDispatch } from "react-redux";
+import { setUser } from "../../../redux/auth.slice";
 import UserModel from "../../../models/user.model";
-
 
 const easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {
@@ -37,7 +36,7 @@ const LoginForm = () => {
   const from = location.state?.from?.pathname || "/";
   const [signUpError, setSignUpError] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string()
@@ -56,30 +55,24 @@ const LoginForm = () => {
     onSubmit: async (values) => {
       try {
         const payload = {
-          "email":values.email,
-          "password":values.password
-        }
+          email: values.email,
+          password: values.password,
+        };
         // 👇️ const data: CreateUserResponse
-        const response = await customAxios.post(
-          '/api/v1/auth/sign-in',
-          payload,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Accept: 'application/json',
-            },
+        const response = await customAxios.post("/auth/sign-in", payload, {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
           },
-        );
+        });
 
-        const user : UserModel = response.data.data.user;
-        const access_token : String = response.data.data.access_token;
+        const user: UserModel = response.data.data.user;
+        const access_token: string = response.data.data.access_token;
 
-        if (user && access_token){
-          dispatch(setUser({access_token: access_token, user: user}))
+        if (user && access_token) {
+          dispatch(setUser({ access_token: access_token, user: user }));
           navigate("/dashboard", { replace: true });
-        }
-        else
-        {
+        } else {
           setSignUpError(true);
           setErrorMessage("Server return error data.");
         }
@@ -94,28 +87,32 @@ const LoginForm = () => {
     formik;
 
   return (
-    <Box sx={{p: 4}}>
+    <Box sx={{ p: 4 }}>
       <FormikProvider value={formik}>
-        <Box sx={{p: 2}}>
+        <Box sx={{ p: 2 }}>
           <Box
             component="img"
             src={"https://i.postimg.cc/CL7CmGSx/google-logo-png-29530.png"}
-            sx={{ objectFit: "fit", width: "250px"}}
+            sx={{ objectFit: "fit", width: "250px" }}
           />
           <Typography
-            color = "text.primary"
+            color="text.primary"
             gutterBottom
             variant="h4"
             component="div"
             sx={{ fontWeight: 600 }}
-          >Đăng nhập</Typography>
+          >
+            Đăng nhập
+          </Typography>
           <Typography
-            color ="text.secondary"
+            color="text.secondary"
             gutterBottom
             variant="h6"
             component="div"
             sx={{ fontWeight: 600 }}
-          >Sử dụng tài khoản K3 của bạn</Typography>
+          >
+            Sử dụng tài khoản K3 của bạn
+          </Typography>
         </Box>
         <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
           <Box
@@ -163,10 +160,12 @@ const LoginForm = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={animate}
             >
-              <FormHelperText id="notify-helper"
-                    error={Boolean(signUpError && errorMessage)}>
-                      {signUpError && errorMessage}
-                </FormHelperText>
+              <FormHelperText
+                id="notify-helper"
+                error={Boolean(signUpError && errorMessage)}
+              >
+                {signUpError && errorMessage}
+              </FormHelperText>
               <Stack
                 direction="row"
                 alignItems="center"

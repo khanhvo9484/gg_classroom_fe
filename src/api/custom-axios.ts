@@ -42,7 +42,7 @@ function createAxiosResponseInterceptor() {
       customAxios.interceptors.response.eject(interceptor);
 
       return customAxios
-        .post("/api/v1/auth/refresh-token/refresh")
+        .post("/auth/refresh-token/refresh")
         .then((response) => {
           saveToken(response.data.access_token as string);
           error.response.config.headers["Authorization"] =

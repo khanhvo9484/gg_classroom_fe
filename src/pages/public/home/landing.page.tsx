@@ -6,6 +6,7 @@ import Stack from "@mui/material/Stack";
 import imageEdu from "../../../assets/images/image.png";
 import CardComponent from "../../../components/ui/card/card.component";
 import { members } from "../../../data/data";
+import { Link } from "react-router-dom";
 
 const LandingPage = () => {
   document.title = "E-learning | Trang chủ";
@@ -38,9 +39,11 @@ const LandingPage = () => {
               <Button variant="contained" size="large">
                 Trải nghiệm ứng dụng
               </Button>
-              <Button variant="outlined" size="large">
-                Đăng ký
-              </Button>
+              <Link to="/signup" style={{ textDecoration: "none" }}>
+                <Button variant="outlined" size="large">
+                  Đăng ký
+                </Button>
+              </Link>
             </Stack>
           </Stack>
           <Box
