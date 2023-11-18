@@ -55,7 +55,6 @@ const LoginForm = () => {
     validationSchema: LoginSchema,
     onSubmit: async (values) => {
       try {
-        console.log(values);
         const payload = {
           "email":values.email,
           "password":values.password
