@@ -9,10 +9,16 @@ import {
   Link,
   Stack,
   TextField,
-  Button
 } from "@mui/material";
+import { FormHelperText } from '@mui/material';
 import { LoadingButton } from "@mui/lab";
 import { motion } from "framer-motion";
+import { customAxios } from "../../../api/custom-axios"
+import { useState } from "react";
+import { useDispatch } from 'react-redux'
+import {setUser} from "../../../redux/auth.slice"
+import UserModel from "../../../models/user.model";
+
 
 const easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {
@@ -25,10 +31,13 @@ const animate = {
   },
 };
 
-const LoginForm = ({ setAuth }) => {
+const LoginForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
+  const [signUpError, setSignUpError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(false);
+  const dispatch = useDispatch()
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string()
@@ -44,8 +53,34 @@ const LoginForm = ({ setAuth }) => {
       remember: true,
     },
     validationSchema: LoginSchema,
-    onSubmit: () => {
-        navigate(from, { replace: true });
+    onSubmit: async (values) => {
+      try {
+        console.log(values);
+        const payload = {
+          "email":values.email,
+          "password":values.password
+        }
+        // 👇️ const data: CreateUserResponse
+        const response = await customAxios.post(
+          '/api/v1/auth/sign-in',
+          payload,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+            },
+          },
+        );
+
+        const user : UserModel = response.data.user;
+        const access_token : String = response.data.access_token;
+
+        dispatch(setUser({access_token: access_token, user: user}))
+        navigate("/dashboard", { replace: true });
+      } catch (error) {
+        setSignUpError(true);
+        setErrorMessage(error.response.data.message);
+      }
     },
   });
 
@@ -109,6 +144,7 @@ const LoginForm = ({ setAuth }) => {
                 fullWidth
                 autoComplete="Mật khẩu"
                 label="Mật khẩu"
+                type="password"
                 {...getFieldProps("password")}
                 error={Boolean(touched.password && errors.password)}
                 helperText={touched.password && errors.password}
@@ -121,6 +157,10 @@ const LoginForm = ({ setAuth }) => {
               initial={{ opacity: 0, y: 20 }}
               animate={animate}
             >
+              <FormHelperText id="notify-helper"
+                    error={Boolean(signUpError && errorMessage)}>
+                      {signUpError && errorMessage}
+                </FormHelperText>
               <Stack
                 direction="row"
                 alignItems="center"

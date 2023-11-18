@@ -19,6 +19,8 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from 'dayjs';
 import { FormHelperText } from '@mui/material';
+import { customAxios } from "../../../api/custom-axios"
+import { setUser } from "../../../redux/auth.slice"
 /////////////////////////////////////////////////////////////
 const easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {
@@ -31,11 +33,13 @@ const animate = {
   },
 };
 
-const SignupForm = ({ setAuth }) => {
+const SignupForm = () => {
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
   const [showRePassword, setShowRePassword] = useState(false);
+  const [signUpError, setSignUpError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(false);
 
   const SignupSchema = Yup.object().shape({
     policy: Yup.boolean()
@@ -66,13 +70,35 @@ const SignupForm = ({ setAuth }) => {
       dateOfBirth: dayjs('2022-04-17'),
     },
     validationSchema: SignupSchema,
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
+      try {
         console.log(values);
-        console.log(touched.policy);
-        console.log(errors.policy);
+        const payload = {
+          "email":values.email,
+          "name":values.name,
+          "dob":values.dateOfBirth,
+          "role":"user",
+          "password":values.password
+        }
+        // 👇️ const data: CreateUserResponse
+        await customAxios.post(
+          '/api/v1/auth/sign-up',
+          payload,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+            },
+          },
+        );
+
         navigate("/", { replace: true });
+      } catch (error) {
+        setSignUpError(true);
+        setErrorMessage(error.response.data.message);
+      }
     },
-  });
+});
 
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
@@ -198,6 +224,10 @@ const SignupForm = ({ setAuth }) => {
                 <FormHelperText id="policy-helper"
                     error={Boolean(touched.policy && errors.policy)}>
                       {touched.policy && errors.policy}
+                </FormHelperText>
+                <FormHelperText id="notify-helper"
+                    error={Boolean(signUpError && errorMessage)}>
+                      {signUpError && errorMessage}
                 </FormHelperText>
             </Stack>
 

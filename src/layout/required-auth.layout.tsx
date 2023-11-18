@@ -6,7 +6,7 @@ const RequiredAuth = () => {
   const location = useLocation();
   const pathName = location.pathname;
   if (!localStorage.getItem("access_token")) {
-    window.location.href = ` /sign-in?redirect=${pathName}`;
+    window.location.href = `/login?redirect=${pathName}`;
     return null;
   }
   return <Outlet />;
