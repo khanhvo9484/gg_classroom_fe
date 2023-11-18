@@ -8,6 +8,7 @@ import LoginForm from "../components/ui/form/login.form";
 import SignUpForm from "../components/ui/form/signup.form";
 import RequiredAuth from "../layout/required-auth.layout";
 import RequiredNotAuth from "../layout/required-not-auth.layout";
+import SignOut from "../components/signout.component";
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
       </Route>
       <Route element={<RequiredAuth />}>
         <Route path="dashboard" element={<h1>dashboard</h1>} />
+        <Route path="/signout" element={<SignOut />}/>
       </Route>
     </Routes>
   );

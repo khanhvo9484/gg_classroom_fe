@@ -72,11 +72,18 @@ const LoginForm = () => {
           },
         );
 
-        const user : UserModel = response.data.user;
-        const access_token : String = response.data.access_token;
+        const user : UserModel = response.data.data.user;
+        const access_token : String = response.data.data.access_token;
 
-        dispatch(setUser({access_token: access_token, user: user}))
-        navigate("/dashboard", { replace: true });
+        if (user && access_token){
+          dispatch(setUser({access_token: access_token, user: user}))
+          navigate("/dashboard", { replace: true });
+        }
+        else
+        {
+          setSignUpError(true);
+          setErrorMessage("Server return error data.");
+        }
       } catch (error) {
         setSignUpError(true);
         setErrorMessage(error.response.data.message);
