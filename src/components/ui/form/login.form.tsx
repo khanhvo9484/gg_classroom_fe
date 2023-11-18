@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import { Form, FormikProvider, useFormik } from "formik";
 import * as Yup from "yup";
-
+import Typography from "@mui/material/Typography";
 import {
   Box,
   Checkbox,
@@ -12,12 +12,14 @@ import {
   Link,
   Stack,
   TextField,
+  Button
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
-import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
-let easing = [0.6, -0.05, 0.01, 0.99];
+const easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {
   opacity: 1,
   y: 0,
@@ -37,9 +39,9 @@ const LoginForm = ({ setAuth }) => {
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string()
-      .email("Provide a valid email address")
-      .required("Email is required"),
-    password: Yup.string().required("Password is required"),
+      .email("Nhập email của bạn")
+      .required("Bạn cần nhập email của mình"),
+    password: Yup.string().required("Bạn cần nhập mật khẩu để đăng nhập"),
   });
 
   const formik = useFormik({
@@ -64,6 +66,27 @@ const LoginForm = ({ setAuth }) => {
 
   return (
     <FormikProvider value={formik}>
+      <Box>
+        <Box
+          component="img"
+          src={"https://i.postimg.cc/CL7CmGSx/google-logo-png-29530.png"}
+          sx={{ objectFit: "fit", width: "250px" }}
+        />
+        <Typography
+          color = "text.primary"
+          gutterBottom
+          variant="h4"
+          component="div"
+          sx={{ fontWeight: 600 }}
+        >Đăng nhập</Typography>
+        <Typography
+          color ="text.secondary"
+          gutterBottom
+          variant="h6"
+          component="div"
+          sx={{ fontWeight: 600 }}
+        >Sử dụng tài khoản K3 của bạn</Typography>
+      </Box>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Box
           component={motion.div}
@@ -85,9 +108,9 @@ const LoginForm = ({ setAuth }) => {
           >
             <TextField
               fullWidth
-              autoComplete="username"
+              autoComplete="Tên đăng nhập"
               type="email"
-              label="Email Address"
+              label="Email"
               {...getFieldProps("email")}
               error={Boolean(touched.email && errors.email)}
               helperText={touched.email && errors.email}
@@ -95,9 +118,9 @@ const LoginForm = ({ setAuth }) => {
 
             <TextField
               fullWidth
-              autoComplete="current-password"
+              autoComplete="Mật khẩu"
               type={showPassword ? "text" : "password"}
-              label="Password"
+              label="Mật khẩu"
               {...getFieldProps("password")}
               error={Boolean(touched.password && errors.password)}
               helperText={touched.password && errors.password}
@@ -108,9 +131,9 @@ const LoginForm = ({ setAuth }) => {
                       onClick={() => setShowPassword((prev) => !prev)}
                     >
                       {showPassword ? (
-                        <Icon icon="eva:eye-fill" />
+                        <Visibility fontSize="large" />
                       ) : (
-                        <Icon icon="eva:eye-off-fill" />
+                        <VisibilityOff fontSize="large" />
                       )}
                     </IconButton>
                   </InputAdornment>
@@ -137,7 +160,7 @@ const LoginForm = ({ setAuth }) => {
                     checked={values.remember}
                   />
                 }
-                label="Remember me"
+                label="Ghi nhớ đăng nhập"
               />
 
               <Link
@@ -146,19 +169,27 @@ const LoginForm = ({ setAuth }) => {
                 to="#"q
                 underline="hover"
               >
-                Forgot password?
+                Quên mật khẩu?
               </Link>
             </Stack>
-
-            <LoadingButton
-              fullWidth
-              size="large"
-              type="submit"
-              variant="contained"
-              loading={isSubmitting}
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="space-between"
+              sx={{ my: 2 }}
             >
-              {isSubmitting ? "loading..." : "Login"}
-            </LoadingButton>
+              <Button variant="outlined" size="large">
+                Tạo tài khoản
+              </Button>
+              <LoadingButton
+                size="large"
+                type="submit"
+                variant="contained"
+                loading={isSubmitting}
+              >
+                {isSubmitting ? "loading..." : "Đăng nhập"}
+              </LoadingButton>
+            </Stack>
           </Box>
         </Box>
       </Form>
