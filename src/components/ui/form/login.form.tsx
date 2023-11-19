@@ -34,6 +34,8 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
+  const searchQuery = location.search || "";
+  console.log(searchQuery, location);
   const [signUpError, setSignUpError] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const dispatch = useDispatch();
