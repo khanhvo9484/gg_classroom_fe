@@ -22,7 +22,7 @@ export default function AvatarDropdown(name : {name : string}) {
             <BackgroundLetterAvatars name={name.name}/>
         </MenuButton>
         <Menu slots={{ listbox: Listbox }}>
-            <MenuItem  onClick={createHandleMenuClick('edit-profile')}>
+            <MenuItem  onClick={createHandleMenuClick('profile')}>
                 <Typography variant="h6">Profile</Typography>
             </MenuItem >
             <MenuItem  onClick={createHandleMenuClick('signout')}>
