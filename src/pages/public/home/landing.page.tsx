@@ -39,7 +39,7 @@ const LandingPage = () => {
               <Button variant="contained" size="large">
                 Trải nghiệm ứng dụng
               </Button>
-              <Link to="/signup" style={{ textDecoration: "none" }}>
+              <Link to="/sign-up" style={{ textDecoration: "none" }}>
                 <Button variant="outlined" size="large">
                   Đăng ký
                 </Button>
