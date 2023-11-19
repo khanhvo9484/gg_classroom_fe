@@ -23,8 +23,10 @@ import {
 import { formatDate, formatDate_YYYY_MM_DD } from "../../../utils/common.util";
 import { API_UPDATE_USER } from "../../../api/api.constant";
 import toast from "react-hot-toast";
-import CircularProgress from "@mui/material/CircularProgress";
 import { customAxios } from "../../../api/custom-axios";
+import { useDispatch } from "react-redux";
+import { updateUserProfile } from "../../../redux/auth.slice";
+import { LoadingButton } from "@mui/lab";
 
 interface Props {
   member: IMember;
@@ -43,6 +45,7 @@ const EditProfileForm: React.FC<Props> = ({
   openEditForm,
   updateUser,
 }) => {
+  const dispatch = useDispatch();
   const [userEdit, setUserEdit] = useState<IMember>(member);
   const [isLoading, setLoading] = useState<boolean>(false);
   const { control, register, handleSubmit, formState, setValue } =
@@ -85,6 +88,8 @@ const EditProfileForm: React.FC<Props> = ({
       setLoading(false);
       toast.success(STRING_UPDATE_PROFILE_SUCCESS);
       updateUser(userRespone);
+      dispatch(updateUserProfile({ user: userRespone }));
+      openEditForm();
     } catch (error) {
       toast.error(STRING_ERROR);
     }
@@ -249,17 +254,13 @@ const EditProfileForm: React.FC<Props> = ({
                   >
                     Hủy
                   </Button>{" "}
-                  <Button
-                    variant="contained"
+                  <LoadingButton
                     type="submit"
-                    sx={{ minWidth: "110px" }}
+                    variant="contained"
+                    loading={isLoading}
                   >
-                    {!isLoading ? (
-                      "Cập nhật"
-                    ) : (
-                      <CircularProgress size={25} sx={{ color: "white" }} />
-                    )}
-                  </Button>
+                    {isLoading ? "loading..." : "Cập nhật"}
+                  </LoadingButton>
                 </Box>
               </Box>
             </CardContent>

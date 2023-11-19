@@ -9,20 +9,22 @@ import { customAxios } from "../../api/custom-axios";
 import { API_GET_USER_BY_ID } from "../../api/api.constant";
 import { formatDate } from "../../utils/common.util";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../redux/auth.slice";
 
 const ProfilePage = () => {
   const [isOpenEditForm, setOpenEditForm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<IMember>();
 
-  const idUser: string = "3";
+  const userProfile = useSelector(selectUser);
 
   useEffect(() => {
     setLoading(true);
     const getUserById = async () => {
       try {
         const { data: response } = await customAxios.get<IMemberRespone>(
-          API_GET_USER_BY_ID.replace("{idUser}", idUser)
+          API_GET_USER_BY_ID.replace("{idUser}", userProfile.id)
         );
 
         const formattedDob = response.data.dob
@@ -40,10 +42,11 @@ const ProfilePage = () => {
         setLoading(false);
       }
     };
-    if (idUser) {
+
+    if (userProfile.id) {
       getUserById();
     }
-  }, []);
+  }, [userProfile.id]);
 
   const openEditForm = () => {
     setOpenEditForm(!isOpenEditForm);

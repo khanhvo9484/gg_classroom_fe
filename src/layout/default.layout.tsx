@@ -8,7 +8,7 @@ const DefaultLayout = () => {
       <Header />
       <Outlet />
       <Footer />
-      <Toaster position="bottom-right" reverseOrder={false} />
+      <Toaster position="top-right" reverseOrder={false} />
     </>
   );
 };
