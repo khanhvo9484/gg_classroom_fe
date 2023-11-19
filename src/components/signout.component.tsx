@@ -1,27 +1,40 @@
 import { deleteUser } from "../redux/auth.slice";
 import { useDispatch, useSelector } from "react-redux";
 import { customAxios } from "../api/custom-axios";
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useEffect } from "react";
+import { Box, CircularProgress } from "@mui/material";
+import useSWR from "swr";
 const SignOut = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const refreshToken = useSelector((state: any) => state.auth.refresh_token);
-  console.log("heheh");
-  useEffect(() => {
-    dispatch(deleteUser());
-    try {
-      const signOut = async () => {
-        await customAxios.post("/auth/refresh-token/sign-out", {
-          refresh_token: refreshToken,
-        });
-      };
-      signOut();
-      navigate(`/`);
-    } catch (error) {}
-  }, []);
+  dispatch(deleteUser());
+  const { data, error, isLoading } = useSWR(
+    "/auth/refresh-token/sign-out",
+    async (url) => {
+      await customAxios.post(url, {
+        refresh_token: refreshToken,
+      });
+    }
+  );
 
-  return null;
+  return (
+    <>
+      {isLoading && (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+          }}
+        >
+          <CircularProgress size={"3rem"} />
+        </Box>
+      )}
+      {!isLoading && <Navigate to="/" />}
+    </>
+  );
 };
 
 export default SignOut;
