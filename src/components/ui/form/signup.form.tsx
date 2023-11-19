@@ -105,7 +105,9 @@ const SignupForm = () => {
         <Box sx={{ p: 2 }}>
           <Box
             component="img"
-            src={"https://i.postimg.cc/CL7CmGSx/google-logo-png-29530.png"}
+            src={
+              "https://firebasestorage.googleapis.com/v0/b/k3-learning.appspot.com/o/k3_logo.png?alt=media&token=c6bb7cec-03d8-4767-b00b-915145956430"
+            }
             sx={{ objectFit: "fit", width: "250px" }}
           />
           <Typography
