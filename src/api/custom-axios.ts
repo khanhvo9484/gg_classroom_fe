@@ -4,6 +4,7 @@ export const customAxios = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   headers: {
     "Content-Type": "application/json",
+    withCredentials: true,
   },
 });
 
@@ -62,7 +63,7 @@ function createAxiosResponseInterceptor() {
   );
 }
 
-createAxiosResponseInterceptor();
+// createAxiosResponseInterceptor();
 
 function saveToken(accessToken: string) {
   localStorage.setItem("access_token", accessToken);

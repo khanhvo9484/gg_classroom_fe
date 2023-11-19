@@ -12,6 +12,7 @@ const authSlice = createSlice({
       ? JSON.parse(localStorage.getItem("user") || "")
       : {},
     access_token: localStorage.getItem("access_token") || "",
+    refresh_token: localStorage.getItem("access_token") || "",
   },
   reducers: {
     setUser(state, action) {
@@ -20,6 +21,9 @@ const authSlice = createSlice({
 
       state.access_token = action.payload.access_token;
       localStorage.setItem("access_token", action.payload.access_token);
+
+      state.refresh_token = action.payload.refresh_token;
+      localStorage.setItem("refresh_token", action.payload.refresh_token);
     },
     updateUserProfile(state, action) {
       state.user = action.payload.user;
@@ -31,6 +35,9 @@ const authSlice = createSlice({
 
       state.access_token = "";
       localStorage.removeItem("access_token");
+
+      state.refresh_token = "";
+      localStorage.removeItem("refresh_token");
     },
   },
 });
@@ -38,5 +45,8 @@ const authSlice = createSlice({
 export const selectUser = (state: any): UserModel => state.auth.user;
 export const selectAccessToken = (state: any): string =>
   state.auth.access_token;
+export const selectRefreshToken = (state: any): string =>
+  state.auth.refresh_token;
+
 export const { setUser, deleteUser, updateUserProfile } = authSlice.actions;
 export default authSlice.reducer;

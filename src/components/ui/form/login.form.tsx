@@ -70,9 +70,16 @@ const LoginForm = () => {
 
         const user: UserModel = response.data.data.user;
         const access_token: string = response.data.data.access_token;
+        const refresh_token: string = response.data.data.refresh_token;
 
         if (user && access_token) {
-          dispatch(setUser({ access_token: access_token, user: user }));
+          dispatch(
+            setUser({
+              access_token: access_token,
+              user: user,
+              refresh_token: refresh_token,
+            })
+          );
           navigate(navigateTo, { replace: true });
         } else {
           setSignUpError(true);
