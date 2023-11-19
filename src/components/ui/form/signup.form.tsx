@@ -20,7 +20,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { FormHelperText } from "@mui/material";
 import { customAxios } from "../../../api/custom-axios";
-
+import toast from "react-hot-toast";
 const easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {
   opacity: 1,
@@ -82,14 +82,11 @@ const SignupForm = () => {
           password: values.password,
         };
         // 👇️ const data: CreateUserResponse
-        await customAxios.post("/auth/sign-up", payload, {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        });
-
-        navigate("/", { replace: true });
+        await customAxios.post("/auth/sign-up", payload);
+        toast.success("Đăng ký thành công");
+        setTimeout(() => {
+          navigate("/home", { replace: true });
+        }, 1000);
       } catch (error) {
         setSignUpError(true);
         setErrorMessage(error.response.data.message);

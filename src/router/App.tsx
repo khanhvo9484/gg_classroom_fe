@@ -15,7 +15,6 @@ function App() {
     <Routes>
       <Route element={<DefaultLayout />}>
         <Route index element={<LandingPage />} />
-        <Route path="profile" element={<ProfilePage />} />
 
         <Route element={<SignInLayout />}>
           <Route element={<RequiredNotAuth />}>
@@ -28,6 +27,7 @@ function App() {
       <Route element={<RequiredAuth />}>
         <Route element={<DefaultLayout />}>
           <Route path="home" element={<HomePage />} />
+          <Route path="profile" element={<ProfilePage />} />
         </Route>
         <Route path="sign-out" element={<SignOut />} />
       </Route>

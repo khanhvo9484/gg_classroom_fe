@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 import AvatarDropdown from "../../components/avatar.dropdown.menu.component";
 import logo from "@/assets/icons/k3_logo.png";
 
-const pages = ["Tổng quan", "Tính năng", "Khách hàng"];
+const pages = [{ title: "Lớp học của tôi", link: "/home" }];
 
 function Header() {
   const user: UserModel = useSelector((state: any) => state.auth.user);
@@ -38,7 +38,7 @@ function Header() {
             <img
               src={logo}
               style={{
-                height: "50px",
+                height: "30px",
                 width: "auto",
                 margin: "auto 0",
                 display: "block",
@@ -82,10 +82,11 @@ function Header() {
           >
             {pages.map((page) => (
               <Button
-                key={page}
+                key={page.title}
                 sx={{ my: 2, color: "black", display: "block" }}
+                href={page.link}
               >
-                {page}
+                {page.title}
               </Button>
             ))}
           </Box>
