@@ -6,6 +6,9 @@ import { useNavigate } from "react-router-dom";
 const RequiredAuth = () => {
   const location = useLocation();
   const pathName = location.pathname;
+  if (pathName === "/sign-out") {
+    return null;
+  }
   const navigate = useNavigate();
 
   useEffect(() => {

@@ -18,6 +18,8 @@ const pages = ["Tổng quan", "Tính năng", "Khách hàng"];
 
 function Header() {
   const user: UserModel = useSelector((state: any) => state.auth.user);
+  const location = useLocation();
+  const path = location.pathname;
   return (
     <AppBar
       position="static"
@@ -91,10 +93,16 @@ function Header() {
           <Box sx={{ flexGrow: 0 }}>
             {user && user.name ? (
               <AvatarDropdown name={user.name} />
-            ) : (
+            ) : path !== "/login" ? (
               <Link href="/login">
                 <Button variant="outlined" size="large">
                   Đăng nhập
+                </Button>
+              </Link>
+            ) : (
+              <Link href="/sign-up">
+                <Button variant="outlined" size="large">
+                  Đăng ký
                 </Button>
               </Link>
             )}

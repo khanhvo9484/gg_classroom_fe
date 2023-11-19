@@ -100,7 +100,7 @@ const SignupForm = () => {
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
   return (
-    <Box sx={{ p: 2 }}>
+    <Box sx={{ p: 2, mb: "2rem" }}>
       <FormikProvider value={formik}>
         <Box sx={{ p: 2 }}>
           <Box
@@ -111,9 +111,8 @@ const SignupForm = () => {
           <Typography
             color="text.primary"
             gutterBottom
-            variant="h4"
+            variant="h5"
             component="div"
-            sx={{ fontWeight: 600 }}
           >
             Đăng ký
           </Typography>

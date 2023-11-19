@@ -37,7 +37,8 @@ const animate = {
 const LoginForm = () => {
   const navigate = useNavigate();
   let [searchParams, setSearchParams] = useSearchParams();
-  const navigateTo = searchParams.get("redirect") || "/";
+  const navigateTo = searchParams.get("redirect") || "/home";
+
   const [signUpError, setSignUpError] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const dispatch = useDispatch();

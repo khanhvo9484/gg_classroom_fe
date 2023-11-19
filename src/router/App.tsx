@@ -15,13 +15,13 @@ function App() {
       <Route element={<DefaultLayout />}>
         <Route index element={<LandingPage />} />
         <Route path="profile" element={<ProfilePage />} />
-      </Route>
 
-      <Route element={<SignInLayout />}>
-        <Route element={<RequiredNotAuth />}>
-          <Route path="login" element={<LoginForm />} />
+        <Route element={<SignInLayout />}>
+          <Route element={<RequiredNotAuth />}>
+            <Route path="login" element={<LoginForm />} />
+          </Route>
+          <Route path="sign-up" element={<SignUpForm />} />
         </Route>
-        <Route path="sign-up" element={<SignUpForm />} />
       </Route>
 
       <Route element={<RequiredAuth />}>
