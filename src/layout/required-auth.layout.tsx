@@ -7,7 +7,7 @@ const RequiredAuth = () => {
   const location = useLocation();
   const pathName = location.pathname;
   if (pathName === "/sign-out") {
-    return null;
+    return <Outlet />;
   }
   const navigate = useNavigate();
 
