@@ -25,7 +25,7 @@ export default function AvatarDropdown(name : {name : string}) {
             <MenuItem  onClick={createHandleMenuClick('profile')}>
                 <Typography variant="h6">Profile</Typography>
             </MenuItem >
-            <MenuItem  onClick={createHandleMenuClick('signout')}>
+            <MenuItem  onClick={createHandleMenuClick('sign-out')}>
                 <Typography variant="h6">Log out</Typography>
             </MenuItem >
         </Menu>
