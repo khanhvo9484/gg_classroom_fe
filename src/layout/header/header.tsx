@@ -7,11 +7,19 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import AdbIcon from "@mui/icons-material/Adb";
-import { Link } from "react-router-dom";
+import Link from "@mui/material/Link"
+import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
+import selectUser from "../../redux/auth.slice";
+import UserModel from "../../models/user.model";
+import { useDispatch } from 'react-redux'
+import AvatarDropdown from "../../components/avatar.dropdown.menu.component";
 
 const pages = ["Tổng quan", "Tính năng", "Khách hàng"];
 
 function Header() {
+  const auth =  localStorage.getItem("user")
+      ? JSON.parse(localStorage.getItem("user") || "")
+      : {};
   return (
     <AppBar
       position="static"
@@ -83,11 +91,14 @@ function Header() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Link to="/login" style={{ textDecoration: "none" }}>
-              <Button variant="outlined" size="large">
-                Đăng nhập
-              </Button>
-            </Link>
+            {auth.user && auth.user.name?
+              <AvatarDropdown name={auth.user.name}/> :
+              <Link href="/login">
+                <Button variant="outlined" size="large">
+                  Đăng nhập
+                </Button>
+              </Link>
+            }
           </Box>
         </Toolbar>
       </Container>
