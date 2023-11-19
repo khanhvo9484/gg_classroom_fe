@@ -40,7 +40,7 @@ const LoginForm = () => {
   const navigateTo = searchParams.get("redirect") || "/home";
 
   const [signUpError, setSignUpError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const dispatch = useDispatch();
 
   document.title = "Đăng nhập";

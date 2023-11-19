@@ -4,7 +4,7 @@ import { MenuButton as BaseMenuButton } from "@mui/base/MenuButton";
 import { MenuItem as BaseMenuItem, menuItemClasses } from "@mui/base/MenuItem";
 import { styled } from "@mui/system";
 import BackgroundLetterAvatars from "./avatar.for.name.component";
-import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 
 export default function AvatarDropdown(name: { name: string }) {

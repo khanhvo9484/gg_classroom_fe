@@ -2,7 +2,6 @@ import { deleteUser } from "../redux/auth.slice";
 import { useDispatch, useSelector } from "react-redux";
 import { customAxios } from "../api/custom-axios";
 import { Navigate } from "react-router-dom";
-import { useEffect } from "react";
 import { Box, CircularProgress } from "@mui/material";
 import useSWR from "swr";
 const SignOut = () => {

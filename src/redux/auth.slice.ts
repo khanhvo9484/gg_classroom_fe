@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import UserModel from "../models/user.model";
 // Create a slice of state
-type AuthState = {
-  user: any;
-  access_token: string;
-};
+// type AuthState = {
+//   user: any;
+//   access_token: string;
+// };
 const authSlice = createSlice({
   name: "auth",
   initialState: {
