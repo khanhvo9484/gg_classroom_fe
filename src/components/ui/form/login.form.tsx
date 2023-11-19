@@ -1,4 +1,8 @@
-import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
+import {
+  Link as RouterLink,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { Form, FormikProvider, useFormik } from "formik";
 import * as Yup from "yup";
 import Typography from "@mui/material/Typography";
@@ -32,13 +36,13 @@ const animate = {
 
 const LoginForm = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
-  const searchQuery = location.search || "";
-  console.log(searchQuery, location);
+  let [searchParams, setSearchParams] = useSearchParams();
+  const navigateTo = searchParams.get("redirect") || "/";
   const [signUpError, setSignUpError] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const dispatch = useDispatch();
+
+  document.title = "Đăng nhập";
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string()
@@ -68,7 +72,7 @@ const LoginForm = () => {
 
         if (user && access_token) {
           dispatch(setUser({ access_token: access_token, user: user }));
-          navigate("/home", { replace: true });
+          navigate(navigateTo, { replace: true });
         } else {
           setSignUpError(true);
           setErrorMessage("Server return error data.");
@@ -95,18 +99,16 @@ const LoginForm = () => {
           <Typography
             color="text.primary"
             gutterBottom
-            variant="h4"
+            variant="h5"
             component="div"
-            sx={{ fontWeight: 600 }}
           >
             Đăng nhập
           </Typography>
           <Typography
             color="text.secondary"
             gutterBottom
-            variant="h6"
+            variant="body1"
             component="div"
-            sx={{ fontWeight: 500 }}
           >
             Sử dụng tài khoản K3 của bạn
           </Typography>

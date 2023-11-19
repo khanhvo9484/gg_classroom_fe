@@ -40,6 +40,8 @@ const SignupForm = () => {
   const [signUpError, setSignUpError] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
 
+  document.title = "Đăng ký";
+
   const SignupSchema = Yup.object().shape({
     policy: Yup.boolean().isTrue(
       "Bàn cần phải đồng ý với điều khoản của chúng tôi"
@@ -72,7 +74,6 @@ const SignupForm = () => {
     validationSchema: SignupSchema,
     onSubmit: async (values) => {
       try {
-        console.log(values);
         const payload = {
           email: values.email,
           name: values.name,
@@ -119,9 +120,8 @@ const SignupForm = () => {
           <Typography
             color="text.secondary"
             gutterBottom
-            variant="h6"
+            variant="body1"
             component="div"
-            sx={{ fontWeight: 600 }}
           >
             Tạo tài khoản K3 cho bạn
           </Typography>

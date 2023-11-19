@@ -1,7 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+import UserModel from "../models/user.model";
 // Create a slice of state
-
+type AuthState = {
+  user: any;
+  access_token: string;
+};
 const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -29,7 +32,8 @@ const authSlice = createSlice({
   },
 });
 
-export const selectUser = (state: any) => state.auth.user;
-export const selectAccessToken = (state: any) => state.auth.access_token;
+export const selectUser = (state: any): UserModel => state.auth.user;
+export const selectAccessToken = (state: any): string =>
+  state.auth.access_token;
 export const { setUser, deleteUser } = authSlice.actions;
 export default authSlice.reducer;

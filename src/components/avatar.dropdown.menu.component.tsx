@@ -12,13 +12,17 @@ export default function AvatarDropdown(name: { name: string }) {
   const navigate = useNavigate();
   const createHandleMenuClick = (menuItem: string) => {
     return () => {
-      navigate(`/${menuItem}`, { replace: true });
+      navigate(`/${menuItem}`);
     };
   };
 
   return (
     <Dropdown>
-      <MenuButton>
+      <MenuButton
+        sx={{
+          border: "none",
+        }}
+      >
         <BackgroundLetterAvatars name={name.name} />
       </MenuButton>
       <Menu slots={{ listbox: Listbox }}>
