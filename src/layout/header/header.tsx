@@ -12,6 +12,7 @@ import { useLocation } from "react-router-dom";
 import UserModel from "../../models/user.model";
 import { useSelector } from "react-redux";
 import AvatarDropdown from "../../components/avatar.dropdown.menu.component";
+import logo from "@/assets/icons/k3_logo.png";
 
 const pages = ["Tổng quan", "Tính năng", "Khách hàng"];
 
@@ -27,24 +28,24 @@ function Header() {
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
+          <Link
+            href="/"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
             }}
           >
-            LOGO
-          </Typography>
+            <img
+              src={logo}
+              style={{
+                height: "50px",
+                width: "auto",
+                margin: "auto 0",
+                display: "block",
+                cursor: "pointer",
+              }}
+            ></img>
+          </Link>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
