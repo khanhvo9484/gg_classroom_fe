@@ -59,19 +59,14 @@ const LoginForm = () => {
           password: values.password,
         };
         // 👇️ const data: CreateUserResponse
-        const response = await customAxios.post("/auth/sign-in", payload, {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        });
+        const response = await customAxios.post("/auth/sign-in", payload);
 
         const user: UserModel = response.data.data.user;
         const access_token: string = response.data.data.access_token;
 
         if (user && access_token) {
           dispatch(setUser({ access_token: access_token, user: user }));
-          navigate("/dashboard", { replace: true });
+          navigate("/home", { replace: true });
         } else {
           setSignUpError(true);
           setErrorMessage("Server return error data.");
@@ -109,7 +104,7 @@ const LoginForm = () => {
             gutterBottom
             variant="h6"
             component="div"
-            sx={{ fontWeight: 600 }}
+            sx={{ fontWeight: 500 }}
           >
             Sử dụng tài khoản K3 của bạn
           </Typography>
