@@ -8,6 +8,7 @@ import RequiredAuth from "../layout/required-auth.layout";
 import RequiredNotAuth from "../layout/required-not-auth.layout";
 import SignOut from "../components/signout.component";
 import ProfilePage from "../pages/public/profile.page";
+import HomePage from "../pages/public/home/home.page";
 
 function App() {
   return (
@@ -25,7 +26,9 @@ function App() {
       </Route>
 
       <Route element={<RequiredAuth />}>
-        <Route path="home" element={<h1>home</h1>} />
+        <Route element={<DefaultLayout />}>
+          <Route path="home" element={<HomePage />} />
+        </Route>
         <Route path="sign-out" element={<SignOut />} />
       </Route>
     </Routes>
