@@ -19,8 +19,8 @@ function App() {
         <Route element={<SignInLayout />}>
           <Route element={<RequiredNotAuth />}>
             <Route path="login" element={<LoginForm />} />
+            <Route path="sign-up" element={<SignUpForm />} />
           </Route>
-          <Route path="sign-up" element={<SignUpForm />} />
         </Route>
       </Route>
 
