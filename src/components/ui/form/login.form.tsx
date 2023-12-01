@@ -13,6 +13,8 @@ import {
   Link,
   Stack,
   TextField,
+  Button,
+  Avatar
 } from "@mui/material";
 import { FormHelperText } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
@@ -22,6 +24,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../../redux/auth.slice";
 import UserModel from "../../../models/user.model";
+
 
 const easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {
@@ -194,39 +197,77 @@ const LoginForm = () => {
                 <Link
                   component={RouterLink}
                   variant="subtitle2"
-                  to="#"
+                  to="/recover-password"
                   underline="hover"
                 >
                   Quên mật khẩu?
                 </Link>
               </Stack>
-              <Stack
-                direction="row"
-                alignItems="center"
-                justifyContent="space-between"
-                sx={{ my: 2 }}
-              >
-                <Link
-                  component={RouterLink}
-                  variant="subtitle2"
-                  to="/signup"
-                  underline="hover"
-                >
-                  Tạo tài khoản
-                </Link>
-                <LoadingButton
+              <LoadingButton
                   size="large"
                   type="submit"
                   variant="contained"
                   loading={isSubmitting}
+                  fullWidth
                 >
                   {isSubmitting ? "loading..." : "Đăng nhập"}
                 </LoadingButton>
-              </Stack>
             </Box>
           </Box>
         </Form>
       </FormikProvider>
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        sx={{ my: 2, borderTop: 3 }}
+      >
+        <Box sx={{ m: 2}}>
+          <Button
+            size="large"
+            variant="outlined"
+            startIcon={<Avatar
+              alt="Google Logo"
+              src="src\assets\icons\Google_logo.svg"
+              sx={{ width: 24, height: 24 }}
+            />}
+            sx={{ width: 200, height: 40 }}
+          >
+            Google
+          </Button>
+        </Box>
+        <Box sx={{ m: 2}}>
+          <Button
+            size="large"
+            variant="outlined"
+            startIcon={<Avatar
+              alt="Google Logo"
+              src="src\assets\icons\Facebook_logo.svg"
+              sx={{ width: 24, height: 24 }}
+            />}
+            sx={{ width: 200, height: 40 }}
+          >
+            Facebook
+          </Button>
+        </Box>
+      </Stack>
+      <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="center"
+          sx={{ my: 2 }}
+        >
+          Bạn chưa có tài khoản?
+          <Link
+            component={RouterLink}
+            variant="subtitle2"
+            to="/signup"
+            underline="hover"
+            sx={{m: 1}}
+          >
+            Đăng ký
+          </Link>
+        </Stack>
     </Box>
   );
 };
