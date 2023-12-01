@@ -10,6 +10,7 @@ import SignOut from "../components/signout.component";
 import ProfilePage from "../pages/public/profile.page";
 import HomePage from "../pages/public/home/home.page";
 import RecoverPasswordForm from "../components/ui/form/recover_password.form";
+import VerifyEmail from "@/pages/public/verify.email.page";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route element={<RequiredNotAuth />}>
             <Route path="login" element={<LoginForm />} />
             <Route path="sign-up" element={<SignUpForm />} />
+            <Route path="verify-email" element={<VerifyEmail />} />
           </Route>
         </Route>
       </Route>

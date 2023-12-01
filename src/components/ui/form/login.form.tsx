@@ -231,7 +231,7 @@ const LoginForm = () => {
               src="src\assets\icons\Google_logo.svg"
               sx={{ width: 24, height: 24 }}
             />}
-            sx={{ width: 200, height: 40 }}
+            sx={{height: 40 }}
           >
             Google
           </Button>
@@ -245,7 +245,7 @@ const LoginForm = () => {
               src="src\assets\icons\Facebook_logo.svg"
               sx={{ width: 24, height: 24 }}
             />}
-            sx={{ width: 200, height: 40 }}
+            sx={{height: 40 }}
           >
             Facebook
           </Button>

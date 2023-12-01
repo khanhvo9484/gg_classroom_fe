@@ -247,7 +247,7 @@ const SignupForm = () => {
                 variant="contained"
                 loading={isSubmitting}
               >
-                Đăng ký
+                {isSubmitting ? "loading..." : "Đăng ký"}
               </LoadingButton>
             </Box>
           </Stack>
