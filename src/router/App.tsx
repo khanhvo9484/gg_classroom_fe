@@ -9,6 +9,7 @@ import RequiredNotAuth from "../layout/required-not-auth.layout";
 import SignOut from "../components/signout.component";
 import ProfilePage from "../pages/public/profile.page";
 import HomePage from "../pages/public/home/home.page";
+import RecoverPasswordForm from "../components/ui/form/recover_password.form";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route index element={<LandingPage />} />
 
         <Route element={<SignInLayout />}>
+          <Route path="recover-password" element={<RecoverPasswordForm />} />
           <Route element={<RequiredNotAuth />}>
             <Route path="login" element={<LoginForm />} />
             <Route path="sign-up" element={<SignUpForm />} />
