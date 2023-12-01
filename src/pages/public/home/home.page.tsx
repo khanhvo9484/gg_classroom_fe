@@ -44,9 +44,11 @@ const HomePage = () => {
           useFlexGap
           flexWrap="wrap"
           spacing={{ xs: 1, sm: 2 }}
+          justifyContent={"space-around"}
         >
-          {MockData.map((individualClass) => (
+          {MockData.map((individualClass, index) => (
             <ClassCard
+              key={index}
               classname={individualClass.classname}
               teacherName={individualClass.teacherName}
               shortName={individualClass.shortName}
