@@ -17,8 +17,7 @@ import { motion } from "framer-motion";
 import { customAxios } from "../../../api/custom-axios";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setUser } from "../../../redux/auth.slice";
-import UserModel from "../../../models/user.model";
+import toast from "react-hot-toast";
 
 
 const easing = [0.6, -0.05, 0.01, 0.99];
@@ -59,19 +58,26 @@ const LoginForm = () => {
         },
         validationSchema: EmailSchema,
         onSubmit: async (values) => {
-        try {
-            if (values.email) {
-                setIsVerify(true);
-                setIsFilling(false)
-                console.log("submit1");
-            } else {
+            try {
+                if (values.email) {
+                    const payload = { email: values.email };
+                    const response = await customAxios.post("/auth/forgot-password", payload);
+                    if (response.status === 200)
+                    {
+                        toast.success("Gửi yêu cầu tạo mới mật khẩu thành công");
+                        setIsVerify(false);
+                        setIsWaiting(true);
+                    }
+                } else {
+                    setRecoverError(true);
+                    setErrorMessage("Form return error data.");
+                }
+            } catch (error) {
                 setRecoverError(true);
-                setErrorMessage("Server return error data.");
+                setErrorMessage(error.response.data.message);
+                setIsFilling(true);
+                setIsWaiting(false);
             }
-        } catch (error) {
-            setRecoverError(true);
-            setErrorMessage(error.response.data.message);
-        }
         },
     });
 
@@ -135,6 +141,9 @@ const LoginForm = () => {
                                     {...getFieldProps("email")}
                                     error={Boolean(touched.email && errors.email)}
                                     helperText={touched.email && errors.email}
+                                    onFocus={() => {
+                                        setRecoverError(false);
+                                    }}
                                 />
                             </Box>
 
@@ -160,8 +169,19 @@ const LoginForm = () => {
                                     size="large"
                                     variant="contained"
                                     loading={isSubmitting}
-                                    type="submit"
-                                    >
+                                    onClick={() => {
+                                        if ((touched.email && errors.email)){
+                                            return
+                                        } else if (values.email === ""){
+                                            setRecoverError(true);
+                                            setErrorMessage("Bạn cần nhập email khôi phục của mình");
+                                        } else
+                                        {
+                                            setIsVerify(true);
+                                            setIsFilling(false);
+                                        }
+                                    }}
+                                >
                                     {isSubmitting ? "loading..." : "Tiếp tục"}
                                 </LoadingButton>
                             </Stack>
@@ -223,18 +243,16 @@ const LoginForm = () => {
                             justifyContent="right"
                             sx={{ my: 2 }}
                         >
-                            <LoadingButton
-                                size="medium"
-                                variant="contained"
-                                loading={isSubmitting}
-                                type="submit"
-                                onClick={() => {
-                                    setIsVerify(false);
-                                    setIsWaiting(true);
-                                }}
-                                >
-                                {isSubmitting ? "loading..." : "Gửi"}
-                            </LoadingButton>
+                            <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+                                <LoadingButton
+                                    size="medium"
+                                    variant="contained"
+                                    loading={isSubmitting}
+                                    type="submit"
+                                    >
+                                    {isSubmitting ? "loading..." : "Gửi"}
+                                </LoadingButton>
+                            </Form>
                         </Stack>
                     </Box>
                 </FormikProvider>
@@ -260,7 +278,7 @@ const LoginForm = () => {
                         >
                             K3 Learning vừa gửi email chứa đường dẫn
                             khôi phục mật khẩu đến topsiu1.ds@gmail.com.
-                            Vui lòng sử dụng được dẫn đó này để lấy lại mật khẩu.
+                            Vui lòng sử dụng được dẫn đó để tạo lại mật khẩu.
                         </Typography>
                     </Box>
                 </Box>
