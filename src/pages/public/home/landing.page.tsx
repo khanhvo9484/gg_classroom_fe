@@ -16,12 +16,13 @@ const LandingPage = () => {
         maxWidth="lg"
         sx={{ height: "100%", pb: 2, mb: 2, borderBottom: "1px solid #ccc" }}
       >
-        <Box sx={{ display: "flex", flexDirection: "row" }}>
+        <Box sx={{ display: "flex", flexDirection: "row", height: "486px" }}>
           <Stack
             spacing={2}
             sx={{
               display: "flex",
               justifyContent: "center",
+              flex: 1,
             }}
           >
             <Typography variant="h3">
@@ -49,7 +50,7 @@ const LandingPage = () => {
           <Box
             component="img"
             src={imageEdu}
-            sx={{ objectFit: "fit", width: "580px" }}
+            sx={{ objectFit: "fit", width: "", flex: 1 }}
           />
         </Box>
       </Container>

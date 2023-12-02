@@ -39,7 +39,7 @@ const animate = {
 
 const LoginForm = () => {
   const navigate = useNavigate();
-  let [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigateTo = searchParams.get("redirect") || "/home";
 
   const [signUpError, setSignUpError] = useState(false);
@@ -232,6 +232,7 @@ const LoginForm = () => {
       </FormikProvider>
       <Stack
         direction="row"
+        flexWrap={"wrap"}
         alignItems="center"
         justifyContent="space-between"
         sx={{ my: 2, borderTop: 3 }}
