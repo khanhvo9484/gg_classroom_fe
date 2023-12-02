@@ -13,6 +13,7 @@ import SuccessPage from "@/pages/public/static/success.page";
 import RecoverPasswordForm from "../components/ui/form/recover_password.form";
 import VerifyEmail from "@/pages/public/verify.email.page";
 import RecoveryChangePasswordForm from "@/components/ui/form/recovery-change-password.form";
+import NotVerify from "@/pages/public/not.verify.page";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
               path="auth/recover-password"
               element={<RecoveryChangePasswordForm />}
             />
+            <Route path="not-verify" element={<NotVerify />} />
           </Route>
         </Route>
       </Route>
