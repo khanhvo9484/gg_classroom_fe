@@ -1,4 +1,4 @@
-import Avatar from '@mui/material/Avatar';
+import Avatar from "@mui/material/Avatar";
 
 function stringToColor(string: string) {
   let hash = 0;
@@ -9,7 +9,7 @@ function stringToColor(string: string) {
     hash = string.charCodeAt(i) + ((hash << 5) - hash);
   }
 
-  let color = '#';
+  let color = "#";
 
   for (i = 0; i < 3; i += 1) {
     const value = (hash >> (i * 8)) & 0xff;
@@ -20,17 +20,24 @@ function stringToColor(string: string) {
   return color;
 }
 
-function stringAvatar(name: {name : string}) {
+function stringAvatar(name: { name: string }) {
+  const nameParts = name.name.split(" ");
+  let displayName = "";
+
+  if (nameParts.length > 1) {
+    displayName = name.name.split(" ")[0][0] + name.name.split(" ")[1][0];
+  } else {
+    displayName = name.name.split(" ")[0][0];
+  }
+
   return {
     sx: {
       bgcolor: stringToColor(name.name),
     },
-    children: `${name.name.split(' ')[0][0]}${name.name.split(' ')[1][0]}`,
+    children: displayName,
   };
 }
 
-export default function BackgroundLetterAvatars(name :{name : string}) {
-  return (
-    <Avatar {...stringAvatar(name)} />
-  );
+export default function BackgroundLetterAvatars(name: { name: string }) {
+  return <Avatar {...stringAvatar(name)} />;
 }

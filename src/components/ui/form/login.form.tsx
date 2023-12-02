@@ -282,7 +282,7 @@ const LoginForm = () => {
         <Link
           component={RouterLink}
           variant="subtitle2"
-          to="/signup"
+          to="/sign-up"
           underline="hover"
           sx={{ m: 1 }}
         >
