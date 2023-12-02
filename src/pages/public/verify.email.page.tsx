@@ -6,6 +6,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { green } from "@mui/material/colors";
 import Fab from "@mui/material/Fab";
 import CheckIcon from "@mui/icons-material/Check";
+import { Error as ErrorIcon } from "@mui/icons-material";
 import SecurityIcon from "@mui/icons-material/Security";
 import { customAxios } from "@/api/custom-axios";
 import { useSearchParams } from "react-router-dom";
@@ -17,38 +18,36 @@ const VerifyEmail = () => {
   const email = searchParams.get("email");
 
   const [loading, setLoading] = React.useState(true);
-  const [success, setSuccess] = React.useState(false);
   const [isVerified, setIsVerified] = React.useState(false);
 
   const buttonSx = {
-    ...(success && {
+    ...(isVerified && {
       bgcolor: green[500],
       "&:hover": {
         bgcolor: green[700],
       },
     }),
   };
-
-  React.useEffect(() => {
+  const verifyEmail = async () => {
     try {
-      console.log(token, email);
-      const result = customAxios.post("/auth/verify-email", {
+      const result = await customAxios.post("/auth/verify-email", {
         token: token,
         email: email,
       });
-      if (result) {
+      if (result.status == 200) {
         setIsVerified(true);
-        setLoading(false);
-        setSuccess(true);
       }
     } catch (error) {
-      console.log(error);
+      setIsVerified(false);
+    } finally {
       setLoading(false);
-      setSuccess(false);
     }
+  };
+  React.useEffect(() => {
+    verifyEmail();
   }, []);
 
-  if (isVerified) {
+  if (!loading) {
     return (
       <Box sx={{ p: 4 }}>
         <Box sx={{ p: 2 }}>
@@ -66,7 +65,9 @@ const VerifyEmail = () => {
               variant="body1"
               component="div"
             >
-              Bạn đã xác thực tài khoản Email thành công cho K3 Learning.
+              {isVerified
+                ? "Bạn đã xác thực tài khoản Email thành công cho K3 Learning."
+                : "Có lỗi xảy ra trong quá trình xác thực tài khoản Email cho K3 Learning."}
             </Typography>
           </Box>
           <Stack
@@ -75,11 +76,15 @@ const VerifyEmail = () => {
             justifyContent="center"
             sx={{ my: 2 }}
           >
-            <Link href="/login">
-              <Button variant="outlined" size="large">
-                Đăng nhập
-              </Button>
-            </Link>
+            {isVerified ? (
+              <Link href="/login">
+                <Button variant="outlined" size="large">
+                  Đăng nhập
+                </Button>
+              </Link>
+            ) : (
+              <ErrorIcon color="error" sx={{ fontSize: 40 }} />
+            )}
           </Stack>
         </Box>
       </Box>
@@ -94,7 +99,7 @@ const VerifyEmail = () => {
       >
         <Box sx={{ m: 1, position: "relative" }}>
           <Fab aria-label="save" color="primary" sx={buttonSx}>
-            {success ? <CheckIcon /> : <SecurityIcon />}
+            {isVerified ? <CheckIcon /> : <SecurityIcon />}
           </Fab>
         </Box>
         <Box sx={{ m: 1, position: "relative" }}>
@@ -104,20 +109,17 @@ const VerifyEmail = () => {
             disabled={loading}
             size="large"
           >
-            Verifying ...
+            Verifying{" "}
+            {loading && (
+              <CircularProgress
+                size={24}
+                sx={{
+                  marginLeft: 1,
+                  color: "primary.main",
+                }}
+              />
+            )}
           </Button>
-          {loading && (
-            <CircularProgress
-              size={24}
-              sx={{
-                color: green[500],
-                position: "absolute",
-                top: "50%",
-                left: "10%",
-                marginTop: "-12px",
-              }}
-            />
-          )}
         </Box>
       </Stack>
     );

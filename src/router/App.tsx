@@ -26,7 +26,7 @@ function App() {
             <Route path="sign-up" element={<SignUpForm />} />
             <Route path="auth/verify-email" element={<VerifyEmail />} />
             <Route
-              path="recovery-change-password"
+              path="auth/recover-password"
               element={<RecoveryChangePasswordForm />}
             />
           </Route>
