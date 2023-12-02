@@ -6,7 +6,13 @@ const DefaultLayout = () => {
   return (
     <>
       <Header />
-      <Outlet />
+      <div
+        style={{
+          minHeight: "66vh",
+        }}
+      >
+        <Outlet />
+      </div>
       <Footer />
       <Toaster position="top-right" reverseOrder={false} />
     </>

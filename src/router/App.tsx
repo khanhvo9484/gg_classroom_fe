@@ -24,8 +24,11 @@ function App() {
           <Route element={<RequiredNotAuth />}>
             <Route path="login" element={<LoginForm />} />
             <Route path="sign-up" element={<SignUpForm />} />
-            <Route path="verify-email" element={<VerifyEmail />} />
-            <Route path="recovery-change-password" element={<RecoveryChangePasswordForm />} />
+            <Route path="auth/verify-email" element={<VerifyEmail />} />
+            <Route
+              path="recovery-change-password"
+              element={<RecoveryChangePasswordForm />}
+            />
           </Route>
         </Route>
       </Route>
