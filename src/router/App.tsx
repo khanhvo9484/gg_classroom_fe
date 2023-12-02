@@ -12,6 +12,7 @@ import HomePage from "../pages/public/home/home.page";
 import SuccessPage from "@/pages/public/static/success.page";
 import RecoverPasswordForm from "../components/ui/form/recover_password.form";
 import VerifyEmail from "@/pages/public/verify.email.page";
+import RecoveryChangePasswordForm from "@/components/ui/form/recovery-change-password.form";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="login" element={<LoginForm />} />
             <Route path="sign-up" element={<SignUpForm />} />
             <Route path="verify-email" element={<VerifyEmail />} />
+            <Route path="recovery-change-password" element={<RecoveryChangePasswordForm />} />
           </Route>
         </Route>
       </Route>

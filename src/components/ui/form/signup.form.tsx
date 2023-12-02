@@ -200,7 +200,7 @@ const SignupForm = () => {
                       <IconButton
                         onClick={() => setShowRePassword((prev) => !prev)}
                       >
-                        {showPassword ? (
+                        {showRePassword ? (
                           <Visibility fontSize="large" />
                         ) : (
                           <VisibilityOff fontSize="large" />
