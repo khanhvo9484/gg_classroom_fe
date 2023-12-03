@@ -4,44 +4,53 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { useCookies } from "react-cookie";
 import { setUser } from "@/redux/auth.slice";
 import { useEffect } from "react";
+import { customAxios } from "@/api/custom-axios";
+import { API_VERIFY_LOGIN_OAUTH } from "@/api/api.constant";
 
 const SuccessPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [cookies, removeCookie] = useCookies(["payload"]);
 
-  const handleLoginGG = () => {
-    if (cookies.payload) {
-      const user = cookies.payload.user;
-      const access_token = cookies.payload.access_token;
-      const refresh_token = cookies.payload.refresh_token;
-
-      if (user && access_token) {
-        dispatch(
-          setUser({
-            access_token: access_token,
-            user: user,
-            refresh_token: refresh_token,
-          })
-        );
-
-        removeCookie("payload", {});
-        setTimeout(() => {
-          navigate("/home", { replace: true });
-        }, 1000);
-      } else {
-        console.log("Fail");
-      }
-    }
-  };
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const idUser = params.get("iduser");
 
   useEffect(() => {
-    handleLoginGG();
+    const verifyUserId = async () => {
+      try {
+        const { data: response } = await customAxios.get(
+          API_VERIFY_LOGIN_OAUTH.replace("{idUser}", idUser)
+        );
+        const data_user = response.data;
+
+        const user = data_user.user;
+        const access_token = data_user.access_token;
+        const refresh_token = data_user.refresh_token;
+
+        if (user && access_token) {
+          dispatch(
+            setUser({
+              access_token: access_token,
+              user: user,
+              refresh_token: refresh_token,
+            })
+          );
+          setTimeout(() => {
+            navigate("/home", { replace: true });
+          }, 1000);
+        } else {
+          console.log("Fail");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    verifyUserId();
   }, []);
 
   return (
