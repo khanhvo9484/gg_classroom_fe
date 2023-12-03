@@ -91,13 +91,14 @@ const LoginForm = () => {
           setErrorMessage("Server return error data.");
         }
       } catch (error) {
-        if (error.response.data.message === 'Please verify your email' &&
-            error.response.data.error === 'Please verify your email' &&
-            error.response.data.statusCode === 400)
-            {
-              navigate('/not-verify', { replace: true });
-              return
-            }
+        if (
+          error.response.data.message === "Please verify your email" &&
+          error.response.data.error === "Please verify your email" &&
+          error.response.data.error.statusCode === 400
+        ) {
+          navigate("/not-verify", { replace: true });
+          return;
+        }
         setSignUpError(true);
         setErrorMessage(error.response.data.message);
       }

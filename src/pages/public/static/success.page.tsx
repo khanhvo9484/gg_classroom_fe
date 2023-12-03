@@ -41,6 +41,9 @@ const SuccessPage = () => {
   };
 
   useEffect(() => {
+    const cookies = document.cookie;
+
+    console.log(cookies);
     handleLoginGG();
   }, []);
 
