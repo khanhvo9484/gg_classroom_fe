@@ -25,6 +25,8 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../../../redux/auth.slice";
 import UserModel from "../../../models/user.model";
 import { API_FACEBOOK_LOGIN, API_GOOGLE_LOGIN } from "@/api/api.constant";
+import fbLogo from "@/assets/icons/Facebook_logo.svg";
+import ggLogo from "@/assets/icons/Google_logo.svg";
 
 const easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {
@@ -91,7 +93,7 @@ const LoginForm = () => {
       } catch (error) {
         if (error.response.data.message === 'Please verify your email' &&
             error.response.data.error === 'Please verify your email' &&
-            error.response.data.error.statusCode === 400)
+            error.response.data.statusCode === 400)
             {
               navigate('/not-verify', { replace: true });
               return
@@ -251,7 +253,7 @@ const LoginForm = () => {
             startIcon={
               <Avatar
                 alt="Google Logo"
-                src="src\assets\icons\Google_logo.svg"
+                src={ggLogo}
                 sx={{ width: 24, height: 24 }}
               />
             }
@@ -268,7 +270,7 @@ const LoginForm = () => {
             startIcon={
               <Avatar
                 alt="Google Logo"
-                src="src\assets\icons\Facebook_logo.svg"
+                src={fbLogo}
                 sx={{ width: 24, height: 24 }}
               />
             }
