@@ -85,7 +85,10 @@ const SignupForm = () => {
         await customAxios.post("/auth/sign-up", payload);
         toast.success("Đăng ký thành công");
         setTimeout(() => {
-          navigate("/home", { replace: true });
+          navigate("/sign-up/verify", {
+            replace: true,
+            state: { email: payload.email },
+          });
         }, 1000);
       } catch (error) {
         setSignUpError(true);
