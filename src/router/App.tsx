@@ -15,10 +15,11 @@ import VerifyEmail from "@/pages/public/verify.email.page";
 import RecoveryChangePasswordForm from "@/components/ui/form/recovery-change-password.form";
 import NotVerify from "@/pages/public/not.verify.page";
 import VerifySignUpPage from "@/pages/public/static/verify-sign-up.page";
-
+import Test from "@/pages/public/test";
 function App() {
   return (
     <Routes>
+      <Route path="/test" element={<Test></Test>} />
       <Route element={<DefaultLayout />}>
         <Route index element={<LandingPage />} />
         <Route element={<SignInLayout />}>
