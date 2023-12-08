@@ -1,6 +1,15 @@
 import { createTheme } from "@mui/material/styles";
 
 const baselightTheme = createTheme({
+  components: {
+    MuiContainer: {
+      styleOverrides: {
+        maxWidthMd: {
+          maxWidth: "1048px !important",
+        },
+      },
+    },
+  },
   direction: "ltr",
   palette: {
     primary: {

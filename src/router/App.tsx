@@ -16,6 +16,10 @@ import RecoveryChangePasswordForm from "@/components/ui/form/recovery-change-pas
 import NotVerify from "@/pages/public/not.verify.page";
 import VerifySignUpPage from "@/pages/public/static/verify-sign-up.page";
 import Test from "@/pages/public/test";
+import ClassPage from "@/pages/class-page/class.page";
+import NewsClassPage from "@/pages/class-page/news-class.page";
+import MembersPage from "@/pages/class-page/members.page";
+
 function App() {
   return (
     <Routes>
@@ -35,6 +39,10 @@ function App() {
             <Route path="not-verify" element={<NotVerify />} />
             <Route path="sign-up/verify" element={<VerifySignUpPage />} />
           </Route>
+        </Route>
+        <Route path="class" element={<ClassPage />}>
+          <Route path="news" element={<NewsClassPage />} />
+          <Route path="members" element={<MembersPage />} />
         </Route>
       </Route>
 
