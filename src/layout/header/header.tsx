@@ -13,10 +13,14 @@ import UserModel from "../../models/user.model";
 import { useSelector } from "react-redux";
 import AvatarDropdown from "../../components/avatar.dropdown.menu.component";
 import logo from "@/assets/icons/k3_logo.png";
+import LinearProgress from "@mui/material/LinearProgress";
+import { useContext } from "react";
+import LoadingContext from "@/context/loading.contenxt";
 
 const pages = [{ title: "Lớp học của tôi", link: "/home" }];
 
 function Header() {
+  const { isLoading } = useContext(LoadingContext);
   const user: UserModel = useSelector((state: any) => state.auth.user);
   const location = useLocation();
   const path = location.pathname;
@@ -110,6 +114,7 @@ function Header() {
           </Box>
         </Toolbar>
       </Container>
+      {isLoading && <LinearProgress />}
     </AppBar>
   );
 }

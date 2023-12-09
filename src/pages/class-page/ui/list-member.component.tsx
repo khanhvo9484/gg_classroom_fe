@@ -8,9 +8,16 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
 import IconButton from "@mui/material/IconButton";
+import InviteModalComponent from "./invite-modal.component";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { selectUser } from "@/redux/auth.slice";
+import { IInvitationCourseRequest } from "@/models/class.model";
+import { ClassService } from "@/service/class.service";
 
 interface Props {
   title: string;
+  isTeacherList: boolean;
 }
 
 const memberList = [
@@ -22,8 +29,43 @@ const memberList = [
   "Khoa Nguyễn Đăng",
 ];
 
-const MemberListComponent: React.FC<Props> = ({ title }) => {
+const MemberListComponent: React.FC<Props> = ({ title, isTeacherList }) => {
+  const classService = new ClassService();
+
+  const [isOpenModalInvite, setOpenModalInvite] = useState(false);
+  const [isLoadingInvitation, setLoadingInvitation] = useState(false);
+  const owner = useSelector(selectUser);
+
   const isTeacher = true;
+
+  const handleAddMember = () => {
+    setOpenModalInvite(true);
+  };
+
+  const handleCloseModalInvite = () => {
+    setOpenModalInvite(!isOpenModalInvite);
+  };
+
+  const handleInviteMember = async (email: string) => {
+    const invitationRequest: IInvitationCourseRequest = {
+      inviterId: owner.id,
+      inviteeEmail: email,
+      courseId: "CS5m3o4MGj", //hard test
+      roleInCourse: isTeacherList ? "teacher" : "student",
+    };
+
+    try {
+      setLoadingInvitation(true);
+      const response = await classService.sendInvitationToJoinCourse(
+        invitationRequest
+      );
+
+      setLoadingInvitation(false);
+      handleCloseModalInvite();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Box sx={{ marginTop: 4, marginBottom: 10 }}>
@@ -47,9 +89,19 @@ const MemberListComponent: React.FC<Props> = ({ title }) => {
             aria-label="settings"
             size="large"
             sx={{ color: "rgb(25,103,210)" }}
+            onClick={() => handleAddMember()}
           >
             <PersonAddAltOutlinedIcon fontSize="inherit" />
           </IconButton>
+        )}
+        {isOpenModalInvite && (
+          <InviteModalComponent
+            handleCloseModalInvite={handleCloseModalInvite}
+            handleInviteMember={handleInviteMember}
+            isOpenModalInvite={isOpenModalInvite}
+            isLoadingInvitation={isLoadingInvitation}
+            isTeacherList={isTeacherList}
+          />
         )}
       </Box>
       <List sx={{ width: "100%", bgcolor: "background.paper" }}>
@@ -58,11 +110,7 @@ const MemberListComponent: React.FC<Props> = ({ title }) => {
             <>
               <ListItem key={index} alignItems="center">
                 <ListItemAvatar sx={{ marginTop: 0, minWidth: 50 }}>
-                  <Avatar
-                    sx={{ width: 32, height: 32 }}
-                    alt="Remy Sharp"
-                    src="/static/images/avatar/1.jpg"
-                  />
+                  <Avatar sx={{ width: 32, height: 32 }} />
                 </ListItemAvatar>
                 <ListItemText
                   primary={

@@ -5,25 +5,29 @@ import { Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import ClassCodeComponent from "./ui/class-code.component";
 import PostComponent from "./ui/card-post.component";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ICourse } from "@/models/class.model";
 import { ClassService } from "@/service/class.service";
 import { useParams } from "react-router-dom";
+import LoadingContext from "@/context/loading.contenxt";
 
 // import { useState } from "react";
 
 const NewsClassPage = () => {
   const classService = new ClassService();
-  const [isLoading, setLoading] = useState(false);
+  const { startLoading, stopLoading } = useContext(LoadingContext);
   const [course, setCourse] = useState<ICourse>(null);
   const { courseId } = useParams();
 
   useEffect(() => {
     const getCourseById = async (courseId: string) => {
       try {
+        startLoading();
+
         const response = await classService.getCourseById(courseId);
 
         setCourse(response.data);
+        stopLoading();
       } catch (error) {
         console.log(error);
         // throw error;
@@ -36,7 +40,7 @@ const NewsClassPage = () => {
   }, []);
 
   return (
-    <Box sx={{ marginY: "2rem" }}>
+    <Box sx={{ marginY: "2rem", minHeight: "600px" }}>
       {course && (
         <Container maxWidth="md" sx={{ paddingX: "none !important" }}>
           <Box sx={{ position: "relative" }}>
