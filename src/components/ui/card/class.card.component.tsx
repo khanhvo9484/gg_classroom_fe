@@ -8,9 +8,11 @@ import { CardActionArea } from "@mui/material";
 import { CardHeader } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import CardMenu from "../../../components/card.dropdown.menu.component";
-import Class from "../../../models/class.model";
+import { ICourse } from "../../../models/class.model";
 import { useEffect, useState } from "react";
 import gradientColors from "@/data/gradient.color";
+import { useSelector } from "react-redux";
+import { selectUser } from "@/redux/auth.slice";
 
 function stringToColor(string: string) {
   let hash = 0;
@@ -32,13 +34,25 @@ function stringToColor(string: string) {
   return color;
 }
 
-const ClassCard = ({ classname, teacherName, shortName }: Class) => {
-  const AvatarBgColor = stringToColor(teacherName);
+interface Props {
+  course: ICourse;
+}
+
+const ClassCard: React.FC<Props> = ({ course }) => {
+  const userProfile = useSelector(selectUser);
+
+  const AvatarBgColor = stringToColor(course.courseOwner.name);
   const colors = gradientColors;
 
   const [bgGradient, setBgGradient] = useState(
     "linear-gradient(to right, #FFFFFF, #FFFFFF)"
   ); // Default background color
+
+  const displayNameOwner = () => {
+    return userProfile.id !== course.courseOwnerId
+      ? course.courseOwner.name
+      : "";
+  };
 
   useEffect(() => {
     // Function to randomly select a color combination
@@ -84,7 +98,7 @@ const ClassCard = ({ classname, teacherName, shortName }: Class) => {
                 },
               }}
             >
-              {classname}
+              {course.name}
             </Typography>
           </Link>
         }
@@ -101,13 +115,13 @@ const ClassCard = ({ classname, teacherName, shortName }: Class) => {
                 },
               }}
             >
-              {teacherName}
+              {displayNameOwner()}
             </Typography>
           </Link>
         }
       />
       <CardActionArea
-        href="/home"
+        href={`/course/${course.id}/news`}
         sx={{
           minHeight: 180,
         }}
@@ -122,7 +136,7 @@ const ClassCard = ({ classname, teacherName, shortName }: Class) => {
             bgcolor: AvatarBgColor,
           }}
         >
-          {shortName}
+          A
         </Avatar>
       </CardActionArea>
       <CardActions

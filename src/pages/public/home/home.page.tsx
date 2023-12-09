@@ -1,38 +1,35 @@
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import ClassCard from "../../../components/ui/card/class.card.component";
-import Class from "../../../models/class.model";
+// import Class from "../../../models/class.model";
 import { Stack } from "@mui/material";
-
-const khanhClass: Class = {
-  classname: "Lập Trình Web",
-  teacherName: "Mai Anh Tuấn",
-  shortName: "AT",
-};
-
-const khangClass: Class = {
-  classname: "Cấu Trúc Dữ Liệu Và Giải Thuật",
-  teacherName: "Bùi Tiến Lên",
-  shortName: "TL",
-};
-
-const khoaClass: Class = {
-  classname: "CTT4 2020",
-  teacherName: "Nguyễn Đăng Khoa",
-  shortName: "NDK",
-};
-
-const MockData = [
-  khanhClass,
-  khangClass,
-  khoaClass,
-  khanhClass,
-  khangClass,
-  khoaClass,
-];
+import { useEffect, useState } from "react";
+import { ClassService } from "@/service/class.service";
+import { ICourse } from "@/models/class.model";
 
 const HomePage = () => {
   document.title = "E-learning | Màn hình chính";
+  const classService = new ClassService();
+  const [loading, setLoading] = useState(false);
+  const [courses, setCourses] = useState<ICourse[]>(null);
+
+  useEffect(() => {
+    // setLoading(true);
+
+    const getAllCourse = async () => {
+      try {
+        const response = await classService.getAllCourse();
+
+        setCourses(response.data);
+      } catch (error) {
+        console.log(error);
+        // throw error;
+      }
+    };
+
+    getAllCourse();
+  }, []);
+
   return (
     <Box sx={{ m: 5 }}>
       <Container
@@ -46,14 +43,18 @@ const HomePage = () => {
           spacing={{ xs: 1, sm: 2 }}
           justifyContent={"space-around"}
         >
-          {MockData.map((individualClass, index) => (
+          {courses &&
+            courses.map((course, index) => {
+              return <ClassCard key={index} course={course} />;
+            })}
+          {/* {MockData.map((individualClass, index) => (
             <ClassCard
               key={index}
               classname={individualClass.classname}
               teacherName={individualClass.teacherName}
               shortName={individualClass.shortName}
             />
-          ))}
+          ))} */}
         </Stack>
       </Container>
     </Box>

@@ -3,7 +3,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { useState } from "react";
 import makeStyles from "@mui/styles/makeStyles";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useParams } from "react-router-dom";
 import Button from "@mui/material/Button";
 
 const useStyles = makeStyles(() => ({
@@ -24,8 +24,11 @@ const useStyles = makeStyles(() => ({
 }));
 
 const ClassPage = () => {
+  //   const location = useLocation();
+  const { courseId } = useParams();
   const [value, setValue] = useState("0");
   const classes = useStyles();
+  const classid = "ahklq2iqo";
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -43,10 +46,11 @@ const ClassPage = () => {
               <Button
                 {...props}
                 component={Link}
-                to="/class/news"
+                to={`/course/${courseId}/news`}
                 style={{
                   textDecoration: "none",
                   height: "100%",
+                  paddingX: 2,
                 }}
               />
             )}
@@ -60,7 +64,7 @@ const ClassPage = () => {
               <Button
                 {...props}
                 component={Link}
-                to="/class/members"
+                to={`/course/${classid}/members`}
                 style={{
                   textDecoration: "none",
                   height: "100%",

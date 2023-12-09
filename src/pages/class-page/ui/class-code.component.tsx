@@ -27,7 +27,11 @@ const iconMapping = {
   3: <ContentCut fontSize="small" />,
 };
 
-const ClassCodeComponent = () => {
+interface Props {
+  code: string;
+}
+
+const ClassCodeComponent: React.FC<Props> = ({ code }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedIndex, setSelectedIndex] = useState(null);
 
@@ -95,7 +99,7 @@ const ClassCodeComponent = () => {
             color: "rgb(25,103,210)",
           }}
         >
-          k4g2ozv
+          {code}
         </Typography>
       </CardContent>
     </Card>
