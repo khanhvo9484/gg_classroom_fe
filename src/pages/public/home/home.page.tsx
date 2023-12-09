@@ -47,14 +47,6 @@ const HomePage = () => {
             courses.map((course, index) => {
               return <ClassCard key={index} course={course} />;
             })}
-          {/* {MockData.map((individualClass, index) => (
-            <ClassCard
-              key={index}
-              classname={individualClass.classname}
-              teacherName={individualClass.teacherName}
-              shortName={individualClass.shortName}
-            />
-          ))} */}
         </Stack>
       </Container>
     </Box>

@@ -19,11 +19,13 @@ import Test from "@/pages/public/test";
 import ClassPage from "@/pages/class-page/class.page";
 import NewsClassPage from "@/pages/class-page/news-class.page";
 import MembersPage from "@/pages/class-page/members.page";
+import Header from "@/layout/header/main.header";
 
 function App() {
   return (
     <Routes>
       <Route path="/test" element={<Test></Test>} />
+      <Route path="/main-header" element={<Header></Header>} />
       <Route element={<DefaultLayout />}>
         <Route index element={<LandingPage />} />
         <Route element={<SignInLayout />}>

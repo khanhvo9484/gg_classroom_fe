@@ -4,6 +4,7 @@ import { CardActions, IconButton } from "@mui/material";
 import FolderOpenOutlined from "@mui/icons-material/FolderOpenOutlined";
 import AssignmentOutlined from "@mui/icons-material/AssignmentOutlined";
 import { Card } from "@mui/material";
+import { Box } from "@mui/material";
 import { CardActionArea } from "@mui/material";
 import { CardHeader } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
@@ -13,6 +14,7 @@ import { useEffect, useState } from "react";
 import gradientColors from "@/data/gradient.color";
 import { useSelector } from "react-redux";
 import { selectUser } from "@/redux/auth.slice";
+import { string } from "yup";
 
 function stringToColor(string: string) {
   let hash = 0;
@@ -38,6 +40,19 @@ interface Props {
   course: ICourse;
 }
 
+function shortName(name: string) {
+  const nameParts = name.split(" ");
+  let displayName = "";
+
+  if (nameParts.length > 1) {
+    displayName = name.split(" ")[0][0] + name.split(" ")[1][0];
+  } else {
+    displayName = name.split(" ")[0][0];
+  }
+
+  return displayName;
+}
+
 const ClassCard: React.FC<Props> = ({ course }) => {
   const userProfile = useSelector(selectUser);
 
@@ -52,6 +67,61 @@ const ClassCard: React.FC<Props> = ({ course }) => {
     return userProfile.id !== course.courseOwnerId
       ? course.courseOwner.name
       : "";
+  };
+
+  const displayAvatarOwner = () => {
+    if (userProfile.id !== course.courseOwnerId){
+      return (
+        <CardActionArea
+        href="#"
+        sx={{
+          minHeight: 180,
+        }}
+        >
+          {(course.courseOwner && course.courseOwner.avatar)
+          ? (
+            <Avatar
+                aria-label="recipe"
+                sx={{
+                  minWidth: 80,
+                  minHeight: 80,
+                  mt: -5,
+                  ml: 29,
+                  bgcolor: AvatarBgColor,
+                }}
+                src={course.courseOwner.avatar}
+            ></Avatar>
+          )
+          : (
+            <Avatar
+                aria-label="recipe"
+                sx={{
+                  minWidth: 80,
+                  minHeight: 80,
+                  mt: -5,
+                  ml: 29,
+                  bgcolor: AvatarBgColor,
+                  children: shortName(course.courseOwner.name),
+                }}
+            ></Avatar>
+          )}
+        </CardActionArea>
+      )
+    } else {
+      return (
+        <Box
+        sx={{
+          minHeight: 180,
+        }}
+        >
+          <Box
+            sx={{
+              mt: -5
+            }}
+          ></Box>
+        </Box>
+      )
+    }
   };
 
   useEffect(() => {
@@ -86,9 +156,8 @@ const ClassCard: React.FC<Props> = ({ course }) => {
         }}
         action={<CardMenu />}
         title={
-          <Link href="#" underline="none">
+          <Link href={`/course/${course.id}/news`} underline="none">
             <Typography
-              gutterBottom
               variant="h5"
               component="div"
               color="info.light"
@@ -99,6 +168,16 @@ const ClassCard: React.FC<Props> = ({ course }) => {
               }}
             >
               {course.name}
+              <Typography
+                color="info.light"
+                sx={{
+                  ":hover": {
+                    textDecoration: "underline",
+                  },
+                }}
+              >
+                {course.description}
+              </Typography>
             </Typography>
           </Link>
         }
@@ -120,25 +199,7 @@ const ClassCard: React.FC<Props> = ({ course }) => {
           </Link>
         }
       />
-      <CardActionArea
-        href={`/course/${course.id}/news`}
-        sx={{
-          minHeight: 180,
-        }}
-      >
-        <Avatar
-          aria-label="recipe"
-          sx={{
-            minWidth: 80,
-            minHeight: 80,
-            mt: -5,
-            ml: 29,
-            bgcolor: AvatarBgColor,
-          }}
-        >
-          A
-        </Avatar>
-      </CardActionArea>
+      {displayAvatarOwner()}
       <CardActions
         sx={{ pl: 28, borderTop: "0.5px solid rgba(42, 42, 42, 0.329)" }}
       >
