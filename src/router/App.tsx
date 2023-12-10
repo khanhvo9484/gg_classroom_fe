@@ -20,20 +20,20 @@ import ClassPage from "@/pages/class-page/class.page";
 import NewsClassPage from "@/pages/class-page/news-class.page";
 import MembersPage from "@/pages/class-page/members.page";
 import MainLayout from "@/layout/main.layout";
-import { BrowserRouter } from "react-router-dom";
 
 function App() {
   return (
     <Routes>
       <Route path="/test" element={<Test></Test>} />
       <Route element={<MainLayout />}>
-        <Route path="home/home" element={<HomePage />} />
-        <Route path="home/calendar" element={<HomePage />} />
-        <Route path="home/review" element={<HomePage />} />
-        <Route path="home/review2" element={<HomePage />} />
-        <Route path="home/archived" element={<HomePage />} />
-        <Route path="home/setting" element={<HomePage />} />
-        <Route path="home/course/:courseId" element={<ClassPage />}>
+        <Route path="home" element={<HomePage />} />
+        <Route path="profile" element={<ProfilePage />} />
+        <Route path="calendar" element={<HomePage />} />
+        <Route path="review" element={<HomePage />} />
+        <Route path="review2" element={<HomePage />} />
+        <Route path="archived" element={<HomePage />} />
+        <Route path="setting" element={<HomePage />} />
+        <Route path="course/:courseId" element={<ClassPage />}>
           <Route path="news" element={<NewsClassPage />} />
           <Route path="members" element={<MembersPage />} />
         </Route>
@@ -54,16 +54,15 @@ function App() {
             <Route path="sign-up/verify" element={<VerifySignUpPage />} />
           </Route>
         </Route>
-        <Route path="course/:courseId" element={<ClassPage />}>
+        {/* <Route path="course/:courseId" element={<ClassPage />}>
           <Route path="news" element={<NewsClassPage />} />
           <Route path="members" element={<MembersPage />} />
-        </Route>
+        </Route> */}
       </Route>
 
       <Route element={<RequiredAuth />}>
         <Route element={<DefaultLayout />}>
-          <Route path="home" element={<HomePage />} />
-          <Route path="profile" element={<ProfilePage />} />
+
         </Route>
         <Route path="sign-out" element={<SignOut />} />
       </Route>

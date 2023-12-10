@@ -15,6 +15,11 @@ import gradientColors from "@/data/gradient.color";
 import { useSelector } from "react-redux";
 import { selectUser } from "@/redux/auth.slice";
 import { string } from "yup";
+import EditCourseDialog from "../dialog/edit-course.dialog.component";
+import { Navigate } from "react-router-dom";
+import {
+  useNavigate
+} from "react-router-dom";
 
 function stringToColor(string: string) {
   let hash = 0;
@@ -53,8 +58,10 @@ function shortName(name: string) {
   return displayName;
 }
 
-const ClassCard: React.FC<Props> = ({ course }) => {
+const ClassCard = ({ course, archiveCourse, leaveCourse }) => {
   const userProfile = useSelector(selectUser);
+  const [isEditCourseDialogOpen, setIsEditCourseDialogOpen] = useState(false);
+  const navigate = useNavigate();
 
   const AvatarBgColor = stringToColor(course.courseOwner.name);
   const colors = gradientColors;
@@ -62,6 +69,15 @@ const ClassCard: React.FC<Props> = ({ course }) => {
   const [bgGradient, setBgGradient] = useState(
     "linear-gradient(to right, #FFFFFF, #FFFFFF)"
   ); // Default background color
+
+  function updateCourses(){
+    navigate(`/home/home`, { replace: true });
+    navigate(0);
+  }
+
+  function editCourse() {
+    setIsEditCourseDialogOpen(true);
+  }
 
   const displayNameOwner = () => {
     return userProfile.id !== course.courseOwnerId
@@ -154,7 +170,9 @@ const ClassCard: React.FC<Props> = ({ course }) => {
           minHeight: 100,
           maxHeight: 100,
         }}
-        action={<CardMenu />}
+        action={<CardMenu archiveCourse={() => {archiveCourse()}} leaveCourse={() => {leaveCourse()}}
+                          editCourse={() => {editCourse()}}
+                          isOwner={Boolean(userProfile.id === course.courseOwnerId)}/>}
         title={
           <Link href={`/course/${course.id}/news`} underline="none">
             <Typography
@@ -210,6 +228,10 @@ const ClassCard: React.FC<Props> = ({ course }) => {
           <FolderOpenOutlined fontSize="medium" />
         </IconButton>
       </CardActions>
+      <EditCourseDialog open={isEditCourseDialogOpen}
+                        updateCourses={updateCourses}
+                        onClose={() => {setIsEditCourseDialogOpen(false)}}
+                        course={course}/>
     </Card>
   );
 };

@@ -7,10 +7,16 @@ import { useContext, useEffect, useState } from "react";
 import { ClassService } from "@/service/class.service";
 import { ICourse } from "@/models/class.model";
 import LoadingContext from "@/context/loading.contenxt";
+import toast from "react-hot-toast";
+import { customAxios } from "@/api/custom-axios";
+import {
+  useNavigate
+} from "react-router-dom";
 
 const HomePage = () => {
   document.title = "E-learning | Màn hình chính";
   const classService = new ClassService();
+  const navigate = useNavigate();
   const { startLoading, stopLoading } = useContext(LoadingContext);
   const [courses, setCourses] = useState<ICourse[]>(null);
 
@@ -32,6 +38,48 @@ const HomePage = () => {
     getAllCourse();
   }, []);
 
+  async function leaveCourse(courseId){
+    try {
+      const payload = {
+        courseId: courseId
+      };
+      // 👇️ const data: CreateUserResponse
+      const response = await customAxios.delete("/courses/leave-course", payload);
+
+
+      if (response) {
+          toast.success("Rời lớp học thành công.");
+          setCourses(courses.filter(course =>course.id !== courseId));
+          navigate(`/home/home/`);
+          navigate(0);
+      } else {
+        toast.error("Rời lớp học không thành công.");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Rời lớp học không thành công.");
+    }
+  }
+
+  async function archiveCourse (courseId){
+    try {
+      // 👇️ const data: CreateUserResponse
+      const response = await customAxios.delete(`/courses/delete-course/${courseId}`);
+
+      if (response) {
+          toast.success("Lưu trữ lớp học thành công.");
+          setCourses(courses.filter(course =>course.id !== courseId));
+          navigate(`/home/home/`);
+          navigate(0);
+      } else {
+        toast.error("Lưu trữ lớp học không thành công.");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Lưu trữ lớp học không thành công.");
+    }
+  }
+
   return (
     <Box sx={{ m: 5, minHeight: "600px" }}>
       <Container
@@ -52,7 +100,9 @@ const HomePage = () => {
         >
           {courses &&
             courses.map((course, index) => {
-              return <ClassCard key={index} course={course} />;
+              return <ClassCard key={index} course={course}
+                      archiveCourse={() => {archiveCourse(course.id)}}
+                      leaveCourse={() => {leaveCourse(course.id)}}/>;
             })}
         </Stack>
       </Container>

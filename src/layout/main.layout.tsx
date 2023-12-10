@@ -35,8 +35,20 @@ import Typography from "@mui/material/Typography";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ListItemNavLink from "@/components/ui/list-item-button-navlink.component";
 import ListItemNavLinkAvatar from "@/components/ui/list-item-button-navlink-avatar.component";
+import AddIcon from '@mui/icons-material/Add';
 import * as React from 'react';
 import { Outlet } from "react-router-dom";
+import AddCourseDialog from "@/components/ui/dialog/add-course.dialog.component";
+import { Toaster } from "react-hot-toast";
+import {
+    useNavigate
+  } from "react-router-dom";
+import FadeInJoin from "@/components/join.fadein.component";
+import Fade from "@mui/material/Fade";
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
+import Zoom from "@mui/material/Zoom";
+import Slide from "@mui/material/Slide";
+
 
 const drawerWidth = 300;
 
@@ -55,9 +67,9 @@ const closedMixin = (theme: Theme): CSSObject => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     overflowX: 'hidden',
-    width: `calc(${theme.spacing(7)} + 1px)`,
+    width: `calc(${theme.spacing(7)} + 20px)`,
     [theme.breakpoints.up('sm')]: {
-      width: `calc(${theme.spacing(8)} + 1px)`,
+      width: `calc(${theme.spacing(8)} + 20px)`,
     },
 });
 
@@ -110,16 +122,29 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   }));
 
 function Header() {
+    const navigate = useNavigate();
     const theme = useTheme();
     const [ sidebarState, setSidebarState ] = React.useState(true);
     const [ sidebarStateHover, setSidebarStateHover ] = React.useState(false);
     const [ isSchoolOpen, setIsSchoolOpen ] = React.useState(true);
     const [ isEnrolledOpen, setIsEnrolledOpen ] = React.useState(true);
+    const [ isCreateCourseDialogOpen, setIsCreateCourseDialogOpen ] = React.useState(false);
+    const [ isOpenFadeInJoin, setIsOpenFadeInJoin ] = React.useState(false);
 
     const classService = new ClassService();
     const [loading, setLoading] = React.useState(false);
     const [courses, setCourses] = React.useState<ICourse[]>(null);
     const [currentPage, setCurrentPage] = React.useState("");
+
+    function updateCourses(courseId){
+        navigate(`/home/course/${courseId}/`, { replace: true });
+    }
+
+    function onFadeClose() {
+        setIsOpenFadeInJoin(false);
+        navigate(`/home/home/`, { replace: true });
+        navigate(0);
+    }
 
     React.useEffect(() => {
       // setLoading(true);
@@ -141,13 +166,21 @@ function Header() {
     const location = useLocation();
     const path = location.pathname;
     return (
-        <Box sx={{ display: 'flex' }}>
+        <>
+        <Box sx={{ display: { xl: 'none', xs: 'block' } }}>
+            <Zoom in={isOpenFadeInJoin} mountOnEnter unmountOnExit>
+                <Box sx={{zIndex: 9999999}}>
+                    <FadeInJoin onFadeClose={() => {onFadeClose()}}/>
+                </Box>
+            </Zoom>
+        </Box>
+        {!isOpenFadeInJoin && <Box sx={{ display: 'flex' }}>
             <AppBar
                 position="fixed"
                 color="transparent"
                 style={{ background: 'white' }}
                 sx={{ boxShadow: "0px 2px 4px -1px rgba(0,0,0,0.2)",
-                    zIndex: 9999999
+                    zIndex: 1201
                 }}
             >
                 <Container maxWidth="xl">
@@ -184,7 +217,7 @@ function Header() {
                         </Link>
 
                         <Link
-                            href="/home/home"
+                            href="/home"
                             underline="none"
                             sx={{
                                 mr: 2,
@@ -214,6 +247,29 @@ function Header() {
                                 : ""}
                             </Typography>
                         </Box>
+
+
+                        <IconButton
+                            size="large"
+                            aria-label="account of current user"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true"
+                            color="inherit"
+                            onClick={() => {setIsCreateCourseDialogOpen(true)}}
+                        >
+                            <AddIcon />
+                        </IconButton>
+
+                        <IconButton
+                            size="large"
+                            aria-label="account of current user"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true"
+                            color="inherit"
+                            onClick={() => {setIsOpenFadeInJoin(!isOpenFadeInJoin)}}
+                        >
+                            <LibraryAddIcon />
+                        </IconButton>
 
                         <Box sx={{ flexGrow: 0 }}>
                             {user && user.name ? (
@@ -255,16 +311,14 @@ function Header() {
                 <Divider />
                 <List>
                     <ListItemNavLink
-                        link="/home/home"
+                        link="/home"
                         text="Màn hình chính"
                         Icon={HomeIcon}
-                        setCurrentPage={setCurrentPage}
                     />
                     <ListItemNavLink
-                        link="/home/calendar"
+                        link="/calendar"
                         text="Lịch"
                         Icon={CalendarTodayIcon}
-                        setCurrentPage={setCurrentPage}
                     />
                 </List>
                 <Divider />
@@ -279,16 +333,15 @@ function Header() {
                     <Collapse in={isSchoolOpen} timeout="auto" unmountOnExit>
                         <List>
                             <ListItemNavLink
-                                link="/home/review"
+                                link="/review"
                                 text="Cần xem xét"
                                 Icon={TopicOutlinedIcon}
-                                setCurrentPage={setCurrentPage}
                             />
                             {courses &&
                                 courses.map((course, index) => {
                                 return (
                                     <ListItemNavLinkAvatar
-                                        link={`/home/course/${course.id}/`}
+                                        link={`/course/${course.id}/`}
                                         course={course} key={course.id}
                                         setCurrentPage={setCurrentPage}/>
                                 );
@@ -307,37 +360,40 @@ function Header() {
                     </ListItemButton>
                     <Collapse in={isEnrolledOpen} timeout="auto" unmountOnExit>
                         <ListItemNavLink
-                                link="/home/review2"
+                                link="/review2"
                                 text="Việc cần làm"
                                 Icon={FactCheckOutlinedIcon}
-                                setCurrentPage={setCurrentPage}
                         />
                     </Collapse>
                 </List>
                 <Divider />
                 <List>
                     <ListItemNavLink
-                        link="/home/archived"
+                        link="/archived"
                         text='Lớp học đã lưu trữ'
                         Icon={ArchiveOutlinedIcon}
-                        setCurrentPage={setCurrentPage}
                     />
                     <ListItemNavLink
-                        link="/home/setting"
+                        link="/setting"
                         text="Cài đặt"
                         Icon={SettingsOutlinedIcon}
-                        setCurrentPage={setCurrentPage}
                     />
                 </List>
                 <Divider />
             </Drawer>
-            <Main open={sidebarState}>
+            <Main open={sidebarState || sidebarStateHover}>
                 <DrawerHeader />
+                <AddCourseDialog
+                    open={isCreateCourseDialogOpen}
+                    updateCourses={updateCourses}
+                    onClose={() => {setIsCreateCourseDialogOpen(false)}}/>
                 <Box>
                     <Outlet />
                 </Box>
             </Main>
-        </Box>
+        </Box>}
+        <Toaster position="top-right" reverseOrder={false} />
+        </>
     );
 }
 export default Header;

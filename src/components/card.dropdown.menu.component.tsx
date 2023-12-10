@@ -4,14 +4,9 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-const options = [
-  'Di chuyển',
-  'Hủy đăng ký',
-];
-
 const ITEM_HEIGHT = 48;
 
-export default function CardMenu() {
+export default function CardMenu({isOwner, archiveCourse, leaveCourse, editCourse}) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -34,27 +29,58 @@ export default function CardMenu() {
       >
         <MoreVertIcon />
       </IconButton>
-      <Menu
-        id="long-menu"
-        MenuListProps={{
-          'aria-labelledby': 'long-button',
-        }}
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        PaperProps={{
-          style: {
-            maxHeight: ITEM_HEIGHT * 4.5,
-            width: '20ch',
-          },
-        }}
-      >
-        {options.map((option) => (
-          <MenuItem key={option} selected={option === 'Pyxis'} onClick={handleClose}>
-            {option}
-          </MenuItem>
-        ))}
-      </Menu>
+      {isOwner
+        ? (
+          <Menu
+            id="long-menu"
+            MenuListProps={{
+              'aria-labelledby': 'long-button',
+            }}
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            PaperProps={{
+              style: {
+                maxHeight: ITEM_HEIGHT * 4.5,
+                width: '20ch',
+              },
+            }}
+          >
+            <MenuItem key={"Chỉnh sửa"} onClick={() =>{editCourse();
+                                                     handleClose();}}>
+              {"Chỉnh sửa"}
+            </MenuItem>
+            <MenuItem key={"Lưu trữ"} onClick={() =>{archiveCourse();
+                                                     handleClose();}}>
+              {"Lưu trữ"}
+            </MenuItem>
+          </Menu>
+        ) : (
+          <Menu
+            id="long-menu"
+            MenuListProps={{
+              'aria-labelledby': 'long-button',
+            }}
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            PaperProps={{
+              style: {
+                maxHeight: ITEM_HEIGHT * 4.5,
+                width: '20ch',
+              },
+            }}
+          >
+            <MenuItem key={"Di chuyển"} onClick={() =>{console.log("Nhấn di chuyển");
+                                                       handleClose();}}>
+            {"Di chuyển"}
+            </MenuItem>
+            <MenuItem key={"Hủy đăng ký"} onClick={() =>{leaveCourse();
+                                                         handleClose();}}>
+              {"Hủy đăng ký"}
+            </MenuItem>
+          </Menu>
+        )}
     </div>
   );
 }

@@ -5,7 +5,6 @@ import ListItemText from '@mui/material/ListItemText';
 
 
 export default function ListItemNavLinkAvatar ({link, course, setCurrentPage}){
-    console.log(link);
     return (
         <ListItemButton LinkComponent={NavLink} to={link}
             onClick={() => setCurrentPage(course.name)}
@@ -19,9 +18,9 @@ export default function ListItemNavLinkAvatar ({link, course, setCurrentPage}){
                 },
             }}
         >
-            <Avatar sx={{ minWidth: 30,
-                        minHeight: 30,
-                        mr: 2
+            <Avatar sx={{   minWidth: 30,
+                            minHeight: 30,
+                            mr: 2
                         }}
                         src={course.courseOwner.avatar}>
             </Avatar>
