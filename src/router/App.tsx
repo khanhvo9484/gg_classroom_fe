@@ -19,13 +19,25 @@ import Test from "@/pages/public/test";
 import ClassPage from "@/pages/class-page/class.page";
 import NewsClassPage from "@/pages/class-page/news-class.page";
 import MembersPage from "@/pages/class-page/members.page";
-import Header from "@/layout/header/main.header";
+import MainLayout from "@/layout/main.layout";
+import { BrowserRouter } from "react-router-dom";
 
 function App() {
   return (
     <Routes>
       <Route path="/test" element={<Test></Test>} />
-      <Route path="/main-header" element={<Header></Header>} />
+      <Route element={<MainLayout />}>
+        <Route path="home/home" element={<HomePage />} />
+        <Route path="home/calendar" element={<HomePage />} />
+        <Route path="home/review" element={<HomePage />} />
+        <Route path="home/review2" element={<HomePage />} />
+        <Route path="home/archived" element={<HomePage />} />
+        <Route path="home/setting" element={<HomePage />} />
+        <Route path="home/course/:courseId" element={<ClassPage />}>
+          <Route path="news" element={<NewsClassPage />} />
+          <Route path="members" element={<MembersPage />} />
+        </Route>
+      </Route>
       <Route element={<DefaultLayout />}>
         <Route index element={<LandingPage />} />
         <Route element={<SignInLayout />}>

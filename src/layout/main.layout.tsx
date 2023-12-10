@@ -7,16 +7,15 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import { useLocation } from "react-router-dom";
-import UserModel from "../../models/user.model";
+import UserModel from "../models/user.model";
 import { useSelector } from "react-redux";
-import AvatarDropdown from "../../components/avatar.dropdown.menu.component";
+import AvatarDropdown from "../components/avatar.dropdown.menu.component";
 import logo from "@/assets/icons/k3_logo.png";
-import { styled } from '@mui/material/styles';
+import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
 import { Collapse } from "@mui/material";
-import Drawer from '@mui/material/Drawer';
+import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -32,34 +31,95 @@ import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import ArchiveOutlinedIcon from '@mui/icons-material/ArchiveOutlined';
 import { ClassService } from "@/service/class.service";
 import { ICourse } from "@/models/class.model";
-import Avatar from "@mui/material/Avatar";
+import Typography from "@mui/material/Typography";
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ListItemNavLink from "@/components/ui/list-item-button-navlink.component";
+import ListItemNavLinkAvatar from "@/components/ui/list-item-button-navlink-avatar.component";
+import * as React from 'react';
+import { Outlet } from "react-router-dom";
 
-const drawerWidth = 260;
+const drawerWidth = 300;
 
+const openedMixin = (theme: Theme): CSSObject => ({
+    width: drawerWidth,
+    transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+    }),
+    overflowX: 'hidden',
+});
+
+const closedMixin = (theme: Theme): CSSObject => ({
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    overflowX: 'hidden',
+    width: `calc(${theme.spacing(7)} + 1px)`,
+    [theme.breakpoints.up('sm')]: {
+      width: `calc(${theme.spacing(8)} + 1px)`,
+    },
+});
 
 const DrawerHeader = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
-  justifyContent: 'flex-end',
-  "& .MuiBackdrop-root": {
-    display: "none"
-  }
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+    justifyContent: 'flex-end',
+    "& .MuiBackdrop-root": {
+        display: "none"
+    },
 }));
-import * as React from 'react';
 
-const pages = [{ title: "Lớp học của tôi", link: "/home" }];
+const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => (prop !== 'open')})(
+    ({ theme, open }) => ({
+      width: drawerWidth,
+      flexShrink: 0,
+      whiteSpace: 'nowrap',
+      boxSizing: 'border-box',
+      ...(open && {
+        ...openedMixin(theme),
+        '& .MuiDrawer-paper': openedMixin(theme),
+      }),
+      ...(!open && {
+        ...closedMixin(theme),
+        '& .MuiDrawer-paper': closedMixin(theme),
+      }),
+    }),
+  );
+
+const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
+    open?: boolean;
+  }>(({ theme, open }) => ({
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: `-${drawerWidth}px`,
+    ...(open && {
+      transition: theme.transitions.create('margin', {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+      marginLeft: 0,
+    }),
+  }));
 
 function Header() {
-    const [ sidebarState, setSidebarState ] = React.useState();
+    const theme = useTheme();
+    const [ sidebarState, setSidebarState ] = React.useState(true);
+    const [ sidebarStateHover, setSidebarStateHover ] = React.useState(false);
     const [ isSchoolOpen, setIsSchoolOpen ] = React.useState(true);
     const [ isEnrolledOpen, setIsEnrolledOpen ] = React.useState(true);
 
     const classService = new ClassService();
     const [loading, setLoading] = React.useState(false);
     const [courses, setCourses] = React.useState<ICourse[]>(null);
+    const [currentPage, setCurrentPage] = React.useState("");
 
     React.useEffect(() => {
       // setLoading(true);
@@ -81,7 +141,7 @@ function Header() {
     const location = useLocation();
     const path = location.pathname;
     return (
-        <Box>
+        <Box sx={{ display: 'flex' }}>
             <AppBar
                 position="fixed"
                 color="transparent"
@@ -123,18 +183,36 @@ function Header() {
                             ></img>
                         </Link>
 
+                        <Link
+                            href="/home/home"
+                            underline="none"
+                            sx={{
+                                mr: 2,
+                                mb: 0,
+                                ":hover": {
+                                  textDecoration: "underline", // theme.shadows[20]
+                                  color: "#19aa77",
+                                },
+                                color: "text.primary"
+                              }}
+                        >
+                            <Typography variant="h5"
+                                        component="div"
+                            >
+                                {"Lớp học"}
+                            </Typography>
+                        </Link>
+
                         <Box
                             sx={{ flexGrow: 1, display: { xs: "none", md: "flex" }, gap: 1 }}
                         >
-                            {pages.map((page) => (
-                            <Button
-                                key={page.title}
-                                sx={{ my: 2, color: "black", display: "block" }}
-                                href={page.link}
+                            <Typography variant="h5"
+                                        component="div"
                             >
-                                {page.title}
-                            </Button>
-                            ))}
+                                {currentPage
+                                ? (<><ArrowForwardIosIcon sx={{mb: "-3px"}} fontSize="small"/> {currentPage}</>)
+                                : ""}
+                            </Typography>
                         </Box>
 
                         <Box sx={{ flexGrow: 0 }}>
@@ -159,37 +237,35 @@ function Header() {
             </AppBar>
             <Drawer
                 sx={{
-                    width: drawerWidth,
                     flexShrink: 0,
                     '& .MuiDrawer-paper': {
-                        width: drawerWidth,
                         boxSizing: 'border-box',
+                        overflowX: "hidden"
                     },
+                    maxWidth: drawerWidth,
                 }}
-                variant="persistent"
+                onMouseEnter={() => {setSidebarStateHover(true)}}
+                onMouseLeave={() => {setSidebarStateHover(false)}}
+                variant="permanent"
                 anchor="left"
-                open={sidebarState}
+                open={sidebarState || sidebarStateHover}
             >
                 <DrawerHeader>
                 </DrawerHeader>
                 <Divider />
                 <List>
-                    <ListItem sx={{ml:1}} disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                <HomeIcon fontSize="medium"/>
-                            </ListItemIcon>
-                            <ListItemText primary={'Màn hình chính'} />
-                        </ListItemButton>
-                    </ListItem>
-                    <ListItem sx={{ml:1}} disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                <CalendarTodayIcon fontSize="medium"/>
-                            </ListItemIcon>
-                            <ListItemText primary={"Lịch"} />
-                        </ListItemButton>
-                    </ListItem>
+                    <ListItemNavLink
+                        link="/home/home"
+                        text="Màn hình chính"
+                        Icon={HomeIcon}
+                        setCurrentPage={setCurrentPage}
+                    />
+                    <ListItemNavLink
+                        link="/home/calendar"
+                        text="Lịch"
+                        Icon={CalendarTodayIcon}
+                        setCurrentPage={setCurrentPage}
+                    />
                 </List>
                 <Divider />
                 <List>
@@ -202,25 +278,19 @@ function Header() {
                     </ListItemButton>
                     <Collapse in={isSchoolOpen} timeout="auto" unmountOnExit>
                         <List>
-                            <ListItemButton sx={{ml:1}}>
-                                <ListItemIcon>
-                                    <TopicOutlinedIcon />
-                                </ListItemIcon>
-                                <ListItemText primary="Cần xem xét" />
-                            </ListItemButton>
+                            <ListItemNavLink
+                                link="/home/review"
+                                text="Cần xem xét"
+                                Icon={TopicOutlinedIcon}
+                                setCurrentPage={setCurrentPage}
+                            />
                             {courses &&
                                 courses.map((course, index) => {
                                 return (
-                                    <ListItemButton sx={{ml:1}} key={index}>
-                                        <Avatar sx={{ minWidth: 30,
-                                                      minHeight: 30,
-                                                      mr: 2
-                                                    }}
-                                                    src={course.courseOwner.avatar}>
-                                        </Avatar>
-                                        <ListItemText primary={course.name}
-                                                      secondary={course.description}/>
-                                    </ListItemButton>
+                                    <ListItemNavLinkAvatar
+                                        link={`/home/course/${course.id}/`}
+                                        course={course} key={course.id}
+                                        setCurrentPage={setCurrentPage}/>
                                 );
                             })}
                         </List>
@@ -236,37 +306,37 @@ function Header() {
                         <ListItemText primary="Đã đăng ký" />
                     </ListItemButton>
                     <Collapse in={isEnrolledOpen} timeout="auto" unmountOnExit>
-                        <List>
-                            <ListItemButton sx={{ml:1}}>
-                                <ListItemIcon>
-                                    <FactCheckOutlinedIcon />
-                                </ListItemIcon>
-                                <ListItemText primary="Việc cần làm" />
-                            </ListItemButton>
-                        </List>
+                        <ListItemNavLink
+                                link="/home/review2"
+                                text="Việc cần làm"
+                                Icon={FactCheckOutlinedIcon}
+                                setCurrentPage={setCurrentPage}
+                        />
                     </Collapse>
                 </List>
                 <Divider />
                 <List>
-                    <ListItem sx={{ml:1}} disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                <ArchiveOutlinedIcon fontSize="medium"/>
-                            </ListItemIcon>
-                            <ListItemText primary={'Lớp học đã lưu trữ'} />
-                        </ListItemButton>
-                    </ListItem>
-                    <ListItem sx={{ml:1}} disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                <SettingsOutlinedIcon fontSize="medium"/>
-                            </ListItemIcon>
-                            <ListItemText primary={"Cài đặt"} />
-                        </ListItemButton>
-                    </ListItem>
+                    <ListItemNavLink
+                        link="/home/archived"
+                        text='Lớp học đã lưu trữ'
+                        Icon={ArchiveOutlinedIcon}
+                        setCurrentPage={setCurrentPage}
+                    />
+                    <ListItemNavLink
+                        link="/home/setting"
+                        text="Cài đặt"
+                        Icon={SettingsOutlinedIcon}
+                        setCurrentPage={setCurrentPage}
+                    />
                 </List>
                 <Divider />
             </Drawer>
+            <Main open={sidebarState}>
+                <DrawerHeader />
+                <Box>
+                    <Outlet />
+                </Box>
+            </Main>
         </Box>
     );
 }
