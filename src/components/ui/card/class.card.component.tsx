@@ -17,9 +17,7 @@ import { selectUser } from "@/redux/auth.slice";
 import { string } from "yup";
 import EditCourseDialog from "../dialog/edit-course.dialog.component";
 import { Navigate } from "react-router-dom";
-import {
-  useNavigate
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function stringToColor(string: string) {
   let hash = 0;
@@ -70,7 +68,7 @@ const ClassCard = ({ course, archiveCourse, leaveCourse }) => {
     "linear-gradient(to right, #FFFFFF, #FFFFFF)"
   ); // Default background color
 
-  function updateCourses(){
+  function updateCourses() {
     navigate(`/home/home`, { replace: true });
     navigate(0);
   }
@@ -86,57 +84,55 @@ const ClassCard = ({ course, archiveCourse, leaveCourse }) => {
   };
 
   const displayAvatarOwner = () => {
-    if (userProfile.id !== course.courseOwnerId){
+    if (userProfile.id !== course.courseOwnerId) {
       return (
         <CardActionArea
-        href="#"
-        sx={{
-          minHeight: 180,
-        }}
+          href="#"
+          sx={{
+            minHeight: 180,
+          }}
         >
-          {(course.courseOwner && course.courseOwner.avatar)
-          ? (
+          {course.courseOwner && course.courseOwner.avatar ? (
             <Avatar
-                aria-label="recipe"
-                sx={{
-                  minWidth: 80,
-                  minHeight: 80,
-                  mt: -5,
-                  ml: 29,
-                  bgcolor: AvatarBgColor,
-                }}
-                src={course.courseOwner.avatar}
+              aria-label="recipe"
+              sx={{
+                minWidth: 80,
+                minHeight: 80,
+                mt: -5,
+                ml: 29,
+                bgcolor: AvatarBgColor,
+              }}
+              src={course.courseOwner.avatar}
             ></Avatar>
-          )
-          : (
+          ) : (
             <Avatar
-                aria-label="recipe"
-                sx={{
-                  minWidth: 80,
-                  minHeight: 80,
-                  mt: -5,
-                  ml: 29,
-                  bgcolor: AvatarBgColor,
-                  children: shortName(course.courseOwner.name),
-                }}
+              aria-label="recipe"
+              sx={{
+                minWidth: 80,
+                minHeight: 80,
+                mt: -5,
+                ml: 29,
+                bgcolor: AvatarBgColor,
+                children: shortName(course.courseOwner.name),
+              }}
             ></Avatar>
           )}
         </CardActionArea>
-      )
+      );
     } else {
       return (
         <Box
-        sx={{
-          minHeight: 180,
-        }}
+          sx={{
+            minHeight: 180,
+          }}
         >
           <Box
             sx={{
-              mt: -5
+              mt: -5,
             }}
           ></Box>
         </Box>
-      )
+      );
     }
   };
 
@@ -170,11 +166,22 @@ const ClassCard = ({ course, archiveCourse, leaveCourse }) => {
           minHeight: 100,
           maxHeight: 100,
         }}
-        action={<CardMenu archiveCourse={() => {archiveCourse()}} leaveCourse={() => {leaveCourse()}}
-                          editCourse={() => {editCourse()}}
-                          isOwner={Boolean(userProfile.id === course.courseOwnerId)}/>}
+        action={
+          <CardMenu
+            archiveCourse={() => {
+              archiveCourse();
+            }}
+            leaveCourse={() => {
+              leaveCourse();
+            }}
+            editCourse={() => {
+              editCourse();
+            }}
+            isOwner={Boolean(userProfile.id === course.courseOwnerId)}
+          />
+        }
         title={
-          <Link href={`/course/${course.id}/news`} underline="none">
+          <Link href={`/course/${course.id}`} underline="none">
             <Typography
               variant="h5"
               component="div"
@@ -228,10 +235,14 @@ const ClassCard = ({ course, archiveCourse, leaveCourse }) => {
           <FolderOpenOutlined fontSize="medium" />
         </IconButton>
       </CardActions>
-      <EditCourseDialog open={isEditCourseDialogOpen}
-                        updateCourses={updateCourses}
-                        onClose={() => {setIsEditCourseDialogOpen(false)}}
-                        course={course}/>
+      <EditCourseDialog
+        open={isEditCourseDialogOpen}
+        updateCourses={updateCourses}
+        onClose={() => {
+          setIsEditCourseDialogOpen(false);
+        }}
+        course={course}
+      />
     </Card>
   );
 };

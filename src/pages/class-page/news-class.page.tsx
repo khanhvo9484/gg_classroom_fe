@@ -10,12 +10,14 @@ import { ICourse } from "@/models/class.model";
 import { ClassService } from "@/service/class.service";
 import { useParams } from "react-router-dom";
 import LoadingContext from "@/context/loading.contenxt";
-
-// import { useState } from "react";
+import RoleContext from "@/context/role.context";
 
 const NewsClassPage = () => {
   const classService = new ClassService();
+
   const { startLoading, stopLoading } = useContext(LoadingContext);
+  const { isTeacher } = useContext(RoleContext);
+
   const [course, setCourse] = useState<ICourse>(null);
   const { courseId } = useParams();
 
@@ -37,7 +39,7 @@ const NewsClassPage = () => {
     if (courseId) {
       getCourseById(courseId);
     }
-  }, []);
+  }, [courseId]);
 
   return (
     <Box sx={{ marginY: "2rem", minHeight: "600px" }}>

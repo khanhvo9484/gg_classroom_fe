@@ -20,24 +20,14 @@ import ClassPage from "@/pages/class-page/class.page";
 import NewsClassPage from "@/pages/class-page/news-class.page";
 import MembersPage from "@/pages/class-page/members.page";
 import MainLayout from "@/layout/main.layout";
+import VerifyTokenInvitePage from "@/pages/public/static/verify-token-invite.page";
+import { RoleProvider } from "@/context/role.context";
 
 function App() {
   return (
     <Routes>
       <Route path="/test" element={<Test></Test>} />
-      <Route element={<MainLayout />}>
-        <Route path="home" element={<HomePage />} />
-        <Route path="profile" element={<ProfilePage />} />
-        <Route path="calendar" element={<HomePage />} />
-        <Route path="review" element={<HomePage />} />
-        <Route path="review2" element={<HomePage />} />
-        <Route path="archived" element={<HomePage />} />
-        <Route path="setting" element={<HomePage />} />
-        <Route path="course/:courseId" element={<ClassPage />}>
-          <Route path="news" element={<NewsClassPage />} />
-          <Route path="members" element={<MembersPage />} />
-        </Route>
-      </Route>
+
       <Route element={<DefaultLayout />}>
         <Route index element={<LandingPage />} />
         <Route element={<SignInLayout />}>
@@ -61,9 +51,44 @@ function App() {
       </Route>
 
       <Route element={<RequiredAuth />}>
-        <Route element={<DefaultLayout />}>
+        {/* <Route element={<DefaultLayout />}>
+          <Route path="home" element={<HomePage />} />
+          <Route path="profile" element={<ProfilePage />} />
+          <Route
+            path="course/:courseId"
+            element={
+              <RoleProvider>
+                <ClassPage />
+              </RoleProvider>
+            }
+          >
+            <Route path="news" element={<NewsClassPage />} />
+            <Route path="members" element={<MembersPage />} />
+          </Route>
+        </Route> */}
 
+        <Route element={<MainLayout />}>
+          <Route path="home" element={<HomePage />} />
+          <Route path="profile" element={<ProfilePage />} />
+          <Route path="calendar" element={<HomePage />} />
+          <Route path="review" element={<HomePage />} />
+          <Route path="review2" element={<HomePage />} />
+          <Route path="archived" element={<HomePage />} />
+          <Route path="setting" element={<HomePage />} />
+          <Route
+            path="course/:courseId"
+            element={
+              <RoleProvider>
+                <ClassPage />
+              </RoleProvider>
+            }
+          >
+            <Route path="news" element={<NewsClassPage />} />
+            <Route path="members" element={<MembersPage />} />
+          </Route>
         </Route>
+        <Route path="invite-course" element={<VerifyTokenInvitePage />} />
+
         <Route path="sign-out" element={<SignOut />} />
       </Route>
 

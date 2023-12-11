@@ -9,9 +9,7 @@ import { ICourse } from "@/models/class.model";
 import LoadingContext from "@/context/loading.contenxt";
 import toast from "react-hot-toast";
 import { customAxios } from "@/api/custom-axios";
-import {
-  useNavigate
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
   document.title = "E-learning | Màn hình chính";
@@ -21,7 +19,6 @@ const HomePage = () => {
   const [courses, setCourses] = useState<ICourse[]>(null);
 
   useEffect(() => {
-    // setLoading(true);
     startLoading();
     const getAllCourse = async () => {
       try {
@@ -38,20 +35,22 @@ const HomePage = () => {
     getAllCourse();
   }, []);
 
-  async function leaveCourse(courseId){
+  async function leaveCourse(courseId) {
     try {
       const payload = {
-        courseId: courseId
+        courseId: courseId,
       };
       // 👇️ const data: CreateUserResponse
-      const response = await customAxios.delete("/courses/leave-course", payload);
-
+      const response = await customAxios.delete(
+        "/courses/leave-course",
+        payload
+      );
 
       if (response) {
-          toast.success("Rời lớp học thành công.");
-          setCourses(courses.filter(course =>course.id !== courseId));
-          navigate(`/home/home/`);
-          navigate(0);
+        toast.success("Rời lớp học thành công.");
+        setCourses(courses.filter((course) => course.id !== courseId));
+        navigate(`/home/home/`);
+        navigate(0);
       } else {
         toast.error("Rời lớp học không thành công.");
       }
@@ -61,16 +60,17 @@ const HomePage = () => {
     }
   }
 
-  async function archiveCourse (courseId){
+  async function archiveCourse(courseId) {
     try {
-      // 👇️ const data: CreateUserResponse
-      const response = await customAxios.delete(`/courses/delete-course/${courseId}`);
+      const response = await customAxios.delete(
+        `/courses/delete-course/${courseId}`
+      );
 
       if (response) {
-          toast.success("Lưu trữ lớp học thành công.");
-          setCourses(courses.filter(course =>course.id !== courseId));
-          navigate(`/home/home/`);
-          navigate(0);
+        toast.success("Lưu trữ lớp học thành công.");
+        setCourses(courses.filter((course) => course.id !== courseId));
+        navigate(`/home/home/`);
+        navigate(0);
       } else {
         toast.error("Lưu trữ lớp học không thành công.");
       }
@@ -100,9 +100,18 @@ const HomePage = () => {
         >
           {courses &&
             courses.map((course, index) => {
-              return <ClassCard key={index} course={course}
-                      archiveCourse={() => {archiveCourse(course.id)}}
-                      leaveCourse={() => {leaveCourse(course.id)}}/>;
+              return (
+                <ClassCard
+                  key={index}
+                  course={course}
+                  archiveCourse={() => {
+                    archiveCourse(course.id);
+                  }}
+                  leaveCourse={() => {
+                    leaveCourse(course.id);
+                  }}
+                />
+              );
             })}
         </Stack>
       </Container>
