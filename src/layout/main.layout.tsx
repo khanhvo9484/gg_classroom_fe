@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 import AvatarDropdown from "../components/avatar.dropdown.menu.component";
 import logo from "@/assets/icons/k3_logo.png";
 import { styled, Theme, CSSObject } from "@mui/material/styles";
-import { Collapse, LinearProgress } from "@mui/material";
+import { Collapse, LinearProgress, MenuItem } from "@mui/material";
 import MuiDrawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
@@ -45,7 +45,8 @@ import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
 import Zoom from "@mui/material/Zoom";
 import LoadingContext from "@/context/loading.contenxt";
 import { useContext, useEffect, useState } from "react";
-
+import JoinCodeByCodeDialog from "@/components/ui/dialog/join-course-by-code-dialog.component";
+import Menu from "@mui/material/Menu";
 const drawerWidth = 300;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -118,6 +119,7 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
 }));
 
 function Header() {
+  const classService = new ClassService();
   const navigate = useNavigate();
   const { isLoading, stopLoading, startLoading } = useContext(LoadingContext);
   const [sidebarState, setSidebarState] = useState(true);
@@ -126,14 +128,27 @@ function Header() {
   const [isEnrolledOpen, setIsEnrolledOpen] = useState(true);
   const [isCreateCourseDialogOpen, setIsCreateCourseDialogOpen] =
     useState(false);
+  const [isOpenJoinCourseByCodeDialog, setIsOpenJoinCourseByCodeDialog] =
+    useState(false);
   const [isOpenFadeInJoin, setIsOpenFadeInJoin] = useState(false);
 
-  const classService = new ClassService();
   const [courses, setCourses] = useState<ICourse[]>(null);
   const [currentPage, setCurrentPage] = useState("");
 
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const openMenuAdd = Boolean(anchorEl);
+
+  const handleOpenMenuAdd = (event: MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseMenuAdd = () => {
+    setAnchorEl(null);
+  };
+
   function updateCourses(courseId) {
-    navigate(`/course/${courseId}/news`, { replace: true });
+    navigate(`/course/${courseId}`, { replace: true });
   }
 
   function onFadeClose() {
@@ -143,7 +158,6 @@ function Header() {
   }
 
   useEffect(() => {
-    // setLoading(true);
     startLoading();
     const getAllCourse = async () => {
       try {
@@ -233,7 +247,11 @@ function Header() {
                     color: "text.primary",
                   }}
                 >
-                  <Typography variant="h6" component="div">
+                  <Typography
+                    variant="h6"
+                    sx={{ fontWeight: 400 }}
+                    component="div"
+                  >
                     {"Lớp học"}
                   </Typography>
                 </Link>
@@ -245,7 +263,11 @@ function Header() {
                     gap: 1,
                   }}
                 >
-                  <Typography variant="h6" component="div">
+                  <Typography
+                    variant="h6"
+                    component="div"
+                    sx={{ fontWeight: 400 }}
+                  >
                     {currentPage ? (
                       <>
                         <ArrowForwardIosIcon
@@ -266,13 +288,42 @@ function Header() {
                   aria-controls="menu-appbar"
                   aria-haspopup="true"
                   color="inherit"
-                  onClick={() => {
-                    setIsCreateCourseDialogOpen(true);
+                  // onClick={() => {
+                  //   setIsCreateCourseDialogOpen(true);
+                  // }}
+                  onClick={(event) => {
+                    handleOpenMenuAdd(event);
                   }}
                 >
                   <AddIcon />
                 </IconButton>
-
+                <Menu
+                  id="lock-menu"
+                  open={openMenuAdd}
+                  anchorEl={anchorEl}
+                  onClose={handleCloseMenuAdd}
+                  MenuListProps={{
+                    "aria-labelledby": "lock-button",
+                    role: "listbox",
+                  }}
+                >
+                  <MenuItem
+                    onClick={() => {
+                      setIsOpenJoinCourseByCodeDialog(true);
+                      setAnchorEl(null);
+                    }}
+                  >
+                    Tham gia lớp học
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      setIsCreateCourseDialogOpen(true);
+                      setAnchorEl(null);
+                    }}
+                  >
+                    Tạo lớp học
+                  </MenuItem>
+                </Menu>
                 <IconButton
                   size="large"
                   aria-label="account of current user"
@@ -422,6 +473,12 @@ function Header() {
                 setIsCreateCourseDialogOpen(false);
               }}
             />
+            <JoinCodeByCodeDialog
+              open={isOpenJoinCourseByCodeDialog}
+              onClose={() => {
+                setIsOpenJoinCourseByCodeDialog(false);
+              }}
+            ></JoinCodeByCodeDialog>
             <Box>
               <Outlet />
             </Box>

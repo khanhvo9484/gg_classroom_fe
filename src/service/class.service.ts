@@ -3,6 +3,7 @@ import {
   API_GET_ALL_COURSE,
   API_GET_ALL_COURSE_MEMBER,
   API_GET_COURSE_BY_ID,
+  API_JOIN_BY_CODE,
   API_JOIN_BY_TOKEN,
   API_SEND_INVITATION,
 } from "@/api/api.constant";
@@ -13,8 +14,9 @@ import {
   ICoursesRespone,
   IInvitationCourseRequest,
   IInvitationCourse,
-  ITokenVeryfiJoinCourseResponse,
+  IVeryfiJoinCourseResponse,
   ITokenVeryfiJoinCourseRequest,
+  IJoinCourseByCodeRequest,
 } from "@/models/class.model";
 import { IAllMemberCourseRespone } from "@/models/member.model";
 import { getSearchParams } from "@/utils/http.util";
@@ -63,11 +65,23 @@ export class ClassService {
 
   async verifyTokenInviteCourse(
     tokenVerifyRequest: ITokenVeryfiJoinCourseRequest
-  ): Promise<ITokenVeryfiJoinCourseResponse> {
+  ): Promise<IVeryfiJoinCourseResponse> {
     const { data: response } =
-      await customAxios.post<ITokenVeryfiJoinCourseResponse>(
+      await customAxios.post<IVeryfiJoinCourseResponse>(
         `${API_COURSES}${API_JOIN_BY_TOKEN}`,
         tokenVerifyRequest
+      );
+
+    return response;
+  }
+
+  async joinCourseByInviteCode(
+    joinByCodeRequest: IJoinCourseByCodeRequest
+  ): Promise<IVeryfiJoinCourseResponse> {
+    const { data: response } =
+      await customAxios.post<IVeryfiJoinCourseResponse>(
+        `${API_COURSES}${API_JOIN_BY_CODE}`,
+        joinByCodeRequest
       );
 
     return response;

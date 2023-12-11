@@ -1,7 +1,6 @@
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import ClassCard from "../../../components/ui/card/class.card.component";
-// import Class from "../../../models/class.model";
 import { Stack } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { ClassService } from "@/service/class.service";

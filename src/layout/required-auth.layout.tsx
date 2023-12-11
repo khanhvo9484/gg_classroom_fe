@@ -4,7 +4,6 @@ import { Navigate } from "react-router-dom";
 
 const RequiredAuth = () => {
   const location = useLocation();
-  console.log("Location: ", location);
   const pathName = location.pathname;
   const searchParams = location.search ? location.search : "";
 

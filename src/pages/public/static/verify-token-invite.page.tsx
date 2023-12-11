@@ -51,7 +51,7 @@ const VerifyTokenInvitePage = () => {
         setVerifyValid(true);
         setIsLoading(false);
         setTimeout(() => {
-          navigate(`/course/${response.data.courseId}/news`, { replace: true });
+          navigate(`/course/${response.data.courseId}`, { replace: true });
         }, 1000);
       } catch (error) {
         setVerifyValid(false);

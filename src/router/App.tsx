@@ -44,10 +44,6 @@ function App() {
             <Route path="sign-up/verify" element={<VerifySignUpPage />} />
           </Route>
         </Route>
-        {/* <Route path="course/:courseId" element={<ClassPage />}>
-          <Route path="news" element={<NewsClassPage />} />
-          <Route path="members" element={<MembersPage />} />
-        </Route> */}
       </Route>
 
       <Route element={<RequiredAuth />}>

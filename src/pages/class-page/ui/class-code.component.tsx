@@ -50,7 +50,7 @@ const ClassCodeComponent: React.FC<Props> = ({ code }) => {
     setAnchorEl(event.currentTarget);
   };
   return (
-    <Card sx={{ width: "14rem" }}>
+    <Card sx={{ width: "14rem", mb: 2, border: "0.0625rem solid #dadce0" }}>
       <CardHeader
         title={
           <Typography

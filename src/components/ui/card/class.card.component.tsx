@@ -14,9 +14,7 @@ import { useEffect, useState } from "react";
 import gradientColors from "@/data/gradient.color";
 import { useSelector } from "react-redux";
 import { selectUser } from "@/redux/auth.slice";
-import { string } from "yup";
 import EditCourseDialog from "../dialog/edit-course.dialog.component";
-import { Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 function stringToColor(string: string) {
@@ -69,7 +67,7 @@ const ClassCard = ({ course, archiveCourse, leaveCourse }) => {
   ); // Default background color
 
   function updateCourses() {
-    navigate(`/home/home`, { replace: true });
+    navigate(`/home`, { replace: true });
     navigate(0);
   }
 

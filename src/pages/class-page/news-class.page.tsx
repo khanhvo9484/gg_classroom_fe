@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import ImageRead from "@/assets/images/img_read.jpg";
-import { Typography } from "@mui/material";
+import { Card, CardContent, CardHeader, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import ClassCodeComponent from "./ui/class-code.component";
 import PostComponent from "./ui/card-post.component";
@@ -14,9 +14,9 @@ import RoleContext from "@/context/role.context";
 
 const NewsClassPage = () => {
   const classService = new ClassService();
+  const { isTeacher } = useContext(RoleContext);
 
   const { startLoading, stopLoading } = useContext(LoadingContext);
-  const { isTeacher } = useContext(RoleContext);
 
   const [course, setCourse] = useState<ICourse>(null);
   const { courseId } = useParams();
@@ -66,7 +66,38 @@ const NewsClassPage = () => {
           <Box sx={{ marginTop: 2 }}>
             <Grid container sx={{ width: "100%" }}>
               <Grid xs={3}>
-                <ClassCodeComponent code={course.inviteCode} />
+                {isTeacher && <ClassCodeComponent code={course.inviteCode} />}
+                <Card
+                  sx={{
+                    width: "14rem",
+                    mb: 2,
+                    border: "0.0625rem solid #dadce0",
+                  }}
+                >
+                  <CardHeader
+                    title={
+                      <Typography
+                        variant="subtitle1"
+                        component="div"
+                        sx={{ fontWeight: 500 }}
+                      >
+                        Sắp đến hạn
+                      </Typography>
+                    }
+                  />
+
+                  <CardContent sx={{ paddingTop: "0", paddingBottom: "16px" }}>
+                    <Typography
+                      variant="subtitle2"
+                      component="div"
+                      sx={{
+                        color: "rgba(0,0,0,.549)",
+                      }}
+                    >
+                      Tuyệt vời, không có bài tập nào sắp đến hạn!{" "}
+                    </Typography>
+                  </CardContent>
+                </Card>
               </Grid>
 
               <Grid

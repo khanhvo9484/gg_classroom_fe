@@ -8,14 +8,11 @@ const SignOut = () => {
   const dispatch = useDispatch();
   const refreshToken = useSelector((state: any) => state.auth.refresh_token);
   dispatch(deleteUser());
-  const { data, error, isLoading } = useSWR(
-    "/auth/refresh-token/sign-out",
-    async (url) => {
-      await customAxios.post(url, {
-        refresh_token: refreshToken,
-      });
-    }
-  );
+  const { isLoading } = useSWR("/auth/refresh-token/sign-out", async (url) => {
+    await customAxios.post(url, {
+      refresh_token: refreshToken,
+    });
+  });
 
   return (
     <>

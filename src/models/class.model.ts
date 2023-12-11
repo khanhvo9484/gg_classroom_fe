@@ -32,12 +32,17 @@ export interface ITokenVeryfiJoinCourseRequest {
   inviteToken: string;
 }
 
-export interface ITokenVeryfiJoinCourse extends IBase {
+export interface IVeryfiJoinCourse extends IBase {
   userId: string;
   courseId: string;
   roleInCourse: string;
   invitationId: string;
 }
 
-export interface ITokenVeryfiJoinCourseResponse
-  extends IBaseResponse<ITokenVeryfiJoinCourse> {}
+export interface IVeryfiJoinCourseResponse
+  extends IBaseResponse<IVeryfiJoinCourse> {}
+
+export interface IJoinCourseByCodeRequest {
+  inviteCode: string;
+  userId: string;
+}

@@ -68,8 +68,7 @@ export default function AddCourseDialog(props: SimpleDialogProps) {
     },
   });
 
-  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } =
-    formik;
+  const { errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
 
   const handleClose = () => {
     onClose();
@@ -101,8 +100,9 @@ export default function AddCourseDialog(props: SimpleDialogProps) {
               >
                 <TextField
                   fullWidth
+                  required
                   autoComplete="Tên lớp học"
-                  label="tên lớp học (bắt buộc)"
+                  label="Tên lớp học"
                   {...getFieldProps("name")}
                   error={Boolean(touched.name && errors.name)}
                   helperText={touched.name && errors.name}
@@ -110,8 +110,8 @@ export default function AddCourseDialog(props: SimpleDialogProps) {
 
                 <TextField
                   fullWidth
-                  autoComplete="Miêu tả môn học"
-                  label="miêu tả môn học"
+                  autoComplete="Mô tả môn học"
+                  label="Mô tả"
                   {...getFieldProps("description")}
                 />
               </Box>
