@@ -47,6 +47,7 @@ import LoadingContext from "@/context/loading.contenxt";
 import { useContext, useEffect, useState } from "react";
 import JoinCodeByCodeDialog from "@/components/ui/dialog/join-course-by-code-dialog.component";
 import Menu from "@mui/material/Menu";
+import { selectUser } from "@/redux/auth.slice";
 const drawerWidth = 300;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -119,6 +120,7 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
 }));
 
 function Header() {
+    const userProfile = useSelector(selectUser);
   const classService = new ClassService();
   const navigate = useNavigate();
   const { isLoading, stopLoading, startLoading } = useContext(LoadingContext);
@@ -416,12 +418,13 @@ function Header() {
                   {courses &&
                     courses.map((course) => {
                       return (
+                        ((userProfile.id === course.courseOwnerId) &&
                         <ListItemNavLinkAvatar
-                          link={`/course/${course.id}`}
-                          course={course}
-                          key={course.id}
-                          setCurrentPage={setCurrentPage}
-                        />
+                            link={`/course/${course.id}`}
+                            course={course}
+                            key={course.id}
+                            setCurrentPage={setCurrentPage}
+                        />)
                       );
                     })}
                 </List>
@@ -447,6 +450,18 @@ function Header() {
                   text="Việc cần làm"
                   Icon={FactCheckOutlinedIcon}
                 />
+                {courses &&
+                    courses.map((course) => {
+                      return (
+                        ((userProfile.id !== course.courseOwnerId) &&
+                        <ListItemNavLinkAvatar
+                            link={`/course/${course.id}`}
+                            course={course}
+                            key={course.id}
+                            setCurrentPage={setCurrentPage}
+                        />)
+                      );
+                    })}
               </Collapse>
             </List>
             <Divider />
