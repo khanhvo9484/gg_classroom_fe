@@ -151,6 +151,7 @@ function Header() {
 
   function updateCourses(courseId) {
     navigate(`/course/${courseId}`, { replace: true });
+    navigate(0);
   }
 
   function onFadeClose() {
@@ -326,18 +327,6 @@ function Header() {
                     Tạo lớp học
                   </MenuItem>
                 </Menu>
-                <IconButton
-                  size="large"
-                  aria-label="account of current user"
-                  aria-controls="menu-appbar"
-                  aria-haspopup="true"
-                  color="inherit"
-                  onClick={() => {
-                    setIsOpenFadeInJoin(!isOpenFadeInJoin);
-                  }}
-                >
-                  <LibraryAddIcon />
-                </IconButton>
 
                 <Box sx={{ flexGrow: 0 }}>
                   {user && user.name ? (

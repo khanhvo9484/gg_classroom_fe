@@ -34,24 +34,27 @@ const HomePage = () => {
     getAllCourse();
   }, []);
 
-  async function leaveCourse(courseId) {
+  async function leaveCourse(courseId : string) {
     try {
       const payload = {
-        courseId: courseId,
+        courseId : courseId,
       };
+      console.log(courseId);
+      console.log(payload);
       // 👇️ const data: CreateUserResponse
-      const response = await customAxios.delete(
+      const response = await customAxios.post(
         "/courses/leave-course",
         payload
       );
 
+      console.log(payload);
       if (response) {
         toast.success("Rời lớp học thành công.");
         setCourses(courses.filter((course) => course.id !== courseId));
-        navigate(`/home/home/`);
+        navigate(`/home/`);
         navigate(0);
       } else {
-        toast.error("Rời lớp học không thành công.");
+        toast.error("Rời lớp học không thành công. Lỗi dữ liệu nhận về.");
       }
     } catch (error) {
       console.log(error);
@@ -68,7 +71,7 @@ const HomePage = () => {
       if (response) {
         toast.success("Lưu trữ lớp học thành công.");
         setCourses(courses.filter((course) => course.id !== courseId));
-        navigate(`/home/home/`);
+        navigate(`/home/`);
         navigate(0);
       } else {
         toast.error("Lưu trữ lớp học không thành công.");
