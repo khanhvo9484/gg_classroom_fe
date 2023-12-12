@@ -41,7 +41,6 @@ import AddCourseDialog from "@/components/ui/dialog/add-course.dialog.component"
 import { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import FadeInJoin from "@/components/join.fadein.component";
-import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
 import Zoom from "@mui/material/Zoom";
 import LoadingContext from "@/context/loading.contenxt";
 import { useContext, useEffect, useState } from "react";
@@ -120,7 +119,7 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
 }));
 
 function Header() {
-    const userProfile = useSelector(selectUser);
+  const userProfile = useSelector(selectUser);
   const classService = new ClassService();
   const navigate = useNavigate();
   const { isLoading, stopLoading, startLoading } = useContext(LoadingContext);
@@ -141,7 +140,7 @@ function Header() {
 
   const openMenuAdd = Boolean(anchorEl);
 
-  const handleOpenMenuAdd = (event: MouseEvent<HTMLElement>) => {
+  const handleOpenMenuAdd = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -407,13 +406,14 @@ function Header() {
                   {courses &&
                     courses.map((course) => {
                       return (
-                        ((userProfile.id === course.courseOwnerId) &&
-                        <ListItemNavLinkAvatar
+                        userProfile.id === course.courseOwnerId && (
+                          <ListItemNavLinkAvatar
                             link={`/course/${course.id}`}
                             course={course}
                             key={course.id}
                             setCurrentPage={setCurrentPage}
-                        />)
+                          />
+                        )
                       );
                     })}
                 </List>
@@ -440,17 +440,18 @@ function Header() {
                   Icon={FactCheckOutlinedIcon}
                 />
                 {courses &&
-                    courses.map((course) => {
-                      return (
-                        ((userProfile.id !== course.courseOwnerId) &&
+                  courses.map((course) => {
+                    return (
+                      userProfile.id !== course.courseOwnerId && (
                         <ListItemNavLinkAvatar
-                            link={`/course/${course.id}`}
-                            course={course}
-                            key={course.id}
-                            setCurrentPage={setCurrentPage}
-                        />)
-                      );
-                    })}
+                          link={`/course/${course.id}`}
+                          course={course}
+                          key={course.id}
+                          setCurrentPage={setCurrentPage}
+                        />
+                      )
+                    );
+                  })}
               </Collapse>
             </List>
             <Divider />
