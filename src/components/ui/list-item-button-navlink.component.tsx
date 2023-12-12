@@ -28,6 +28,7 @@ export default function ListItemNavLink ({link, text, Icon}){
                         <Icon fontSize="medium"/>
                     </ListItemIcon>
                     <ListItemText primary={<Typography
+                        noWrap={true}
                         variant="h6"
                         color="text.primary"
                         sx={{

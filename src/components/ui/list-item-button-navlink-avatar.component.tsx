@@ -34,6 +34,7 @@ export default function ListItemNavLinkAvatar({
         ></Avatar>
         <ListItemText disableTypography
           primary={<Typography
+            noWrap={true}
             variant="h6"
             color="text.primary"
             sx={{
@@ -43,6 +44,7 @@ export default function ListItemNavLinkAvatar({
             {course.name}
           </Typography>}
           secondary={<Typography
+            noWrap={true}
             fontSize={15}
             color="text.primary"
             sx={{
