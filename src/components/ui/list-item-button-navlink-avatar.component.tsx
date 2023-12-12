@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import ListItemButton from "@mui/material/ListItemButton";
 import Avatar from "@mui/material/Avatar";
 import ListItemText from "@mui/material/ListItemText";
+import { Typography } from "@mui/material";
 
 export default function ListItemNavLinkAvatar({
   link,
@@ -9,25 +10,49 @@ export default function ListItemNavLinkAvatar({
   setCurrentPage,
 }) {
   return (
-    <ListItemButton
-      LinkComponent={NavLink}
-      to={link}
-      onClick={() => setCurrentPage(course.name)}
-      sx={{
-        ml: 1,
-        maxWidth: 280,
-        "&.active": {
-          backgroundColor: "secondary.main",
-          borderTopRightRadius: 32,
-          borderBottomRightRadius: 32,
-        },
-      }}
-    >
-      <Avatar
-        sx={{ minWidth: 30, minHeight: 30, mr: 2 }}
-        src={course.courseOwner.avatar}
-      ></Avatar>
-      <ListItemText primary={course.name} secondary={course.description} />
-    </ListItemButton>
+    <NavLink to={link}
+    onClick={() => setCurrentPage(course.name)}
+    style={() => {
+      return {
+        textDecoration: "none",
+      };
+    }}>
+      {({ isActive}) => (
+        <ListItemButton
+        sx={{
+          ml: 1,
+          maxWidth: 280,
+          fontWeight: isActive ? "bold" : "",
+          backgroundColor: isActive ? 'secondary.main' : "",
+          borderTopRightRadius: isActive ? 32 : 0,
+          borderBottomRightRadius: isActive ? 32 : 0,
+        }}
+      >
+        <Avatar
+          sx={{ minWidth: 30, minHeight: 30, mr: 2 }}
+          src={course.courseOwner.avatar}
+        ></Avatar>
+        <ListItemText disableTypography
+          primary={<Typography
+            variant="h6"
+            color="text.primary"
+            sx={{
+              underline:"none",
+            }}
+          >
+            {course.name}
+          </Typography>}
+          secondary={<Typography
+            fontSize={15}
+            color="text.primary"
+            sx={{
+              underline:"none",
+            }}
+          >
+            {course.description}
+          </Typography>} />
+      </ListItemButton>
+      )}
+    </NavLink>
   );
 }
