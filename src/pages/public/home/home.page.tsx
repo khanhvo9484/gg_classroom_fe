@@ -4,18 +4,21 @@ import ClassCard from "../../../components/ui/card/class.card.component";
 import { Stack } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { ClassService } from "@/service/class.service";
-import { ICourse } from "@/models/class.model";
 import LoadingContext from "@/context/loading.contenxt";
 import toast from "react-hot-toast";
 import { customAxios } from "@/api/custom-axios";
-import { useNavigate } from "react-router-dom";
+import { selectCourses } from "@/redux/courses.slice";
+import { setCourses } from "@/redux/courses.slice";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 const HomePage = () => {
   document.title = "E-learning | Màn hình chính";
   const classService = new ClassService();
-  const navigate = useNavigate();
   const { startLoading, stopLoading } = useContext(LoadingContext);
-  const [courses, setCourses] = useState<ICourse[]>(null);
+  const courses = useSelector(selectCourses);
+  const dispatch = useDispatch();
+
 
   useEffect(() => {
     startLoading();
@@ -23,15 +26,21 @@ const HomePage = () => {
       try {
         const response = await classService.getAllCourse();
 
-        setCourses(response.data);
-        stopLoading();
+        dispatch(
+          setCourses({
+            courses : response.data
+          })
+        );
       } catch (error) {
         console.log(error);
         // throw error;
       }
     };
 
-    getAllCourse();
+    if (!courses) {
+      getAllCourse();
+    }
+    stopLoading();
   }, []);
 
   async function leaveCourse(courseId : string) {
@@ -39,20 +48,19 @@ const HomePage = () => {
       const payload = {
         courseId : courseId,
       };
-      console.log(courseId);
-      console.log(payload);
       // 👇️ const data: CreateUserResponse
       const response = await customAxios.post(
         "/courses/leave-course",
         payload
       );
 
-      console.log(payload);
       if (response) {
         toast.success("Rời lớp học thành công.");
-        setCourses(courses.filter((course) => course.id !== courseId));
-        navigate(`/home/`);
-        navigate(0);
+        dispatch(
+          setCourses({
+            courses : courses.filter((course) => course.id !== courseId)
+          })
+        );
       } else {
         toast.error("Rời lớp học không thành công. Lỗi dữ liệu nhận về.");
       }
@@ -70,9 +78,11 @@ const HomePage = () => {
 
       if (response) {
         toast.success("Lưu trữ lớp học thành công.");
-        setCourses(courses.filter((course) => course.id !== courseId));
-        navigate(`/home/`);
-        navigate(0);
+        dispatch(
+          setCourses({
+            courses : courses.filter((course) => course.id !== courseId)
+          })
+        );
       } else {
         toast.error("Lưu trữ lớp học không thành công.");
       }

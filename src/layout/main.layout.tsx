@@ -30,7 +30,6 @@ import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
 import { ClassService } from "@/service/class.service";
-import { ICourse } from "@/models/class.model";
 import Typography from "@mui/material/Typography";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ListItemNavLink from "@/components/ui/list-item-button-navlink.component";
@@ -39,7 +38,6 @@ import AddIcon from "@mui/icons-material/Add";
 import { Outlet } from "react-router-dom";
 import AddCourseDialog from "@/components/ui/dialog/add-course.dialog.component";
 import { Toaster } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import FadeInJoin from "@/components/join.fadein.component";
 import Zoom from "@mui/material/Zoom";
 import LoadingContext from "@/context/loading.contenxt";
@@ -47,6 +45,9 @@ import { useContext, useEffect, useState } from "react";
 import JoinCodeByCodeDialog from "@/components/ui/dialog/join-course-by-code-dialog.component";
 import Menu from "@mui/material/Menu";
 import { selectUser } from "@/redux/auth.slice";
+import { useDispatch } from "react-redux";
+import { selectCourses } from "@/redux/courses.slice";
+import { setCourses } from "@/redux/courses.slice";
 const drawerWidth = 300;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -121,7 +122,6 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
 function Header() {
   const userProfile = useSelector(selectUser);
   const classService = new ClassService();
-  const navigate = useNavigate();
   const { isLoading, stopLoading, startLoading } = useContext(LoadingContext);
   const [sidebarState, setSidebarState] = useState(true);
   const [sidebarStateHover, setSidebarStateHover] = useState(false);
@@ -133,7 +133,7 @@ function Header() {
     useState(false);
   const [isOpenFadeInJoin, setIsOpenFadeInJoin] = useState(false);
 
-  const [courses, setCourses] = useState<ICourse[]>(null);
+  const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState("");
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -149,14 +149,11 @@ function Header() {
   };
 
   function updateCourses(courseId) {
-    navigate(`/course/${courseId}`, { replace: true });
-    navigate(0);
+    console.log(`Just update courses: ${courseId}`)
   }
 
   function onFadeClose() {
     setIsOpenFadeInJoin(false);
-    navigate(`/home/home/`, { replace: true });
-    navigate(0);
   }
 
   useEffect(() => {
@@ -165,18 +162,25 @@ function Header() {
       try {
         const response = await classService.getAllCourse();
 
-        setCourses(response.data);
-        stopLoading();
+        dispatch(
+          setCourses({
+            courses : response.data
+          })
+        );
       } catch (error) {
         console.log(error);
         // throw error;
       }
     };
 
-    getAllCourse();
+    if (!courses) {
+      getAllCourse();
+    }
+    stopLoading();
   }, []);
 
   const user: UserModel = useSelector((state: any) => state.auth.user);
+  const courses = useSelector(selectCourses);
   const location = useLocation();
   const path = location.pathname;
   return (

@@ -47,22 +47,6 @@ function App() {
       </Route>
 
       <Route element={<RequiredAuth />}>
-        {/* <Route element={<DefaultLayout />}>
-          <Route path="home" element={<HomePage />} />
-          <Route path="profile" element={<ProfilePage />} />
-          <Route
-            path="course/:courseId"
-            element={
-              <RoleProvider>
-                <ClassPage />
-              </RoleProvider>
-            }
-          >
-            <Route path="news" element={<NewsClassPage />} />
-            <Route path="members" element={<MembersPage />} />
-          </Route>
-        </Route> */}
-
         <Route element={<MainLayout />}>
           <Route path="home" element={<HomePage />} />
           <Route path="profile" element={<ProfilePage />} />
