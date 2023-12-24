@@ -1,6 +1,7 @@
 import {
   API_COURSES,
   API_GET_ALL_COURSE,
+  API_GET_ALL_ARCHIVED_COURSE,
   API_GET_ALL_COURSE_MEMBER,
   API_GET_COURSE_BY_ID,
   API_JOIN_BY_CODE,
@@ -25,6 +26,14 @@ export class ClassService {
   async getAllCourse(): Promise<ICoursesRespone> {
     const { data: response } = await customAxios.get<ICoursesRespone>(
       `${API_COURSES}${API_GET_ALL_COURSE}`
+    );
+
+    return response;
+  }
+
+  async getAllArchivedCourse(): Promise<ICoursesRespone> {
+    const { data: response } = await customAxios.get<ICoursesRespone>(
+      `${API_COURSES}${API_GET_ALL_ARCHIVED_COURSE}`
     );
 
     return response;

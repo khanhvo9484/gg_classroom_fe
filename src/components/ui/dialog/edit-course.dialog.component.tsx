@@ -12,6 +12,11 @@ import { customAxios } from "../../../api/custom-axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { ICourse } from "@/models/class.model";
+import { selectUser } from "@/redux/auth.slice";
+import { useDispatch } from "react-redux";
+import { selectCourses } from "@/redux/courses.slice";
+import { setCourses } from "@/redux/courses.slice";
+import { useSelector } from "react-redux";
 
 const easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {
@@ -35,6 +40,8 @@ export default function EditCourseDialog(props: SimpleDialogProps) {
   const { onClose, open, updateCourses, course } = props;
   const [signUpError, setSignUpError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const courses = useSelector(selectCourses);
+  const dispatch = useDispatch();
 
   const EditCourseSchema = Yup.object().shape({
     name: Yup.string().required("Bạn cần nhập tên lớp học của mình"),
@@ -60,6 +67,23 @@ export default function EditCourseDialog(props: SimpleDialogProps) {
           payload
         );
         if (response) {
+          const newCourses = courses.map((course) => {
+            if (course.id !== response.data.data.id) {
+              return course;
+            }
+            else {
+              const newCourse = {
+                description: response.data.data.description,
+                name: response.data.data.name,
+              };
+              return Object.assign({}, course, newCourse);
+            }
+          });
+          dispatch(
+            setCourses({
+              courses : newCourses
+            })
+          );
           toast.success("Chỉnh sửa thông tin lớp thành công");
           onClose();
           updateCourses();
@@ -71,7 +95,7 @@ export default function EditCourseDialog(props: SimpleDialogProps) {
         }
       } catch (error) {
         setSignUpError(true);
-        setErrorMessage(error.response.data.message);
+        setErrorMessage(error.response.data && error.response.data.message);
       }
     },
   });

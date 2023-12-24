@@ -4,7 +4,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { Typography } from "@mui/material";
 
-export default function ListItemNavLink ({link, text, Icon}){
+export default function ListItemNavLink ({link, text, Icon, onClick}){
     return (
         <NavLink to={link}
             style={() => {
@@ -23,6 +23,7 @@ export default function ListItemNavLink ({link, text, Icon}){
                         borderTopRightRadius: isActive ? 32 : 0,
                         borderBottomRightRadius: isActive ? 32 : 0,
                     }}
+                    onClick={() => onClick(text)}
                 >
                     <ListItemIcon>
                         <Icon fontSize="medium"/>

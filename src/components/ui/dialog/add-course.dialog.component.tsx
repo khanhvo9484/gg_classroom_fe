@@ -11,6 +11,11 @@ import { motion } from "framer-motion";
 import { customAxios } from "../../../api/custom-axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
+import { selectUser } from "@/redux/auth.slice";
+import { useDispatch } from "react-redux";
+import { selectCourses } from "@/redux/courses.slice";
+import { setCourses } from "@/redux/courses.slice";
 
 const easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {
@@ -33,6 +38,9 @@ export default function AddCourseDialog(props: SimpleDialogProps) {
   const { onClose, open, updateCourses } = props;
   const [signUpError, setSignUpError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
+  const courses = useSelector(selectCourses);
 
   const CreateCourseSchema = Yup.object().shape({
     name: Yup.string().required("Bạn cần nhập tên lớp học của mình"),
@@ -54,6 +62,15 @@ export default function AddCourseDialog(props: SimpleDialogProps) {
         // 👇️ const data: CreateUserResponse
         const response = await customAxios.post("/courses/create", payload);
         if (response) {
+          const newCourse = Object.assign({}, response.data.data, {
+              courseOwner: user
+          });
+          const newCourses = [...courses, newCourse];
+          dispatch(
+              setCourses({
+                  courses : newCourses
+              })
+          );
           toast.success("Tạo lớp học mới thành công");
           updateCourses(response.data.data.id);
           onClose();

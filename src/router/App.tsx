@@ -21,6 +21,7 @@ import NewsClassPage from "@/pages/class-page/news-class.page";
 import MembersPage from "@/pages/class-page/members.page";
 import MainLayout from "@/layout/main.layout";
 import VerifyTokenInvitePage from "@/pages/public/static/verify-token-invite.page";
+import ArchivedCoursesPage from "@/pages/public/archived.page";
 import { RoleProvider } from "@/context/role.context";
 
 function App() {
@@ -49,6 +50,7 @@ function App() {
       <Route element={<RequiredAuth />}>
         <Route element={<MainLayout />}>
           <Route path="home" element={<HomePage />} />
+          <Route path="archived" element={<ArchivedCoursesPage />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route path="calendar" element={<HomePage />} />
           <Route path="review" element={<HomePage />} />

@@ -379,11 +379,13 @@ function Header() {
                 link="/home"
                 text="Màn hình chính"
                 Icon={HomeIcon}
+                onClick={setCurrentPage}
               />
               <ListItemNavLink
                 link="/calendar"
                 text="Lịch"
                 Icon={CalendarTodayIcon}
+                onClick={setCurrentPage}
               />
             </List>
             <Divider />
@@ -406,6 +408,7 @@ function Header() {
                     link="/review"
                     text="Cần xem xét"
                     Icon={TopicOutlinedIcon}
+                    onClick={setCurrentPage}
                   />
                   {courses &&
                     courses.map((course) => {
@@ -442,6 +445,7 @@ function Header() {
                   link="/review2"
                   text="Việc cần làm"
                   Icon={FactCheckOutlinedIcon}
+                  onClick={setCurrentPage}
                 />
                 {courses &&
                   courses.map((course) => {
@@ -461,14 +465,16 @@ function Header() {
             <Divider />
             <List>
               <ListItemNavLink
-                link="/archived"
-                text="Lớp học đã lưu trữ"
-                Icon={ArchiveOutlinedIcon}
+                  link="/archived"
+                  text="Lớp học đã lưu trữ"
+                  Icon={ArchiveOutlinedIcon}
+                  onClick={setCurrentPage}
               />
               <ListItemNavLink
-                link="/setting"
-                text="Cài đặt"
-                Icon={SettingsOutlinedIcon}
+                  link="/setting"
+                  text="Cài đặt"
+                  Icon={SettingsOutlinedIcon}
+                  onClick={setCurrentPage}
               />
             </List>
             <Divider />
