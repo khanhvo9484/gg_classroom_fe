@@ -13,6 +13,9 @@ import {
 import Button from "@mui/material/Button";
 import RoleContext from "@/context/role.context";
 import { ClassService } from "@/service/class.service";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import IconButton from "@mui/material/IconButton";
+import SettingClassComponent from "./ui/setting-class.component";
 
 const useStyles = makeStyles(() => ({
   style: {
@@ -40,6 +43,9 @@ const ClassPage = () => {
   const navigate = useNavigate();
   const classes = useStyles();
 
+  const [isOpenSettingCourseDialog, setIsOpenSettingCourseDialog] =
+    useState(false);
+
   const getPartAfterCourseId = () => {
     const pathSegments = location.pathname.split("/");
     const courseIndex = pathSegments.indexOf("course");
@@ -66,6 +72,10 @@ const ClassPage = () => {
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+  };
+
+  const handleOpenSettingCourse = () => {
+    setIsOpenSettingCourseDialog(true);
   };
 
   useEffect(() => {
@@ -96,48 +106,66 @@ const ClassPage = () => {
     setStateCourse(courseId);
   });
   return (
-    <Box>
-      <Box sx={{ borderBottom: 2, borderColor: "divider" }}>
-        <Tabs sx={{ paddingLeft: 3 }} value={value} onChange={handleChange}>
-          <Tab
-            sx={{ textTransform: "none" }}
-            className={classes.style}
-            value={0}
-            component={(props) => (
-              <Button
-                {...props}
-                component={Link}
-                to={`/course/${courseId}/news`}
-                style={{
-                  textDecoration: "none",
-                  height: "100%",
-                  paddingX: 2,
-                }}
-              />
-            )}
-            label="Bảng tin"
-          />
-          <Tab
-            sx={{ textTransform: "none" }}
-            className={classes.style}
-            value={1}
-            component={(props) => (
-              <Button
-                {...props}
-                component={Link}
-                to={`/course/${courseId}/members`}
-                style={{
-                  textDecoration: "none",
-                  height: "100%",
-                }}
-              />
-            )}
-            label="Mọi người"
-          />
-        </Tabs>
+    <>
+      <Box>
+        <Box
+          sx={{
+            borderBottom: 2,
+            borderColor: "divider",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <Tabs sx={{ paddingLeft: 3 }} value={value} onChange={handleChange}>
+            <Tab
+              sx={{ textTransform: "none" }}
+              className={classes.style}
+              value={0}
+              component={(props) => (
+                <Button
+                  {...props}
+                  component={Link}
+                  to={`/course/${courseId}/news`}
+                  style={{
+                    textDecoration: "none",
+                    height: "100%",
+                    paddingX: 2,
+                  }}
+                />
+              )}
+              label="Bảng tin"
+            />
+            <Tab
+              sx={{ textTransform: "none" }}
+              className={classes.style}
+              value={1}
+              component={(props) => (
+                <Button
+                  {...props}
+                  component={Link}
+                  to={`/course/${courseId}/members`}
+                  style={{
+                    textDecoration: "none",
+                    height: "100%",
+                  }}
+                />
+              )}
+              label="Mọi người"
+            />
+          </Tabs>
+          <IconButton size="large" onClick={() => handleOpenSettingCourse()}>
+            <SettingsOutlinedIcon />
+          </IconButton>
+        </Box>
+        <Outlet />
       </Box>
-      <Outlet />
-    </Box>
+      <SettingClassComponent
+        open={isOpenSettingCourseDialog}
+        onClose={() => {
+          setIsOpenSettingCourseDialog(false);
+        }}
+      />
+    </>
   );
 };
 
