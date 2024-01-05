@@ -35,7 +35,7 @@ const useStyles = makeStyles(() => ({
 
 const ClassPage = () => {
   const classService = new ClassService();
-  const { setIsTeacher } = useContext(RoleContext);
+  const { isTeacher, setIsTeacher } = useContext(RoleContext);
   const location = useLocation();
   const { courseId } = useParams();
   const [stateCourse, setStateCourse] = useState("");
@@ -152,6 +152,26 @@ const ClassPage = () => {
               )}
               label="Mọi người"
             />
+
+            {isTeacher && (
+              <Tab
+                sx={{ textTransform: "none" }}
+                className={classes.style}
+                value={2}
+                component={(props) => (
+                  <Button
+                    {...props}
+                    component={Link}
+                    to={`/course/${courseId}/grades`}
+                    style={{
+                      textDecoration: "none",
+                      height: "100%",
+                    }}
+                  />
+                )}
+                label="Điểm"
+              />
+            )}
           </Tabs>
           <IconButton size="large" onClick={() => handleOpenSettingCourse()}>
             <SettingsOutlinedIcon />

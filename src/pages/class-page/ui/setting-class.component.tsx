@@ -8,7 +8,7 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 import Button from "@mui/material/Button";
-import { Box, Stack } from "@mui/material";
+import { Box, CardActions, Stack } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { useSelector } from "react-redux";
@@ -108,13 +108,13 @@ const SettingClassComponent: React.FC<SimpleDialogProps> = ({
           sx={{
             display: "flex",
             justifyContent: "center",
-            height: "100vh",
+            // height: "100vh",
           }}
         >
           <Card
             variant="outlined"
             sx={{
-              mt: "8rem",
+              my: "8rem",
               width: "45rem",
               height: "45rem",
               border: "0.0625rem solid #dadce0",
@@ -184,6 +184,13 @@ const SettingClassComponent: React.FC<SimpleDialogProps> = ({
                 ))}
               </SortableStack>
             </CardContent>
+            <CardActions>
+              <Button size="small" sx={{ color: "rgb(25,103,210)" }}>
+                <Typography variant="subtitle2" gutterBottom>
+                  Thêm loại điểm
+                </Typography>
+              </Button>
+            </CardActions>
           </Card>
         </Box>
       </Dialog>

@@ -1,0 +1,12 @@
+.ag-theme-quartz{
+    --ag-grid-size: 14px;
+    --ag-list-item-height: 40px;
+
+    --ag-font-size: 16px;
+
+    --ag-row-border-style: solid;
+    --ag-row-border-width: 1px;
+    --ag-row-border-color: rgb(150, 150, 200);
+
+    --ag-cell-horizontal-border: 1px solid #ddd;
+}
