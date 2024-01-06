@@ -10,13 +10,13 @@ import { CardHeader } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import CardMenu from "@/components/card.dropdown.menu.component";
 import { ICourse } from "@/models/class.model";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import gradientColors from "@/data/gradient.color";
 import { useSelector } from "react-redux";
 import { selectUser } from "@/redux/auth.slice";
 import EditCourseDialog from "../dialog/edit-course.dialog.component";
 import { useNavigate } from "react-router-dom";
-import MovingIcon from '@mui/icons-material/Moving';
+import MovingIcon from "@mui/icons-material/Moving";
 import Tooltip from "@mui/material/Tooltip";
 import CardArchivedMenu from "@/components/card.dropdown.menu.archived.component";
 
@@ -42,6 +42,10 @@ function stringToColor(string: string) {
 
 interface Props {
   course: ICourse;
+  archiveCourse: () => void;
+  leaveCourse: () => void;
+  reviveCourse: () => void;
+  deleteCourse: () => void;
 }
 
 function shortName(name: string) {
@@ -57,10 +61,15 @@ function shortName(name: string) {
   return displayName;
 }
 
-const ClassCard = ({ course, archiveCourse, leaveCourse, deleteCourse, reviveCourse }) => {
+const ClassCard: React.FC<Props> = ({
+  course,
+  archiveCourse,
+  leaveCourse,
+  reviveCourse,
+  deleteCourse,
+}) => {
   const userProfile = useSelector(selectUser);
   const [isEditCourseDialogOpen, setIsEditCourseDialogOpen] = useState(false);
-  const navigate = useNavigate();
 
   const AvatarBgColor = stringToColor(course.courseOwner.name);
   const colors = gradientColors;
@@ -70,7 +79,7 @@ const ClassCard = ({ course, archiveCourse, leaveCourse, deleteCourse, reviveCou
   ); // Default background color
 
   function updateCourses() {
-    console.log("Update courses success!")
+    console.log("Update courses success!");
   }
 
   function editCourse() {
@@ -167,8 +176,8 @@ const ClassCard = ({ course, archiveCourse, leaveCourse, deleteCourse, reviveCou
           maxHeight: 100,
         }}
         action={
-          (!course.isDeleted)
-          ? (<CardMenu
+          !course.isDeleted ? (
+            <CardMenu
               archiveCourse={() => {
                 archiveCourse();
               }}
@@ -179,11 +188,13 @@ const ClassCard = ({ course, archiveCourse, leaveCourse, deleteCourse, reviveCou
                 editCourse();
               }}
               isOwner={Boolean(userProfile.id === course.courseOwnerId)}
-            />)
-          : (<CardArchivedMenu
+            />
+          ) : (
+            <CardArchivedMenu
               reviveCourse={() => reviveCourse()}
               deleteCourse={() => deleteCourse()}
-            />)
+            />
+          )
         }
         title={
           <Link href={`/course/${course.id}`} underline="none">
@@ -230,32 +241,37 @@ const ClassCard = ({ course, archiveCourse, leaveCourse, deleteCourse, reviveCou
         }
       />
       {displayAvatarOwner()}
-      {userProfile.id === course.courseOwnerId
-        ? (<CardActions
-            sx={{ pl: 28, borderTop: "0.5px solid rgba(42, 42, 42, 0.329)" }}>
-              <Tooltip title={`Mở sổ điểm cho ${course.name}`}>
-                <IconButton>
-                  <MovingIcon fontSize="medium" />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title={`Mở thư mục cho ${course.name}`}>
-                <IconButton>
-                  <FolderOpenOutlined fontSize="medium" />
-                </IconButton>
-              </Tooltip>
-          </CardActions>)
-        : (<CardActions sx={{ pl: 28, borderTop: "0.5px solid rgba(42, 42, 42, 0.329)" }}>
-            <Tooltip title={`Mở bài tập cho ${course.name}`}>
-              <IconButton>
-                <AssignmentOutlined fontSize="medium" />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title={`Mở thư mục cho ${course.name}`}>
-              <IconButton>
-                <FolderOpenOutlined fontSize="medium" />
-              </IconButton>
-            </Tooltip>
-          </CardActions>)}
+      {userProfile.id === course.courseOwnerId ? (
+        <CardActions
+          sx={{ pl: 28, borderTop: "0.5px solid rgba(42, 42, 42, 0.329)" }}
+        >
+          <Tooltip title={`Mở sổ điểm cho ${course.name}`}>
+            <IconButton>
+              <MovingIcon fontSize="medium" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title={`Mở thư mục cho ${course.name}`}>
+            <IconButton>
+              <FolderOpenOutlined fontSize="medium" />
+            </IconButton>
+          </Tooltip>
+        </CardActions>
+      ) : (
+        <CardActions
+          sx={{ pl: 28, borderTop: "0.5px solid rgba(42, 42, 42, 0.329)" }}
+        >
+          <Tooltip title={`Mở bài tập cho ${course.name}`}>
+            <IconButton>
+              <AssignmentOutlined fontSize="medium" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title={`Mở thư mục cho ${course.name}`}>
+            <IconButton>
+              <FolderOpenOutlined fontSize="medium" />
+            </IconButton>
+          </Tooltip>
+        </CardActions>
+      )}
       <EditCourseDialog
         open={isEditCourseDialogOpen}
         updateCourses={updateCourses}

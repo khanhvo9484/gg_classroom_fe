@@ -19,7 +19,6 @@ const HomePage = () => {
   const courses = useSelector(selectCourses);
   const dispatch = useDispatch();
 
-
   useEffect(() => {
     startLoading();
     const getAllCourse = async () => {
@@ -28,7 +27,7 @@ const HomePage = () => {
 
         dispatch(
           setCourses({
-            courses : response.data
+            courses: response.data,
           })
         );
       } catch (error) {
@@ -43,22 +42,19 @@ const HomePage = () => {
     stopLoading();
   }, []);
 
-  async function leaveCourse(courseId : string) {
+  async function leaveCourse(courseId: string) {
     try {
       const payload = {
-        courseId : courseId,
+        courseId: courseId,
       };
       // 👇️ const data: CreateUserResponse
-      const response = await customAxios.post(
-        "/courses/leave-course",
-        payload
-      );
+      const response = await customAxios.post("/courses/leave-course", payload);
 
       if (response) {
         toast.success("Rời lớp học thành công.");
         dispatch(
           setCourses({
-            courses : courses.filter((course) => course.id !== courseId)
+            courses: courses.filter((course) => course.id !== courseId),
           })
         );
       } else {
@@ -80,7 +76,7 @@ const HomePage = () => {
         toast.success("Lưu trữ lớp học thành công.");
         dispatch(
           setCourses({
-            courses : courses.filter((course) => course.id !== courseId)
+            courses: courses.filter((course) => course.id !== courseId),
           })
         );
       } else {

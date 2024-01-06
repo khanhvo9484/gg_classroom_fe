@@ -7,6 +7,8 @@ import {
   API_JOIN_BY_CODE,
   API_JOIN_BY_TOKEN,
   API_SEND_INVITATION,
+  API_GET_GRADE_STRUCTURE,
+  API_GRADE_STRUCTURE,
 } from "@/api/api.constant";
 import { customAxios } from "@/api/custom-axios";
 import { IBaseResponse } from "@/models/base.model";
@@ -19,6 +21,7 @@ import {
   ITokenVeryfiJoinCourseRequest,
   IJoinCourseByCodeRequest,
 } from "@/models/class.model";
+import { IGradeStructureResponse } from "@/models/grade.model";
 import { IAllMemberCourseRespone } from "@/models/member.model";
 import { getSearchParams } from "@/utils/http.util";
 
@@ -92,6 +95,17 @@ export class ClassService {
         `${API_COURSES}${API_JOIN_BY_CODE}`,
         joinByCodeRequest
       );
+
+    return response;
+  }
+
+  async getGradeStructureCourse(courseId): Promise<IGradeStructureResponse> {
+    const { data: response } = await customAxios.get<IGradeStructureResponse>(
+      `${API_GRADE_STRUCTURE}${API_GET_GRADE_STRUCTURE.replace(
+        "{courseId}",
+        courseId
+      )}`
+    );
 
     return response;
   }

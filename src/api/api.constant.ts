@@ -19,11 +19,15 @@ export const API_GET_ALL_GRADE_REVIEW = "/home";
 
 export const API_STUDENT_GRADE = "/student-grade";
 export const API_GET_STUDENT_XLSX = "/student-xlsx-template";
-export const API_GET_STUDENT_MAPPING_ID_XLSX = "/student-mapping-id-xlsx-template";
+export const API_GET_STUDENT_MAPPING_ID_XLSX =
+  "/student-mapping-id-xlsx-template";
 export const STUDENT_XLSX_FILE_NAME = "student-template.xlsx";
-export const STUDENT_MAPPING_ID_XLSX_FILE_NAME = "student-mapping-id-template.xlsx";
+export const STUDENT_MAPPING_ID_XLSX_FILE_NAME =
+  "student-mapping-id-template.xlsx";
 export const API_STUDENT_UPLOAD = "/upload-student-list";
-export const API_STUDENT_MAPPING_ID_UPLOAD = "/upload-student-mapping-id"
+export const API_STUDENT_MAPPING_ID_UPLOAD = "/upload-student-mapping-id";
 
-export const API_GRADE_STRUCTURE = "/grade-structure"
-export const API_GET_GRADE_STRUTURE = "/get"
+export const API_GET_GRADE_STRUCTURE = "/get/{courseId}";
+
+export const API_GRADE_STRUCTURE = "/grade-structure";
+export const API_GET_GRADE_STRUTURE = "/get";

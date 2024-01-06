@@ -8,6 +8,7 @@ export interface ICourse extends IBase {
   courseOwnerId: string;
   courseOwner: IMember;
   roleInCourse: string;
+  isDeleted?: boolean;
 }
 
 export interface ICoursesRespone extends IBaseResponse<ICourse[]> {}
