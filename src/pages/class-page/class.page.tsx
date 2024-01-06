@@ -16,6 +16,7 @@ import { ClassService } from "@/service/class.service";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import IconButton from "@mui/material/IconButton";
 import SettingClassComponent from "./ui/setting-class.component";
+import SheetMenu from "@/components/sheet.menu.component";
 
 const useStyles = makeStyles(() => ({
   style: {
@@ -36,6 +37,7 @@ const useStyles = makeStyles(() => ({
 const ClassPage = () => {
   const classService = new ClassService();
   const { isTeacher, setIsTeacher } = useContext(RoleContext);
+  console.log(isTeacher);
   const location = useLocation();
   const { courseId } = useParams();
   const [stateCourse, setStateCourse] = useState("");
@@ -172,7 +174,27 @@ const ClassPage = () => {
                 label="Điểm"
               />
             )}
+            {!isTeacher && (
+              <Tab
+                sx={{ textTransform: "none" }}
+                className={classes.style}
+                value={3}
+                component={(props) => (
+                  <Button
+                    {...props}
+                    component={Link}
+                    to={`/course/${courseId}/student-grades`}
+                    style={{
+                      textDecoration: "none",
+                      height: "100%",
+                    }}
+                  />
+                )}
+                label="Điểm"
+              />
+            )}
           </Tabs>
+          <SheetMenu></SheetMenu>
           <IconButton size="large" onClick={() => handleOpenSettingCourse()}>
             <SettingsOutlinedIcon />
           </IconButton>

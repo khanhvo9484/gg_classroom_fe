@@ -122,6 +122,8 @@ const HomePage = () => {
                   leaveCourse={() => {
                     leaveCourse(course.id);
                   }}
+                  deleteCourse={null}
+                  reviveCourse={null}
                 />
               );
             })}

@@ -24,6 +24,7 @@ import VerifyTokenInvitePage from "@/pages/public/static/verify-token-invite.pag
 import ArchivedCoursesPage from "@/pages/public/archived.page";
 import { RoleProvider } from "@/context/role.context";
 import GradesPage from "@/pages/class-page/grades.page";
+import StudentGradePage from "@/pages/class-page/student.grades.page";
 
 function App() {
   return (
@@ -69,6 +70,7 @@ function App() {
             <Route path="news" element={<NewsClassPage />} />
             <Route path="members" element={<MembersPage />} />
             <Route path="grades" element={<GradesPage />} />
+            <Route path="student-grades" element={<StudentGradePage />} />
           </Route>
         </Route>
         <Route path="invite-course" element={<VerifyTokenInvitePage />} />

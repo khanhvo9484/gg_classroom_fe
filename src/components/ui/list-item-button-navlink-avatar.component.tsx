@@ -23,7 +23,7 @@ export default function ListItemNavLinkAvatar({
           ml: 1,
           maxWidth: 280,
           fontWeight: isActive ? "bold" : "",
-          backgroundColor: isActive ? 'secondary.main' : "",
+          backgroundColor: isActive ? 'secondary.light' : "",
           borderTopRightRadius: isActive ? 32 : 0,
           borderBottomRightRadius: isActive ? 32 : 0,
         }}

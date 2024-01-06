@@ -13,3 +13,17 @@ export const API_SEND_INVITATION = "/send-invitation";
 export const API_GET_ALL_COURSE_MEMBER = "/get-all-course-member";
 export const API_JOIN_BY_TOKEN = "/join-by-token";
 export const API_JOIN_BY_CODE = "/join-by-invite-code";
+
+export const API_GRADE_REVIEW = "/home";
+export const API_GET_ALL_GRADE_REVIEW = "/home";
+
+export const API_STUDENT_GRADE = "/student-grade";
+export const API_GET_STUDENT_XLSX = "/student-xlsx-template";
+export const API_GET_STUDENT_MAPPING_ID_XLSX = "/student-mapping-id-xlsx-template";
+export const STUDENT_XLSX_FILE_NAME = "student-template.xlsx";
+export const STUDENT_MAPPING_ID_XLSX_FILE_NAME = "student-mapping-id-template.xlsx";
+export const API_STUDENT_UPLOAD = "/upload-student-list";
+export const API_STUDENT_MAPPING_ID_UPLOAD = "/upload-student-mapping-id"
+
+export const API_GRADE_STRUCTURE = "/grade-structure"
+export const API_GET_GRADE_STRUTURE = "/get"

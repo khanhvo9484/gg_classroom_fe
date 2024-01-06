@@ -14,7 +14,7 @@ import CardContent from "@mui/material/CardContent";
 import { useSelector } from "react-redux";
 import { selectUser } from "@/redux/auth.slice";
 import NotifyModalComponent from "@/components/ui/modals/notify-modal.component";
-import { sortableContainer, sortableElement } from "react-sortable-hoc";
+import { SortableContainer, SortableElement } from "react-sortable-hoc";
 
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -52,10 +52,25 @@ const SettingClassComponent: React.FC<SimpleDialogProps> = ({
     "Item 3",
   ]);
 
-  const SortableScoreTypeComponent = sortableElement(ScoreTypeComponent);
-  const SortableStack = sortableContainer(({ children }) => (
-    <Stack>{children}</Stack>
-  ));
+  // const SortableScoreTypeComponent = SortableElement(ScoreTypeComponent);
+  // const SortableStack = SortableContainer(({ children }) => (
+  //   <Stack>{children}</Stack>
+  // ));
+
+  const SortableScoreTypeComponent = SortableElement(ScoreTypeComponent);
+
+  const SortableStack = SortableContainer(({listScoreType}: {listScoreType: string[]}) => {
+    return (
+      <Stack>
+        {listScoreType.map((value, index) => (
+          <SortableScoreTypeComponent
+            key={`item-${value}`}
+            index={index}
+          />
+        ))}
+      </Stack>
+    );
+  });
 
   const handleChangeOptionScore = (event: SelectChangeEvent) => {
     setOptionScore(event.target.value);
@@ -175,14 +190,7 @@ const SettingClassComponent: React.FC<SimpleDialogProps> = ({
                 Loại điểm
               </Typography>
 
-              <SortableStack onSortEnd={onSortEnd}>
-                {listScoreType.map((value, index) => (
-                  <SortableScoreTypeComponent
-                    key={`item-${value}`}
-                    index={index}
-                  />
-                ))}
-              </SortableStack>
+              <SortableStack onSortEnd={onSortEnd} listScoreType={listScoreType}/>
             </CardContent>
             <CardActions>
               <Button size="small" sx={{ color: "rgb(25,103,210)" }}>
