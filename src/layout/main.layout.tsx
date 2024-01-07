@@ -49,7 +49,7 @@ import { useDispatch } from "react-redux";
 import { selectCourses } from "@/redux/courses.slice";
 import { setCourses } from "@/redux/courses.slice";
 import NotificationMenu from "@/components/notification.menu/notification.menu.component";
-const drawerWidth = 300;
+const drawerWidth = 250;
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
@@ -303,6 +303,7 @@ function Header() {
                   onClick={(event) => {
                     handleOpenMenuAdd(event);
                   }}
+                  sx={{ml:1}}
                 >
                   <AddIcon />
                 </IconButton>
@@ -403,7 +404,18 @@ function Header() {
                 <ListItemIcon>
                   <PeopleAltOutlinedIcon fontSize="medium" />
                 </ListItemIcon>
-                <ListItemText primary="Giảng dạy" />
+                <ListItemText primary={
+                  <Typography
+                      noWrap={true}
+                      variant="body1"
+                      color="text.primary"
+                      fontSize={14}
+                      sx={{
+                      underline:"none",
+                      }}
+                  >
+                      {"Giảng dạy"}
+                  </Typography>} />
               </ListItemButton>
               <Collapse in={isSchoolOpen} timeout="auto" unmountOnExit>
                 <List>
@@ -441,7 +453,18 @@ function Header() {
                 <ListItemIcon>
                   <SchoolOutlinedIcon fontSize="medium" />
                 </ListItemIcon>
-                <ListItemText primary="Đã đăng ký" />
+                <ListItemText primary={
+                  <Typography
+                      noWrap={true}
+                      variant="body1"
+                      color="text.primary"
+                      fontSize={14}
+                      sx={{
+                      underline:"none",
+                      }}
+                  >
+                      {"Đã đăng ký"}
+                  </Typography>} />
               </ListItemButton>
               <Collapse in={isEnrolledOpen} timeout="auto" unmountOnExit>
                 <ListItemNavLink

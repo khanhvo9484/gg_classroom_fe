@@ -201,7 +201,7 @@ export default function GradeReviewRequestDialog(props: SimpleDialogProps) {
                             variant="text"
                             loading={isSubmitting}
                             disabled={Boolean(errors.expectedGrade || !touched.expectedGrade
-                                            || errors.explaination || !touched.explaination)}
+                                            || errors.explaination)}
                         >
                             {isSubmitting ? "loading..." : "Yêu cầu phúc khảo"}
                         </LoadingButton>

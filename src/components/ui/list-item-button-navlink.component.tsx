@@ -30,8 +30,9 @@ export default function ListItemNavLink ({link, text, Icon, onClick}){
                     </ListItemIcon>
                     <ListItemText primary={<Typography
                         noWrap={true}
-                        variant="h6"
+                        variant="body1"
                         color="text.primary"
+                        fontSize={13}
                         sx={{
                         underline:"none",
                         }}

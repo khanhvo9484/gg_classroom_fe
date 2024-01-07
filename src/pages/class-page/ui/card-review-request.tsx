@@ -12,6 +12,7 @@ import { Box, Button, Divider, Grid } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useContext } from "react";
 import RoleContext from "@/context/role.context";
+import CommentInputComponent from "./comment-input.component";
 
 const GradeReviewPost = () => {
     const {courseId} = useParams();
@@ -132,9 +133,9 @@ const GradeReviewPost = () => {
                     </Grid>
                 </Grid>
             </CardContent>
-            <CardContent sx={{ padding: 0 }}>
-                <CommentComponent />
-            </CardContent>
+            <CommentComponent />
+            <CommentComponent />
+            <CommentInputComponent />
             <CardActions disableSpacing></CardActions>
         </Card>
     );

@@ -13,7 +13,7 @@ export default function Notification() {
 
     return (
         <>
-            <Card>
+            <Card sx={{borderRadius: 3}}>
                 <CardActionArea onClick={() => handleNotificationClick("1")}>
                     <CardHeader
                         sx={{ paddingBottom: "5px" }}
