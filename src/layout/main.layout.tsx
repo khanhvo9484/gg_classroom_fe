@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 import AvatarDropdown from "../components/avatar.dropdown.menu.component";
 import logo from "@/assets/icons/k3_logo.png";
 import { styled, Theme, CSSObject } from "@mui/material/styles";
-import { Collapse, LinearProgress, MenuItem } from "@mui/material";
+import { Collapse, LinearProgress, MenuItem, Paper } from "@mui/material";
 import MuiDrawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
@@ -48,6 +48,7 @@ import { selectUser } from "@/redux/auth.slice";
 import { useDispatch } from "react-redux";
 import { selectCourses } from "@/redux/courses.slice";
 import { setCourses } from "@/redux/courses.slice";
+import NotificationMenu from "@/components/notification.menu/notification.menu.component";
 const drawerWidth = 300;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -288,8 +289,10 @@ function Header() {
                   </Typography>
                 </Box>
 
+                <NotificationMenu />
+
                 <IconButton
-                  size="large"
+                  size="small"
                   aria-label="account of current user"
                   aria-controls="menu-appbar"
                   aria-haspopup="true"
