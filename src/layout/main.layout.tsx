@@ -405,7 +405,7 @@ function Header() {
               <Collapse in={isSchoolOpen} timeout="auto" unmountOnExit>
                 <List>
                   <ListItemNavLink
-                    link="/review"
+                    link="/own-class-review"
                     text="Cần xem xét"
                     Icon={TopicOutlinedIcon}
                     onClick={setCurrentPage}
@@ -442,8 +442,8 @@ function Header() {
               </ListItemButton>
               <Collapse in={isEnrolledOpen} timeout="auto" unmountOnExit>
                 <ListItemNavLink
-                  link="/review2"
-                  text="Việc cần làm"
+                  link="/joined-class-review"
+                  text="Đang được xem xét"
                   Icon={FactCheckOutlinedIcon}
                   onClick={setCurrentPage}
                 />

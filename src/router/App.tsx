@@ -25,6 +25,11 @@ import ArchivedCoursesPage from "@/pages/public/archived.page";
 import { RoleProvider } from "@/context/role.context";
 import GradesPage from "@/pages/class-page/grades.page";
 // import StudentGradePage from "@/pages/class-page/student.grades.page";
+import StudentViewGradePage from "@/pages/class-page/student-grade-page/student.grades.page";
+import GradeReviewPost from "@/pages/class-page/ui/card-review-request";
+import ReviewRequestPage from "@/pages/class-page/review-request-list/review-request-list.page";
+import AllReviewRequestPage from "@/pages/ownclass.review.page";
+import JoinedClassReviewRequestPage from "@/pages/joinedclass.review.page";
 
 function App() {
   return (
@@ -55,8 +60,8 @@ function App() {
           <Route path="archived" element={<ArchivedCoursesPage />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route path="calendar" element={<HomePage />} />
-          <Route path="review" element={<HomePage />} />
-          <Route path="review2" element={<HomePage />} />
+          <Route path="own-class-review" element={<AllReviewRequestPage />} />
+          <Route path="joined-class-review" element={<JoinedClassReviewRequestPage />} />
           <Route path="archived" element={<HomePage />} />
           <Route path="setting" element={<HomePage />} />
           <Route
@@ -70,7 +75,9 @@ function App() {
             <Route path="news" element={<NewsClassPage />} />
             <Route path="members" element={<MembersPage />} />
             <Route path="grades" element={<GradesPage />} />
-            {/* <Route path="student-grades" element={<StudentGradePage />} /> */}
+            <Route path="student-view-grade" element={<StudentViewGradePage />} />
+            <Route path="grade-review/" element={<ReviewRequestPage />} />
+            <Route path="grade-review/:reviewId" element={<GradeReviewPost />} />
           </Route>
         </Route>
         <Route path="invite-course" element={<VerifyTokenInvitePage />} />
