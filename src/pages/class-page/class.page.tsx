@@ -42,7 +42,7 @@ const ClassPage = () => {
   const { isTeacher, setIsTeacher } = useContext(RoleContext);
   const location = useLocation();
   const { courseId } = useParams();
-  // const [stateCourse, setStateCourse] = useState("");
+  const [stateCourse, setStateCourse] = useState("");
   const [value, setValue] = useState(0);
   const navigate = useNavigate();
   const classes = useStyles();
@@ -50,6 +50,11 @@ const ClassPage = () => {
 
   const [isOpenSettingCourseDialog, setIsOpenSettingCourseDialog] =
     useState(false);
+
+  useEffect(() => {
+    const str = getPartAfterCourseId();
+    setStateCourse(str);
+  });
 
   useEffect(() => {
     startLoading()
@@ -60,8 +65,8 @@ const ClassPage = () => {
 
         if (role === "teacher") {
           setIsTeacher(true);
-          navigateToDefaultTab(role);
         }
+        navigateToDefaultTab(role);
       } catch (error) {
         console.log(error);
         // throw error;
@@ -72,7 +77,7 @@ const ClassPage = () => {
       getCourseById(courseId);
     }
     stopLoading();
-  }, [courseId]);
+  }, [stateCourse]);
 
   const getPartAfterCourseId = () => {
     const pathSegments = location.pathname.split("/");
@@ -88,6 +93,7 @@ const ClassPage = () => {
 
   const navigateToDefaultTab = (role: string) => {
     const str = getPartAfterCourseId();
+    console.log(str);
     switch (str) {
       case "student-view-grade":
         if (role === "teacher"){
@@ -124,7 +130,7 @@ const ClassPage = () => {
         navigate(`/course/${courseId}/grade-review`, { replace: true });
         break;
       default:
-        setValue(5);
+        setValue(null);
         navigate(`/course/${courseId}/${str}`, { replace: true });
         break;
     }
