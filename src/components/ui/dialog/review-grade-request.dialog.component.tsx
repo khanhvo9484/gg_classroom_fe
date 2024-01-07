@@ -166,8 +166,8 @@ export default function GradeReviewRequestDialog(props: SimpleDialogProps) {
                             startIcon={<AttachFileIcon />}>
                                 <VisuallyHiddenInput type="file"
                                 {...getFieldProps("file")}
-                                onInputCapture={(event) => {console.log(event.target.files[0]);
-                                                            setCurrentFile(event.target.files[0])}}/>
+                                onInputCapture={(event) => {console.log((event.target as HTMLInputElement).files[0]);
+                                                            setCurrentFile((event.target as HTMLInputElement).files[0])}}/>
                             </Button>
                             {currentFile && (<img
                                 src={URL.createObjectURL(currentFile)}
