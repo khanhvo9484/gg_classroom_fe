@@ -2,11 +2,9 @@
 import { useContext, useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { Box } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import { useSelector } from "react-redux";
-import { selectUser } from "@/redux/auth.slice";
 import { SortableContainer, SortableElement } from "react-sortable-hoc";
 import { arrayMoveImmutable } from "array-move";
 import ScoreTypeComponent from "./ui/score-type.component";
@@ -28,8 +26,6 @@ import { ClassService } from "@/service/class.service";
 import LoadingContext from "@/context/loading.contenxt";
 import toast from "react-hot-toast";
 import RoleContext from "@/context/role.context";
-import { replace } from "formik";
-import { Stack } from "@mui/material";
 
 interface SortableListProps {
   items: IGradeItemComponent[];
@@ -127,14 +123,13 @@ const SortableStack = SortableContainer<SortableListProps>(
 );
 const GradeStructurePage = () => {
   const classService = new ClassService();
-  const user = useSelector(selectUser);
   const [listScoreType, setListScoreType] = useState<IGradeItemComponent[]>();
   const [remainingPercent, setRemaninPercent] = useState(100);
   const { courseId } = useParams();
   const [isValidForm, setIsValidForm] = useState<boolean>(false);
   const [isValidPercent, setIsValidPercent] = useState<boolean>(false);
   const { isLoading, stopLoading, startLoading } = useContext(LoadingContext);
-  const { isTeacher, setIsTeacher } = useContext(RoleContext);
+  const { isTeacher } = useContext(RoleContext);
 
   const {
     register,
@@ -149,7 +144,7 @@ const GradeStructurePage = () => {
     mode: "onChange",
   });
   console.log("ren der lai");
-  const { append, remove, update } = useFieldArray({
+  const { append, remove } = useFieldArray({
     control,
     name: "grades",
   });

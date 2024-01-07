@@ -1,12 +1,23 @@
 .ag-theme-quartz{
-    --ag-grid-size: 14px;
-    --ag-list-item-height: 40px;
+    --ag-grid-size: 12px;
+    /* --ag-list-item-height: 100px; */
 
     --ag-font-size: 16px;
-
+    --ag-border-color:  rgb(150, 150, 200);
     --ag-row-border-style: solid;
-    --ag-row-border-width: 1px;
+    --ag-row-border-width: 2px;
+
     --ag-row-border-color: rgb(150, 150, 200);
 
-    --ag-cell-horizontal-border: 1px solid #ddd;
+    --ag-cell-horizontal-border: 5px solid rgb(150, 150, 200);
+    --ag-critical-border-color: red;
+    --ag-header-cell-hover-background-color: #33cc3344;
+}
+
+.ag-header-group-cell-with-group {
+    background-color: #33cc3344 !important;
+  }
+
+.my-css-class{
+    justify-content: center;
 }

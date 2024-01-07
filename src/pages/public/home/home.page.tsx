@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import ClassCard from "../../../components/ui/card/class.card.component";
 import { Stack } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { ClassService } from "@/service/class.service";
 import LoadingContext from "@/context/loading.contenxt";
 import toast from "react-hot-toast";
