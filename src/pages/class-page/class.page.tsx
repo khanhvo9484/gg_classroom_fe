@@ -15,7 +15,7 @@ import RoleContext from "@/context/role.context";
 import { ClassService } from "@/service/class.service";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import IconButton from "@mui/material/IconButton";
-import SettingClassComponent from "./ui/setting-class.component";
+// import SettingClassComponent from "./ui/setting-class.component";
 import SheetMenu from "@/components/sheet.menu.component";
 import LoadingContext from "@/context/loading.contenxt";
 
@@ -115,8 +115,16 @@ const ClassPage = () => {
         setValue(2);
         navigate(`/course/${courseId}/grades`, { replace: true });
         break;
-      default:
+      case "grade-structure":
         setValue(4);
+        navigate(`/course/${courseId}/grade-structure`, { replace: true });
+        break;
+      case "grade-review":
+        setValue(5);
+        navigate(`/course/${courseId}/grade-review`, { replace: true });
+        break;
+      default:
+        setValue(5);
         navigate(`/course/${courseId}/${str}`, { replace: true });
         break;
     }
@@ -225,6 +233,23 @@ const ClassPage = () => {
                 <Button
                   {...props}
                   component={Link}
+                  to={`/course/${courseId}/grade-structure`}
+                  style={{
+                    textDecoration: "none",
+                    height: "100%",
+                  }}
+                />
+              )}
+              label="Cấu trúc điểm"
+            />
+            <Tab
+              sx={{ textTransform: "none" }}
+              className={classes.style}
+              value={5}
+              component={(props) => (
+                <Button
+                  {...props}
+                  component={Link}
                   to={`/course/${courseId}/grade-review`}
                   style={{
                     textDecoration: "none",
@@ -242,12 +267,12 @@ const ClassPage = () => {
         </Box>
         <Outlet />
       </Box>
-      <SettingClassComponent
+      {/* <SettingClassComponent
         open={isOpenSettingCourseDialog}
         onClose={() => {
           setIsOpenSettingCourseDialog(false);
         }}
-      />
+      /> */}
     </>
   );
 };

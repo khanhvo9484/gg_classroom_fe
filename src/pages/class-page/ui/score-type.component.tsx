@@ -10,18 +10,25 @@ import { useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import makeStyles from "@mui/styles/makeStyles";
-import { Control, UseFormRegister, UseFormGetValues } from "react-hook-form";
+import {
+  Control,
+  UseFormRegister,
+  UseFormGetValues,
+  UseFormSetValue,
+} from "react-hook-form";
 import AddIcon from "@mui/icons-material/Add";
-import { Subject } from "rxjs";
 
 interface Props {
   gradeItemComponent: IGradeItemComponent;
   index: number;
   onDeleteGradeItem: (index: number) => void;
-  handleChange: () => void;
+  updateRemainPercent: () => void;
   register: UseFormRegister<Record<string, any>>; // UseFormRegister is the correct type
   control: Control;
   getValues: UseFormGetValues<{
+    grades: IGradeItemComponent[];
+  }>;
+  setValue: UseFormSetValue<{
     grades: IGradeItemComponent[];
   }>;
   addSubGrade: (index: number) => void;
@@ -32,10 +39,13 @@ const useStyles = makeStyles(() => ({
   inputNumberStyle: {
     width: "206px",
   },
-  hoverEffect: {
-    "&:hover .closeIcon": {
-      visibility: "visible !important",
+  boxHover: {
+    "&:hover $closeIcon": {
+      visibility: "visible",
     },
+  },
+  closeIcon: {
+    visibility: "hidden",
   },
 }));
 
@@ -44,8 +54,9 @@ const ScoreTypeComponent: React.FC<Props> = ({
   index,
   onDeleteGradeItem,
   register,
-  handleChange,
+  updateRemainPercent,
   getValues,
+  setValue,
   addSubGrade,
   deleteSubGrade,
 }) => {
@@ -58,11 +69,13 @@ const ScoreTypeComponent: React.FC<Props> = ({
 
   const handleDeleteGradeItem = () => {
     onDeleteGradeItem(index);
+    setGradeItemSub(null);
+    console.log("hien tai: ", gradeItemComponent);
   };
 
   const handeOnChange = () => {
     console.log("dang change");
-    handleChange();
+    updateRemainPercent();
   };
 
   const handleExpandSubGrade = () => {
@@ -78,14 +91,44 @@ const ScoreTypeComponent: React.FC<Props> = ({
   const handleSubGradeChange = (subGrade: IGradeItem) => {
     console.log(subGrade);
 
-    console.log("value form: ", getValues().grades);
+    // console.log("value form: ", getValues().grades);
+
+    calculatePercent();
   };
 
   const handleDeleteSubGradeItem = (parentIndex: number, subIndex: number) => {
     console.log(index);
     deleteSubGrade(parentIndex, subIndex);
+    console.log("grade sub: ", gradeItemSub);
+    setGradeItemSub(gradeItemSub);
+    setValue(`grades.${index}.gradeSubComponent`, gradeItemSub);
+    updateRemainPercent();
   };
 
+  const calculatePercent = () => {
+    console.log("index", index);
+    const formValue = getValues().grades;
+    console.log("form value: ", formValue);
+    const gradeStrucItem = formValue.at(index);
+    const percenParent = +gradeStrucItem.percentage;
+    let sum = 0;
+
+    gradeStrucItem.gradeSubComponent.forEach((item) => {
+      sum += +item.percentage;
+    });
+
+    console.log(sum);
+    console.log(gradeStrucItem);
+
+    const newRemainingPercent = percenParent - sum;
+
+    if (newRemainingPercent < 0) {
+      setValue(`grades.${index}.percentage`, sum.toString());
+    }
+    updateRemainPercent();
+
+    console.log("Con lai: ", newRemainingPercent);
+  };
   return (
     <>
       <Box
@@ -125,11 +168,17 @@ const ScoreTypeComponent: React.FC<Props> = ({
               })}
             />
           </FormControl>
-          {gradeItemSub.length > 0 && (
-            <IconButton size="large" onClick={handleExpandSubGrade}>
-              {isExpand ? <ExpandMoreIcon /> : <ExpandLessIcon />}
-            </IconButton>
-          )}
+
+          <IconButton
+            sx={{
+              visibility:
+                gradeItemSub && gradeItemSub.length > 0 ? "visible" : "hidden",
+            }}
+            size="large"
+            onClick={handleExpandSubGrade}
+          >
+            {isExpand ? <ExpandMoreIcon /> : <ExpandLessIcon />}
+          </IconButton>
           <IconButton size="large" onClick={() => handleAddSubGrade(index)}>
             <AddIcon />
           </IconButton>
@@ -139,14 +188,14 @@ const ScoreTypeComponent: React.FC<Props> = ({
         </Box>
 
         {/* Child loop*/}
-        <Box sx={{ pl: 4, pt: 2 }}>
+        <Box sx={{ pl: 0, pt: 2 }}>
           {isExpand &&
             gradeItemSub &&
             gradeItemSub.map((item, idx) => (
               <Box
-                key={idx}
+                key={item.id || idx}
                 sx={{ display: "flex" }}
-                className={classes.hoverEffect}
+                className={classes.boxHover}
               >
                 <Box
                   sx={{
@@ -160,7 +209,7 @@ const ScoreTypeComponent: React.FC<Props> = ({
                   </InputLabel>
                   <FilledInput
                     id="component-filled"
-                    defaultValue={item.name}
+                    // defaultValue={item.name}
                     {...register(
                       `grades[${index}].gradeSubComponent.${idx}.name`,
                       {
@@ -174,7 +223,7 @@ const ScoreTypeComponent: React.FC<Props> = ({
                   <FilledInput
                     id="component-filled"
                     type="number"
-                    defaultValue={item.percentage}
+                    // defaultValue={item.percentage}
                     inputProps={{ min: 0, max: 100 }}
                     className={classes.inputNumberStyle}
                     {...register(
@@ -189,7 +238,7 @@ const ScoreTypeComponent: React.FC<Props> = ({
 
                 <IconButton
                   size="large"
-                  className="closeIcon"
+                  className={classes.closeIcon}
                   onClick={() => {
                     handleDeleteSubGradeItem(index, idx);
                   }}

@@ -24,6 +24,7 @@ import VerifyTokenInvitePage from "@/pages/public/static/verify-token-invite.pag
 import ArchivedCoursesPage from "@/pages/public/archived.page";
 import { RoleProvider } from "@/context/role.context";
 import GradesPage from "@/pages/class-page/grades.page";
+import GradeStructurePage from "@/pages/class-page/grade-structure.page";
 // import StudentGradePage from "@/pages/class-page/student.grades.page";
 import StudentViewGradePage from "@/pages/class-page/student-grade-page/student.grades.page";
 import GradeReviewPost from "@/pages/class-page/ui/card-review-request";
@@ -78,6 +79,8 @@ function App() {
             <Route path="student-view-grade" element={<StudentViewGradePage />} />
             <Route path="grade-review/" element={<ReviewRequestPage />} />
             <Route path="grade-review/:reviewId" element={<GradeReviewPost />} />
+            <Route path="grade-structure" element={<GradeStructurePage />} />
+            {/* <Route path="student-grades" element={<StudentGradePage />} /> */}
           </Route>
         </Route>
         <Route path="invite-course" element={<VerifyTokenInvitePage />} />
