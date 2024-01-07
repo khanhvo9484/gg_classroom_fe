@@ -1,29 +1,42 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Box } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import GradeTableComponent from "./ui/grade-table/grade-table.component";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { ClassService } from "@/service/class.service";
 import { useParams } from "react-router-dom";
 import LoadingContext from "@/context/loading.contenxt";
 import { ColDef, ColGroupDef } from "ag-grid-community";
 import HeaderItemTableComponent from "./ui/header-item-table.component";
+import SheetMenu from "@/components/sheet.menu.component";
+import { AgGridReact } from "ag-grid-react";
 
-function createGridHeaderConfig(data: any): (ColDef | ColGroupDef)[] {
+function createGridHeaderConfig(
+  data: any,
+  updateBoard: (data: any) => void
+): (ColDef | ColGroupDef)[] {
   return data.map((item) => {
     const headerName = item.name;
+    console.log("id: ", item.id);
     const children = item.gradeSubComponent.map((child) => ({
       field: child.name,
       headerComponent: HeaderItemTableComponent,
-      headerComponentParams: { name: child.name },
+      headerComponentParams: {
+        name: child.name,
+        id: item.id,
+        updateBoard: updateBoard,
+      },
       cellEditor: "agNumberCellEditor",
     }));
 
-    // Check if gradeSubComponent is empty
     if (item.gradeSubComponent.length === 0) {
       return {
-        field: headerName.toLowerCase(),
+        field: headerName.replace(/\s+/g, "").toLowerCase(),
         headerComponent: HeaderItemTableComponent,
-        headerComponentParams: { name: headerName },
+        headerComponentParams: {
+          name: headerName,
+          id: item.id,
+          updateBoard: updateBoard,
+        },
       };
     }
 
@@ -68,6 +81,7 @@ const GradesPage = () => {
   const classService = new ClassService();
   const { courseId } = useParams();
   const { stopLoading, startLoading } = useContext(LoadingContext);
+  const gridRef = useRef<AgGridReact>(null);
   const [rowData, setRowData] = useState<any[]>([]);
   const [colDefs, setColDefs] = useState<(ColDef | ColGroupDef)[]>([
     {
@@ -90,6 +104,17 @@ const GradesPage = () => {
     },
   ]);
 
+  const updateBoard = (data: any) => {
+    console.log("thuc hien update board", data);
+
+    const rowValuesList = data.map((student) =>
+      convertToRowDataWithStudentInfo(student)
+    );
+    console.log(rowValuesList);
+
+    setRowData(rowValuesList);
+  };
+
   useEffect(() => {
     startLoading();
     const getStudentGradeBoardByCourse = async () => {
@@ -98,7 +123,8 @@ const GradesPage = () => {
           courseId
         );
         const columnMap = createGridHeaderConfig(
-          response.data[0].grade.gradeComponent
+          response.data[0].grade.gradeComponent,
+          updateBoard
         );
 
         console.log("column Map: ", columnMap);
@@ -127,13 +153,51 @@ const GradesPage = () => {
     }
   }, [courseId]);
 
+  const onFilterTextBoxChanged = useCallback(() => {
+    gridRef.current!.api.setGridOption(
+      "quickFilterText",
+      (document.getElementById("filter-text-box") as HTMLInputElement).value
+    );
+  }, []);
+
+  const onExportCSV = useCallback(() => {
+    gridRef.current!.api.exportDataAsCsv({
+      fileName: `student_grades_${courseId}`,
+    });
+  }, []);
+
   return (
     <>
       <Box sx={{ mt: 2, mb: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: 2,
+          }}
+        >
+          <Box
+            className="example-header"
+            sx={{ display: "flex", alignItems: "center", gap: 3 }}
+          >
+            <TextField
+              id="filter-text-box"
+              label="Tìm kiếm"
+              type="search"
+              onInput={onFilterTextBoxChanged}
+              sx={{ width: "400px" }}
+            />
+          </Box>
+          <SheetMenu onExportCSV={onExportCSV} />
+        </Box>
+
         {colDefs.length > 2 && rowData && (
           <GradeTableComponent
             rowGrade={rowData}
             colGrid={colDefs}
+            gridRef={gridRef}
+            onFilterTextBoxChanged={onFilterTextBoxChanged}
           ></GradeTableComponent>
         )}
       </Box>

@@ -23,10 +23,15 @@ export const API_STUDENT_GRADE = "/student-grade";
 export const API_GET_STUDENT_XLSX = "/student-xlsx-template";
 export const API_GET_STUDENT_MAPPING_ID_XLSX =
   "/student-mapping-id-xlsx-template";
+
+export const API_GET_STUDENT_GRADE_XLSX_TEMPLATE =
+  "/student-grade-xlsx-template";
+
 export const STUDENT_XLSX_FILE_NAME = "student-template.xlsx";
 export const STUDENT_MAPPING_ID_XLSX_FILE_NAME =
   "student-mapping-id-template.xlsx";
 export const API_STUDENT_UPLOAD = "/upload-student-list";
+export const API_UPLOAD_STUDENT_GRADE = "/upload-student-grade";
 export const API_STUDENT_MAPPING_ID_UPLOAD = "/upload-student-mapping-id";
 
 export const API_GET_GRADE_STRUCTURE = "/get/{courseId}";

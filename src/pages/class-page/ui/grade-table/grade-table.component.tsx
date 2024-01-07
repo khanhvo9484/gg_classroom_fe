@@ -2,22 +2,30 @@
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
-import { useState, useMemo, useCallback, useRef } from "react";
-import { Box, TextField } from "@mui/material";
+import { useState, useMemo, useEffect } from "react";
+import { Box } from "@mui/material";
 import { CellValueChangedEvent, ColDef, ColGroupDef } from "ag-grid-community";
 import "./grade-table.css";
 
 interface Props {
   colGrid: (ColDef | ColGroupDef)[];
   rowGrade: any[];
+  gridRef: any;
+  onFilterTextBoxChanged: () => void;
 }
 
-const GradeTableComponent: React.FC<Props> = ({ colGrid, rowGrade }) => {
-  const [rowData] = useState(rowGrade);
+const GradeTableComponent: React.FC<Props> = ({
+  colGrid,
+  rowGrade,
+  gridRef,
+}) => {
+  const [rowData, setRowData] = useState(rowGrade);
 
   const [colDefs] = useState<(ColDef | ColGroupDef)[]>(colGrid);
-  console.log(rowGrade);
-  const gridRef = useRef<AgGridReact>(null);
+
+  useEffect(() => {
+    setRowData(rowGrade);
+  }, [rowGrade]);
 
   console.log("col : ", colDefs);
   const defaultColDef = useMemo(() => {
@@ -29,27 +37,11 @@ const GradeTableComponent: React.FC<Props> = ({ colGrid, rowGrade }) => {
     };
   }, []);
 
-  const onFilterTextBoxChanged = useCallback(() => {
-    gridRef.current!.api.setGridOption(
-      "quickFilterText",
-      (document.getElementById("filter-text-box") as HTMLInputElement).value
-    );
-  }, []);
-
   const handleCellValueChange = (event: CellValueChangedEvent) => {
     console.log("event: ", event);
   };
   return (
     <Box>
-      <Box sx={{ mb: 2 }} className="example-header">
-        <TextField
-          id="filter-text-box"
-          label="Tìm kiếm"
-          type="search"
-          onInput={onFilterTextBoxChanged}
-          sx={{ width: "400px" }}
-        />
-      </Box>
       <Box className="ag-theme-quartz" sx={{ height: "90vh" }}>
         <AgGridReact
           ref={gridRef}

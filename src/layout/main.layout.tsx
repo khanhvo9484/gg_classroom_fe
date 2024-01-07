@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -12,7 +13,7 @@ import { useSelector } from "react-redux";
 import AvatarDropdown from "../components/avatar.dropdown.menu.component";
 import logo from "@/assets/icons/k3_logo.png";
 import { styled, Theme, CSSObject } from "@mui/material/styles";
-import { Collapse, LinearProgress, MenuItem, Paper } from "@mui/material";
+import { Collapse, LinearProgress, MenuItem } from "@mui/material";
 import MuiDrawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
@@ -150,7 +151,7 @@ function Header() {
   };
 
   function updateCourses(courseId) {
-    console.log(`Just update courses: ${courseId}`)
+    console.log(`Just update courses: ${courseId}`);
   }
 
   function onFadeClose() {
@@ -165,7 +166,7 @@ function Header() {
 
         dispatch(
           setCourses({
-            courses : response.data
+            courses: response.data,
           })
         );
       } catch (error) {
@@ -303,7 +304,7 @@ function Header() {
                   onClick={(event) => {
                     handleOpenMenuAdd(event);
                   }}
-                  sx={{ml:1}}
+                  sx={{ ml: 1 }}
                 >
                   <AddIcon />
                 </IconButton>
@@ -404,18 +405,21 @@ function Header() {
                 <ListItemIcon>
                   <PeopleAltOutlinedIcon fontSize="medium" />
                 </ListItemIcon>
-                <ListItemText primary={
-                  <Typography
+                <ListItemText
+                  primary={
+                    <Typography
                       noWrap={true}
                       variant="body1"
                       color="text.primary"
                       fontSize={14}
                       sx={{
-                      underline:"none",
+                        underline: "none",
                       }}
-                  >
+                    >
                       {"Giảng dạy"}
-                  </Typography>} />
+                    </Typography>
+                  }
+                />
               </ListItemButton>
               <Collapse in={isSchoolOpen} timeout="auto" unmountOnExit>
                 <List>
@@ -453,18 +457,21 @@ function Header() {
                 <ListItemIcon>
                   <SchoolOutlinedIcon fontSize="medium" />
                 </ListItemIcon>
-                <ListItemText primary={
-                  <Typography
+                <ListItemText
+                  primary={
+                    <Typography
                       noWrap={true}
                       variant="body1"
                       color="text.primary"
                       fontSize={14}
                       sx={{
-                      underline:"none",
+                        underline: "none",
                       }}
-                  >
+                    >
                       {"Đã đăng ký"}
-                  </Typography>} />
+                    </Typography>
+                  }
+                />
               </ListItemButton>
               <Collapse in={isEnrolledOpen} timeout="auto" unmountOnExit>
                 <ListItemNavLink
@@ -491,16 +498,16 @@ function Header() {
             <Divider />
             <List>
               <ListItemNavLink
-                  link="/archived"
-                  text="Lớp học đã lưu trữ"
-                  Icon={ArchiveOutlinedIcon}
-                  onClick={setCurrentPage}
+                link="/archived"
+                text="Lớp học đã lưu trữ"
+                Icon={ArchiveOutlinedIcon}
+                onClick={setCurrentPage}
               />
               <ListItemNavLink
-                  link="/setting"
-                  text="Cài đặt"
-                  Icon={SettingsOutlinedIcon}
-                  onClick={setCurrentPage}
+                link="/setting"
+                text="Cài đặt"
+                Icon={SettingsOutlinedIcon}
+                onClick={setCurrentPage}
               />
             </List>
             <Divider />

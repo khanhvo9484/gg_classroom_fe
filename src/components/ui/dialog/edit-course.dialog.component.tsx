@@ -12,7 +12,6 @@ import { customAxios } from "../../../api/custom-axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { ICourse } from "@/models/class.model";
-import { selectUser } from "@/redux/auth.slice";
 import { useDispatch } from "react-redux";
 import { selectCourses } from "@/redux/courses.slice";
 import { setCourses } from "@/redux/courses.slice";
@@ -70,8 +69,7 @@ export default function EditCourseDialog(props: SimpleDialogProps) {
           const newCourses = courses.map((course) => {
             if (course.id !== response.data.data.id) {
               return course;
-            }
-            else {
+            } else {
               const newCourse = {
                 description: response.data.data.description,
                 name: response.data.data.name,
@@ -81,7 +79,7 @@ export default function EditCourseDialog(props: SimpleDialogProps) {
           });
           dispatch(
             setCourses({
-              courses : newCourses
+              courses: newCourses,
             })
           );
           toast.success("Chỉnh sửa thông tin lớp thành công");

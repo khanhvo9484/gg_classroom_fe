@@ -15,7 +15,6 @@ import gradientColors from "@/data/gradient.color";
 import { useSelector } from "react-redux";
 import { selectUser } from "@/redux/auth.slice";
 import EditCourseDialog from "../dialog/edit-course.dialog.component";
-import { useNavigate } from "react-router-dom";
 import MovingIcon from "@mui/icons-material/Moving";
 import Tooltip from "@mui/material/Tooltip";
 import CardArchivedMenu from "@/components/card.dropdown.menu.archived.component";

@@ -15,8 +15,6 @@ import RoleContext from "@/context/role.context";
 import { ClassService } from "@/service/class.service";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import IconButton from "@mui/material/IconButton";
-// import SettingClassComponent from "./ui/setting-class.component";
-import SheetMenu from "@/components/sheet.menu.component";
 import LoadingContext from "@/context/loading.contenxt";
 
 const useStyles = makeStyles(() => ({
@@ -35,8 +33,6 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-
-
 const ClassPage = () => {
   const classService = new ClassService();
   const { isTeacher, setIsTeacher } = useContext(RoleContext);
@@ -48,7 +44,7 @@ const ClassPage = () => {
   const classes = useStyles();
   const { startLoading, stopLoading } = useContext(LoadingContext);
 
-  const [isOpenSettingCourseDialog, setIsOpenSettingCourseDialog] = useState(false);
+  const [, setIsOpenSettingCourseDialog] = useState<boolean>(false);
 
   useEffect(() => {
     const str = getPartAfterCourseId();
@@ -56,7 +52,7 @@ const ClassPage = () => {
   });
 
   useEffect(() => {
-    startLoading()
+    startLoading();
     const getCourseById = async (courseId: string) => {
       try {
         const response = await classService.getCourseById(courseId);
@@ -95,11 +91,10 @@ const ClassPage = () => {
     console.log(str);
     switch (str) {
       case "student-view-grade":
-        if (role === "teacher"){
+        if (role === "teacher") {
           setValue(2);
           navigate(`/course/${courseId}/grades`, { replace: true });
-        }
-        else {
+        } else {
           setValue(3);
           navigate(`/course/${courseId}/student-view-grade`, { replace: true });
         }
@@ -134,7 +129,6 @@ const ClassPage = () => {
         break;
     }
   };
-
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -265,7 +259,6 @@ const ClassPage = () => {
               label="Danh sách phúc khảo"
             />
           </Tabs>
-          <SheetMenu></SheetMenu>
           <IconButton size="large" onClick={() => handleOpenSettingCourse()}>
             <SettingsOutlinedIcon />
           </IconButton>
