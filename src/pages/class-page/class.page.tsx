@@ -48,7 +48,7 @@ const ClassPage = () => {
   const classes = useStyles();
   const { startLoading, stopLoading } = useContext(LoadingContext);
 
-  const [setIsOpenSettingCourseDialog] = useState(false);
+  const [isOpenSettingCourseDialog, setIsOpenSettingCourseDialog] = useState(false);
 
   useEffect(() => {
     const str = getPartAfterCourseId();

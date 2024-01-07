@@ -4,9 +4,11 @@ export const API_VERIFY_LOGIN_OAUTH = "/auth/verify-login/{idUser}";
 
 export const API_GET_USER_BY_ID = "/users/user/{idUser}";
 export const API_UPDATE_USER = "/users/user";
+export const API_GET_ALL_USER = "/users/all-users";
 
 export const API_COURSES = "/courses";
 export const API_GET_ALL_COURSE = "/all";
+export const API_GET_ALL_COURSES = "/admin-all";
 export const API_GET_ALL_ARCHIVED_COURSE = "/all-archived";
 export const API_GET_COURSE_BY_ID = "/course/{courseId}";
 export const API_SEND_INVITATION = "/send-invitation";

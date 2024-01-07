@@ -12,6 +12,7 @@ import {
   API_UPDATE_GRADE_REWRITE,
   API_STUDENT_GRADE,
   API_GET_STUDENT_GRADE_BOARD,
+  API_GET_ALL_COURSES,
 } from "@/api/api.constant";
 import { customAxios } from "@/api/custom-axios";
 import { IBaseResponse } from "@/models/base.model";
@@ -33,6 +34,15 @@ import { IAllMemberCourseRespone } from "@/models/member.model";
 import { getSearchParams } from "@/utils/http.util";
 
 export class ClassService {
+
+  async getAllCourses(): Promise<ICoursesRespone> {
+    const { data: response } = await customAxios.get<ICoursesRespone>(
+      `${API_COURSES}${API_GET_ALL_COURSES}`
+    );
+
+    return response;
+  }
+
   async getAllCourse(): Promise<ICoursesRespone> {
     const { data: response } = await customAxios.get<ICoursesRespone>(
       `${API_COURSES}${API_GET_ALL_COURSE}`

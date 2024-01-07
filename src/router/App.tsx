@@ -20,6 +20,7 @@ import ClassPage from "@/pages/class-page/class.page";
 import NewsClassPage from "@/pages/class-page/news-class.page";
 import MembersPage from "@/pages/class-page/members.page";
 import MainLayout from "@/layout/main.layout";
+import AdminLayout from "@/layout/admin.layout";
 import VerifyTokenInvitePage from "@/pages/public/static/verify-token-invite.page";
 import ArchivedCoursesPage from "@/pages/public/archived.page";
 import { RoleProvider } from "@/context/role.context";
@@ -31,6 +32,9 @@ import GradeReviewPost from "@/pages/class-page/ui/card-review-request";
 import ReviewRequestPage from "@/pages/class-page/review-request-list/review-request-list.page";
 import AllReviewRequestPage from "@/pages/ownclass.review.page";
 import JoinedClassReviewRequestPage from "@/pages/joinedclass.review.page";
+import RequiredAdmin from "@/layout/required-admin.layout";
+import AdminAcountsPage from "@/pages/admin/admin.accounts.page";
+import AdminCoursesPage from "@/pages/admin/admin.courses.page";
 
 function App() {
   return (
@@ -52,6 +56,15 @@ function App() {
             <Route path="not-verify" element={<NotVerify />} />
             <Route path="sign-up/verify" element={<VerifySignUpPage />} />
           </Route>
+        </Route>
+      </Route>
+
+      <Route path="admin" element={<RequiredAdmin />}>
+        <Route element={<AdminLayout />}>
+          <Route path="home" element={"home"} />
+          <Route path="accounts" element={<AdminAcountsPage />} />
+          <Route path="courses" element={<AdminCoursesPage />} />
+          <Route path="student-id" element={"student-id"} />
         </Route>
       </Route>
 
