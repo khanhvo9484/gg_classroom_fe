@@ -9,6 +9,7 @@ import {
   API_SEND_INVITATION,
   API_GET_GRADE_STRUCTURE,
   API_GRADE_STRUCTURE,
+  API_UPDATE_GRADE_REWRITE,
 } from "@/api/api.constant";
 import { customAxios } from "@/api/custom-axios";
 import { IBaseResponse } from "@/models/base.model";
@@ -21,7 +22,7 @@ import {
   ITokenVeryfiJoinCourseRequest,
   IJoinCourseByCodeRequest,
 } from "@/models/class.model";
-import { IGradeStructureResponse } from "@/models/grade.model";
+import { IGradeStructure, IGradeStructureResponse } from "@/models/grade.model";
 import { IAllMemberCourseRespone } from "@/models/member.model";
 import { getSearchParams } from "@/utils/http.util";
 
@@ -105,6 +106,17 @@ export class ClassService {
         "{courseId}",
         courseId
       )}`
+    );
+
+    return response;
+  }
+
+  async updateGradeStructureCourse(
+    gradeStructureRequest: IGradeStructure
+  ): Promise<IGradeStructureResponse> {
+    const { data: response } = await customAxios.put<IGradeStructureResponse>(
+      `${API_GRADE_STRUCTURE}${API_UPDATE_GRADE_REWRITE}`,
+      gradeStructureRequest
     );
 
     return response;

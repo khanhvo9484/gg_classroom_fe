@@ -15,7 +15,7 @@ import RoleContext from "@/context/role.context";
 import { ClassService } from "@/service/class.service";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import IconButton from "@mui/material/IconButton";
-import SettingClassComponent from "./ui/setting-class.component";
+// import SettingClassComponent from "./ui/setting-class.component";
 import SheetMenu from "@/components/sheet.menu.component";
 
 const useStyles = makeStyles(() => ({
@@ -193,6 +193,23 @@ const ClassPage = () => {
                 label="Điểm"
               />
             )}
+            <Tab
+              sx={{ textTransform: "none" }}
+              className={classes.style}
+              value={4}
+              component={(props) => (
+                <Button
+                  {...props}
+                  component={Link}
+                  to={`/course/${courseId}/grade-structure`}
+                  style={{
+                    textDecoration: "none",
+                    height: "100%",
+                  }}
+                />
+              )}
+              label="Cấu trúc điểm"
+            />
           </Tabs>
           <SheetMenu></SheetMenu>
           <IconButton size="large" onClick={() => handleOpenSettingCourse()}>
@@ -201,12 +218,12 @@ const ClassPage = () => {
         </Box>
         <Outlet />
       </Box>
-      <SettingClassComponent
+      {/* <SettingClassComponent
         open={isOpenSettingCourseDialog}
         onClose={() => {
           setIsOpenSettingCourseDialog(false);
         }}
-      />
+      /> */}
     </>
   );
 };
