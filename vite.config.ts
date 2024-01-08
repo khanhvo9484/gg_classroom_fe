@@ -8,6 +8,7 @@ export default defineConfig({
   resolve: {
     alias: [
       { find: "@asset", replacement: path.resolve(__dirname, "src/asset") },
+      { find: "@socket", replacement: path.resolve(__dirname, "src/socket") },
       { find: "@", replacement: path.resolve(__dirname, "src") },
     ],
   },

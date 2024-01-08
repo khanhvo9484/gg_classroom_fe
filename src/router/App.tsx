@@ -39,7 +39,7 @@ import AdminCoursesPage from "@/pages/admin/admin.courses.page";
 function App() {
   return (
     <Routes>
-      <Route path="/test" element={<Test></Test>} />
+      <Route path="test" element={<Test></Test>} />
 
       <Route element={<DefaultLayout />}>
         <Route index element={<LandingPage />} />
@@ -75,7 +75,10 @@ function App() {
           <Route path="profile" element={<ProfilePage />} />
           <Route path="calendar" element={<HomePage />} />
           <Route path="own-class-review" element={<AllReviewRequestPage />} />
-          <Route path="joined-class-review" element={<JoinedClassReviewRequestPage />} />
+          <Route
+            path="joined-class-review"
+            element={<JoinedClassReviewRequestPage />}
+          />
           <Route path="archived" element={<HomePage />} />
           <Route path="setting" element={<HomePage />} />
           <Route
@@ -89,9 +92,15 @@ function App() {
             <Route path="news" element={<NewsClassPage />} />
             <Route path="members" element={<MembersPage />} />
             <Route path="grades" element={<GradesPage />} />
-            <Route path="student-view-grade" element={<StudentViewGradePage />} />
+            <Route
+              path="student-view-grade"
+              element={<StudentViewGradePage />}
+            />
             <Route path="grade-review/" element={<ReviewRequestPage />} />
-            <Route path="grade-review/:reviewId" element={<GradeReviewPost />} />
+            <Route
+              path="grade-review/:reviewId"
+              element={<GradeReviewPost />}
+            />
             <Route path="grade-structure" element={<GradeStructurePage />} />
             {/* <Route path="student-grades" element={<StudentGradePage />} /> */}
           </Route>

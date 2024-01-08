@@ -3,16 +3,25 @@ import { useDispatch, useSelector } from "react-redux";
 import { customAxios } from "../api/custom-axios";
 import { Navigate } from "react-router-dom";
 import { Box, CircularProgress } from "@mui/material";
-import useSWR from "swr";
+import socket from "@socket/socket";
+import { useState, useEffect } from "react";
 const SignOut = () => {
   const dispatch = useDispatch();
   const refreshToken = useSelector((state: any) => state.auth.refresh_token);
-  dispatch(deleteUser());
-  const { isLoading } = useSWR("/auth/refresh-token/sign-out", async (url) => {
-    await customAxios.post(url, {
-      refresh_token: refreshToken,
-    });
-  });
+  const [isLoading, setIsLoading] = useState(true);
+  // 🙄 disconnect socket
+  socket.disconnect();
+
+  useEffect(() => {
+    async function signOut() {
+      dispatch(deleteUser());
+      await customAxios.post("/auth/refresh-token/sign-out", {
+        refresh_token: refreshToken,
+      });
+      setIsLoading(false);
+    }
+    signOut();
+  }, []);
 
   return (
     <>

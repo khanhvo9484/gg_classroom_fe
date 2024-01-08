@@ -41,3 +41,5 @@ export const API_GET_GRADE_STRUTURE = "/get";
 export const API_UPDATE_GRADE_REWRITE = "/update-grade-rewrite";
 
 export const API_GET_STUDENT_GRADE_BOARD = "/student-grade-board/{courseId}";
+
+export const API_GET_NOTIFICATION = "/notification/get-notification/{userId}";

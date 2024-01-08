@@ -85,6 +85,7 @@ const LoginForm = () => {
               refresh_token: refresh_token,
             })
           );
+
           navigate(navigateTo, { replace: true });
         } else {
           setSignUpError(true);

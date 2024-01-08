@@ -8,6 +8,7 @@ export default interface UserModel {
   dob: string;
   bio: string;
   avatar: string;
+  accountType: string;
   phone_number: string;
   isSuspensed: boolean;
   isBlocked: boolean;

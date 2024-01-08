@@ -1,19 +1,34 @@
 import { createSlice } from "@reduxjs/toolkit";
 import UserModel from "../models/user.model";
+import socket from "@socket/socket";
 // Create a slice of state
 // type AuthState = {
 //   user: any;
 //   access_token: string;
 // };
+const connectSocket = (user) => {
+  if (user && user.id) {
+    if (!socket.connected) {
+      socket.io.opts.query = {
+        userId: user.id,
+      };
+      socket.connect();
+    }
+  }
+};
+const initialState = {
+  user: localStorage.getItem("user")
+    ? JSON.parse(localStorage.getItem("user") || "")
+    : {},
+  access_token: localStorage.getItem("access_token") || "",
+  refresh_token: localStorage.getItem("access_token") || "",
+};
+if (initialState.user && initialState.user.id) {
+  connectSocket(initialState.user);
+}
 const authSlice = createSlice({
   name: "auth",
-  initialState: {
-    user: localStorage.getItem("user")
-      ? JSON.parse(localStorage.getItem("user") || "")
-      : {},
-    access_token: localStorage.getItem("access_token") || "",
-    refresh_token: localStorage.getItem("access_token") || "",
-  },
+  initialState: initialState,
   reducers: {
     setUser(state, action) {
       state.user = action.payload.user;
@@ -24,6 +39,8 @@ const authSlice = createSlice({
 
       state.refresh_token = action.payload.refresh_token;
       localStorage.setItem("refresh_token", action.payload.refresh_token);
+
+      connectSocket(action.payload.user);
     },
     updateUserProfile(state, action) {
       state.user = action.payload.user;

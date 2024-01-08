@@ -1,0 +1,504 @@
+commit 33c6752755f7581de6756723a4420ee2457537fb
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Tue Dec 12 18:19:28 2023 +0700
+
+    add env file
+
+commit cd8173514a9b11ccf7515eb1e39c500f870e2567
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Tue Dec 12 16:50:27 2023 +0700
+
+    add env file
+
+commit 06c02bf27cf967de91671b29090eaeb3478fffa2
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Tue Dec 12 16:47:32 2023 +0700
+
+    add env file
+
+commit f8d624eae61513edf43901df79bec168ce1330b0
+Merge: a595924 b25a561
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Tue Dec 12 16:33:21 2023 +0700
+
+    Merge branch 'oauth2' into production_v1
+
+commit b25a5610922dca991abac8b64be957d76aff4b91
+Merge: cbcbce8 7c7f27c
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Tue Dec 12 16:32:56 2023 +0700
+
+    Merge branch 'oauth2' of https://github.com/khanhvo9484/gg_classroom_fe into oauth2
+
+commit a595924a12f4b4708b3dc722a2b571f6748bb8f7
+Merge: 7cf54f3 cbcbce8
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Tue Dec 12 16:25:17 2023 +0700
+
+    Merge branch 'oauth2' into production_v1
+
+commit 7c7f27cfdf3227445832439fc58af054e5953ddf
+Merge: 7139f0a 7cb57fe
+Author: 20120509 <topsiu1.ds@gmail.com>
+Date:   Tue Dec 12 16:21:21 2023 +0700
+
+    Merge branch 'oauth2' of https://github.com/khanhvo9484/gg_classroom_fe into oauth2
+
+commit 7139f0a93575a6c8bf71a3ec5b342adb801f55d3
+Author: 20120509 <topsiu1.ds@gmail.com>
+Date:   Tue Dec 12 16:21:16 2023 +0700
+
+    fix khong build duoc
+
+commit 7cb57fedc2001bd11bb8546c7eabc1327c0e0f79
+Author: khang3052002 <tranduyheo123@gmail.com>
+Date:   Tue Dec 12 15:41:46 2023 +0700
+
+    handle error when build
+
+commit 7cf54f38ea6d4a3b9df084c11e0d766e5ed86ce3
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Tue Dec 12 15:19:10 2023 +0700
+
+    add package
+
+commit 7815593f23b612f0b5381ee1087bf7c23c1deb62
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Tue Dec 12 15:17:11 2023 +0700
+
+    add package
+
+commit cbcbce84ceb569e1286e7505f8d7403903968178
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Tue Dec 12 15:11:13 2023 +0700
+
+    add package
+
+commit 13ad006a411555da8589009c08e871a10d4822c9
+Author: 20120509 <topsiu1.ds@gmail.com>
+Date:   Mon Dec 11 20:39:51 2023 +0700
+
+    huy dang ky tu: doi delete sang post
+
+commit 1fde3486019dac493fb304bc6b2da2492844f234
+Author: 20120509 <topsiu1.ds@gmail.com>
+Date:   Mon Dec 11 19:22:25 2023 +0700
+
+    chia doi lop hoc: own - dang ky
+
+commit 2cfb932a356c046d02c0c7e6783090be51f0145d
+Author: khang3052002 <tranduyheo123@gmail.com>
+Date:   Mon Dec 11 19:09:22 2023 +0700
+
+    join class by code, fix bug
+
+commit 1800f305564e04cfeb4c7b48c35bbe4801d0d640
+Author: khang3052002 <tranduyheo123@gmail.com>
+Date:   Mon Dec 11 13:37:29 2023 +0700
+
+    prettier format, invite member
+
+commit 6f0c1a1c6adefba5948bfbf307b2276ef927045c
+Author: 20120509 <topsiu1.ds@gmail.com>
+Date:   Sun Dec 10 22:42:09 2023 +0700
+
+    hoan thanh 4 chuc nang o home: them xoa sua tham gia
+
+commit be36a0cb0ce1ae39a39bcef42a7d86b3fcd95f8f
+Author: 20120509 <topsiu1.ds@gmail.com>
+Date:   Sun Dec 10 13:15:34 2023 +0700
+
+    hoan thanh layout cho home
+
+commit 8ee4bcecbc975fff3894409595b31d5dd7d773d1
+Author: khang3052002 <tranduyheo123@gmail.com>
+Date:   Sun Dec 10 02:20:01 2023 +0700
+
+    handle invitation
+
+commit ce77a5f9b4b27736546a59466e976c3b1657449a
+Author: 20120509 <topsiu1.ds@gmail.com>
+Date:   Sat Dec 9 23:50:49 2023 +0700
+
+    test home layout
+
+commit 2b23b4c764c7d382c2a0bac9a9ee2567d1f34cf8
+Author: 20120509 <topsiu1.ds@gmail.com>
+Date:   Sat Dec 9 20:03:02 2023 +0700
+
+    fix classCard component wrong button behavior
+
+commit e427c5ff18b854889e8bf29a8950ac6613404c14
+Author: khang3052002 <tranduyheo123@gmail.com>
+Date:   Sat Dec 9 19:02:10 2023 +0700
+
+    page view member, integrate view all course, detail course
+
+commit 99db995723697aa2582e67e05fc4e7fe38428553
+Author: khang3052002 <tranduyheo123@gmail.com>
+Date:   Sat Dec 9 02:57:39 2023 +0700
+
+    detail class
+
+commit 2ce658a55b2372d32bca6c503372eb03fbdd28be
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Fri Dec 8 18:56:37 2023 +0700
+
+    add axios interceptor
+
+commit 72cc797972694faa763ab8d5b4bf60acaa295dea
+Author: khang3052002 <tranduyheo123@gmail.com>
+Date:   Mon Dec 4 01:27:45 2023 +0700
+
+    change login verify login oauth2
+
+commit 30622f5885b9a3f8ccef2eadd7936836be5b7014
+Author: khang3052002 <tranduyheo123@gmail.com>
+Date:   Sun Dec 3 22:21:38 2023 +0700
+
+    remove log cookie
+
+commit 2fde0b49801340b76a24dcab2f5bf7bbed08fb17
+Author: khang3052002 <tranduyheo123@gmail.com>
+Date:   Sun Dec 3 18:37:51 2023 +0700
+
+    log cookie
+
+commit c275e792dffb12833a9e0ab99e56325cfcf33b69
+Author: 20120509 <topsiu1.ds@gmail.com>
+Date:   Sun Dec 3 17:34:25 2023 +0700
+
+    fix loi chuyen trang not-verify o login form + duong dan logo
+
+commit e0bdbb4f56f0fd4bab699e6ce0898e596ca5fcc8
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Sun Dec 3 16:54:08 2023 +0700
+
+    change dependency
+
+commit c106e7cdbf8c0bc3828e7771f2d51a290585f4da
+Author: khang3052002 <tranduyheo123@gmail.com>
+Date:   Sun Dec 3 11:45:33 2023 +0700
+
+    handle sign up verify email
+
+commit ca2d580b869cf7690d7764bb5ecae99203a70b8c
+Author: 20120509 <topsiu1.ds@gmail.com>
+Date:   Sat Dec 2 21:56:31 2023 +0700
+
+    flow quen mat khau
+
+commit f836e61f58a6561db736d0b308f4f6f7295bdd91
+Author: 20120509 <topsiu1.ds@gmail.com>
+Date:   Sat Dec 2 19:28:39 2023 +0700
+
+    navigate tu login sang not-verify
+
+commit 9e78d6431128ab4f8fd51ccc746eaf7447e2c31b
+Author: khang3052002 <tranduyheo123@gmail.com>
+Date:   Sat Dec 2 19:19:44 2023 +0700
+
+    fix bug none display page when user have 1 word in name
+
+commit 5d754b4ca7f329811651f04951c28174c314800e
+Author: 20120509 <topsiu1.ds@gmail.com>
+Date:   Sat Dec 2 19:11:33 2023 +0700
+
+    Them trang thong bao chua xac thuc tai khoan
+
+commit 0b694bd37959a38b2d4b0cc315b7c0267edeeabd
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Sat Dec 2 17:52:32 2023 +0700
+
+    handle invalid link
+
+commit 55ebceae98c7dbe771c70117f51d681cb6c7a856
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Sat Dec 2 17:24:10 2023 +0700
+
+    verify email
+
+commit 47643bef967826461ae7a942c1160444879e6109
+Author: khang3052002 <tranduyheo123@gmail.com>
+Date:   Sat Dec 2 11:49:31 2023 +0700
+
+    edit sth
+
+commit 64c8d42babb34b9f4739deb6f8562e80dc545f50
+Author: 20120509 <topsiu1.ds@gmail.com>
+Date:   Sat Dec 2 08:28:35 2023 +0700
+
+    them form tao moi mat khau
+
+commit c00ef9ce1b4afd35a3e483f682f7b4d8770a7853
+Author: khang3052002 <tranduyheo123@gmail.com>
+Date:   Sat Dec 2 01:43:44 2023 +0700
+
+    integrate oauth2
+
+commit 7ca21825ed1e46d4144659d574bbebd0b995dba4
+Author: 20120509 <topsiu1.ds@gmail.com>
+Date:   Fri Dec 1 23:43:12 2023 +0700
+
+    them verify-email page
+
+commit a304bc23f6ea70db089376406d1959edcf2bd0de
+Merge: 57d745f 82e2be8
+Author: 20120509 <topsiu1.ds@gmail.com>
+Date:   Fri Dec 1 22:21:37 2023 +0700
+
+    Merge branch 'master' of https://github.com/khanhvo9484/gg_classroom_fe
+
+commit 57d745f8dd47438edde59c328cfa6af67fa65628
+Author: 20120509 <topsiu1.ds@gmail.com>
+Date:   Fri Dec 1 22:17:21 2023 +0700
+
+    update quen mat khau
+
+commit 82e2be8dcae19a2e469a0a397527045742f9d768
+Author: 20120509 <topsiu1.ds@gmail.com>
+Date:   Fri Dec 1 22:01:28 2023 +0700
+
+    recovery form và fb google logo
+
+commit 7adf99409843f19f75da257c1ee1499a8be8e2de
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Mon Nov 20 12:11:09 2023 +0700
+
+    fixbug sign up
+
+commit 67cc258854d57fa8ab9570a9a5ef841d0d2e20dc
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Sun Nov 19 22:46:07 2023 +0700
+
+    change redirect 2
+
+commit 66c0960709a1898be794bb6f7adb0754992a8fd2
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Sun Nov 19 22:41:37 2023 +0700
+
+    add redirect
+
+commit beab801793d977866c0988b76cc0c651e8c63dbb
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Sun Nov 19 22:36:35 2023 +0700
+
+    final 2
+
+commit 960911e9274f8237f2dd0047b84e28e97d39c040
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Sun Nov 19 22:24:13 2023 +0700
+
+    add redirect
+
+commit cbeed4f1d9c9f0e90d0c9a7a1c61a4f832c2cc93
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Sun Nov 19 21:49:01 2023 +0700
+
+    final1
+
+commit 26a7f9988151b3e9c2e9634c29f80e982f6bdb74
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Sun Nov 19 20:36:05 2023 +0700
+
+    update
+
+commit fedd4cdea2bcb65765e2ba442317b77029bc0867
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Sun Nov 19 19:27:41 2023 +0700
+
+    add logo
+
+commit 62a5cd56b1295770b758c1c6d98eff397179e6f5
+Author: 20120509 <topsiu1.ds@gmail.com>
+Date:   Sun Nov 19 19:20:40 2023 +0700
+
+    Them trang chinh cua classroom
+
+commit cdba5853330057b118be6b0587f97fce843100eb
+Merge: 246d3d7 e8c23be
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Sun Nov 19 15:11:15 2023 +0700
+
+    Merge branch 'master' of https://github.com/khanhvo9484/gg_classroom_fe
+
+commit 246d3d710c85a61af82916eadbfc47c9805a45fb
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Sun Nov 19 15:11:12 2023 +0700
+
+    push logo
+
+commit e8c23be861d82876255f07f68425b38f2137c865
+Author: 20120509 <topsiu1.ds@gmail.com>
+Date:   Sun Nov 19 14:01:27 2023 +0700
+
+    nothing
+
+commit d2a631a2bf97eeaf01a7498983fad4c916dcdc6a
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Sun Nov 19 13:54:51 2023 +0700
+
+    fix sign out
+
+commit a41aecdcf08231ba40090d08805f728e53fc7a52
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Sun Nov 19 13:48:12 2023 +0700
+
+    change logic refresh
+
+commit 62ebb6ece889abb5eef13638b9afcf378af7ff27
+Author: khang3052002 <tranduyheo123@gmail.com>
+Date:   Sun Nov 19 12:51:02 2023 +0700
+
+    intergrate edit profile
+
+commit f919da92bb0387b1a60033001a3136ae1e782180
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Sun Nov 19 12:30:15 2023 +0700
+
+    edit ui
+
+commit fd110f13b78f22adc8018284454a1d2ee1e01cab
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Sun Nov 19 12:02:52 2023 +0700
+
+    edit dropdown menu
+
+commit bc6c48e7be2e8d716954d02ace2edea95a85480e
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Sun Nov 19 11:27:26 2023 +0700
+
+    Sửa giao diện
+
+commit 0faddb189728b22f82d4c47d499b6e90c03691f9
+Author: 20120509 <topsiu1.ds@gmail.com>
+Date:   Sun Nov 19 11:07:22 2023 +0700
+
+    sua path den sign-out
+
+commit 2d290d5533c0c356ff22a7f4370d159a15c1d17f
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Sun Nov 19 11:03:23 2023 +0700
+
+    kv edit
+
+commit 31d3aeb5265fe087cd44423e6a13e35e82ef98c6
+Author: 20120509 <topsiu1.ds@gmail.com>
+Date:   Sun Nov 19 08:06:45 2023 +0700
+
+    cap nhat link den profile o header
+
+commit a4e2f8fa71d8ee142fb2f9ada926bd20b94a7afa
+Author: 20120509 <topsiu1.ds@gmail.com>
+Date:   Sun Nov 19 07:59:35 2023 +0700
+
+    Them avatar menu
+
+commit b1dd9823e5040fc8efad75a3edb112f386453a34
+Author: khang3052002 <tranduyheo123@gmail.com>
+Date:   Sun Nov 19 01:21:14 2023 +0700
+
+    edit profile done
+
+commit 69ba500cad7d0250fcba42b25b97098073d2b592
+Author: 20120509 <topsiu1.ds@gmail.com>
+Date:   Sat Nov 18 22:46:17 2023 +0700
+
+    cap nhat signout route
+
+commit 97b70340b10d28ad6e7ee1f653ea294cb3d3d39b
+Author: 20120509 <topsiu1.ds@gmail.com>
+Date:   Sat Nov 18 22:17:57 2023 +0700
+
+    Them signout route
+
+commit f77209f57737b179eabf4d94fff69514e8162cab
+Author: 20120509 <topsiu1.ds@gmail.com>
+Date:   Sat Nov 18 21:28:51 2023 +0700
+
+    Hoan thanh chuc nang dang nhap dang ky
+
+commit 771907e7f3c8b2afac73d9ca6199fea8a56af6fc
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Sat Nov 18 18:54:06 2023 +0700
+
+    Đổi package json
+
+commit 2b3c3f10e1cce52d23a46d797493854b4574654c
+Author: 20120509 <topsiu1.ds@gmail.com>
+Date:   Sat Nov 18 18:36:28 2023 +0700
+
+    update package
+
+commit 39b3716f50234f2ff37cfbcfb357d18276318463
+Author: 20120509 <topsiu1.ds@gmail.com>
+Date:   Sat Nov 18 18:29:14 2023 +0700
+
+    update form validation
+
+commit 5f5b22af5950f22a3cdf10341c6555f4f48ffcf3
+Merge: b54fa2b 9700555
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Sat Nov 18 18:17:31 2023 +0700
+
+    Merge branch 'master' of https://github.com/khanhvo9484/gg_classroom_fe
+
+commit b54fa2bea1fe96c648d504ec61e3c458fc2fe9ca
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Sat Nov 18 18:17:27 2023 +0700
+
+    Add redux and axios interceptor
+
+commit 97005554460497f503667a8b77166b3712405ce3
+Author: 20120509 <topsiu1.ds@gmail.com>
+Date:   Sat Nov 18 14:53:34 2023 +0700
+
+    Finish giao dien dang nhap
+
+commit 3140e73a1414f82474a31451e91b334083db5cd7
+Author: 20120509 <topsiu1.ds@gmail.com>
+Date:   Sat Nov 18 12:12:21 2023 +0700
+
+    fix path in App.tsx
+
+commit 062ab15993537e8dad32c88ce721bc8b71d0c00b
+Author: 20120509 <topsiu1.ds@gmail.com>
+Date:   Sat Nov 18 12:08:18 2023 +0700
+
+    demo sign in
+
+commit daedd005d9c3bb00dcee38da55f45c85eb73801c
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Sat Nov 18 10:52:08 2023 +0700
+
+    resolve conflict
+
+commit 3e605f9ff0f68d897c91f8af1bade83fd83c462f
+Author: Kyle Tran <kyle.t@itcgroup.io>
+Date:   Sat Nov 18 03:05:20 2023 +0700
+
+    done edit profile page
+
+commit fbada1dd0ec47131fd04b9fc8189cef0a0b49a56
+Author: Kyle Tran <kyle.t@itcgroup.io>
+Date:   Fri Nov 17 22:54:11 2023 +0700
+
+    Add footer to landing page
+
+commit 467ecc898cbd1bd2ca53da0679b98bc0112b068d
+Author: Kyle Tran <kyle.t@itcgroup.io>
+Date:   Fri Nov 17 02:15:36 2023 +0700
+
+    header + landing page
+
+commit aafdc1af1f0a32ae72967d84557c746c00417713
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Thu Nov 16 20:16:26 2023 +0700
+
+    init
+
+commit 0240197214c9d48de854629726a5e9690ac5ec58
+Author: 20120507 <103519164+khanhvo9484@users.noreply.github.com>
+Date:   Thu Nov 16 19:39:38 2023 +0700
+
+    second
