@@ -108,7 +108,7 @@ const ClassCard: React.FC<Props> = ({
         <CardActionArea
           href="#"
           sx={{
-            minHeight: 180,
+            height: 170,
           }}
         >
           {course.courseOwner && course.courseOwner.avatar ? (
@@ -142,7 +142,7 @@ const ClassCard: React.FC<Props> = ({
       return (
         <Box
           sx={{
-            minHeight: 180,
+            height: 170,
           }}
         >
           <Box
@@ -171,10 +171,11 @@ const ClassCard: React.FC<Props> = ({
       sx={{
         border: "0.5px solid rgba(42, 42, 42, 0.329)",
         borderRadius: 3,
-        maxWidth: 330,
-        maxHeight: 350,
+        width: "20rem",
+        height: "20.375rem",
         ":hover": {
-          boxShadow: 10, // theme.shadows[20]
+          boxShadow:
+            "0 1px 2px 0 rgba(60,64,67,.3), 0 2px 6px 2px rgba(60,64,67,.15)", // theme.shadows[20]
         },
       }}
     >
@@ -210,7 +211,7 @@ const ClassCard: React.FC<Props> = ({
         title={
           <Link href={`/course/${course.id}`} underline="none">
             <Typography
-              variant="h5"
+              variant="h6"
               component="div"
               color="info.light"
               sx={{
@@ -254,7 +255,11 @@ const ClassCard: React.FC<Props> = ({
       {displayAvatarOwner()}
       {userProfile.id === course.courseOwnerId ? (
         <CardActions
-          sx={{ pl: 28, borderTop: "0.5px solid rgba(42, 42, 42, 0.329)" }}
+          sx={{
+            justifyContent: "end",
+            borderTop: "0.5px solid rgba(42, 42, 42, 0.329)",
+            mr: 1,
+          }}
         >
           <Tooltip title={`Mở sổ điểm cho ${course.name}`}>
             <IconButton>
@@ -269,7 +274,10 @@ const ClassCard: React.FC<Props> = ({
         </CardActions>
       ) : (
         <CardActions
-          sx={{ pl: 28, borderTop: "0.5px solid rgba(42, 42, 42, 0.329)" }}
+          sx={{
+            justifyContent: "end",
+            borderTop: "0.5px solid rgba(42, 42, 42, 0.329)",
+          }}
         >
           <Tooltip title={`Mở bài tập cho ${course.name}`}>
             <IconButton>
