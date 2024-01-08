@@ -8,7 +8,6 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import { useLocation } from "react-router-dom";
-import UserModel from "../models/user.model";
 import { useSelector } from "react-redux";
 import AvatarDropdown from "../components/avatar.dropdown.menu.component";
 import logo from "@/assets/icons/k3_logo.png";

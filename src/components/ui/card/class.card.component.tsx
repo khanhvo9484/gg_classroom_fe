@@ -18,6 +18,10 @@ import EditCourseDialog from "../dialog/edit-course.dialog.component";
 import MovingIcon from "@mui/icons-material/Moving";
 import Tooltip from "@mui/material/Tooltip";
 import CardArchivedMenu from "@/components/card.dropdown.menu.archived.component";
+import ImageRead from "@/assets/images/img_read.jpg";
+import ImageBackToSchool from "@/assets/images/img_backtoschool.jpg";
+import ImageLearnLang from "@/assets/images/img_learnlanguage.jpg";
+import ImageGrad from "@/assets/images/img_graduation.jpg";
 
 function stringToColor(string: string) {
   let hash = 0;
@@ -47,6 +51,13 @@ interface Props {
   deleteCourse: () => void;
 }
 
+function getRandomImage() {
+  const images = [ImageRead, ImageBackToSchool, ImageLearnLang, ImageGrad];
+  const randomIndex = Math.floor(Math.random() * images.length);
+
+  return images[randomIndex];
+}
+
 function shortName(name: string) {
   const nameParts = name.split(" ");
   let displayName = "";
@@ -73,7 +84,7 @@ const ClassCard: React.FC<Props> = ({
   const AvatarBgColor = stringToColor(course.courseOwner.name);
   const colors = gradientColors;
 
-  const [bgGradient, setBgGradient] = useState(
+  const [, setBgGradient] = useState(
     "linear-gradient(to right, #FFFFFF, #FFFFFF)"
   ); // Default background color
 
@@ -169,10 +180,11 @@ const ClassCard: React.FC<Props> = ({
     >
       <CardHeader
         sx={{
-          background: bgGradient,
           color: "primary.contrastText",
           minHeight: 100,
           maxHeight: 100,
+          backgroundImage: `url(${getRandomImage()})`,
+          backgroundSize: "cover",
         }}
         action={
           !course.isDeleted ? (
