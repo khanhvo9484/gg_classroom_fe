@@ -17,6 +17,9 @@ import LoadingContext from "@/context/loading.contenxt";
 
 const useStyles = makeStyles(() => ({
   style: {
+    fontSize: "0.925rem !important",
+    fontWeight: "500 !important",
+    letterSpaceing: ".01785714em !important",
     paddingTop: "1.2rem !important",
     paddingBottom: "1.2rem !important",
     "&.Mui-selected": {

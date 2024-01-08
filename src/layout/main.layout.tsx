@@ -49,7 +49,7 @@ import { useDispatch } from "react-redux";
 import { selectCourses } from "@/redux/courses.slice";
 import { setCourses } from "@/redux/courses.slice";
 import NotificationMenu from "@/components/notification.menu/notification.menu.component";
-const drawerWidth = 264;
+const drawerWidth = 280;
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
@@ -254,8 +254,8 @@ function Header() {
                   }}
                 >
                   <Typography
-                    variant="subtitle1"
-                    sx={{ fontWeight: 400 }}
+                    variant="h6"
+                    sx={{ fontWeight: 500 }}
                     component="div"
                   >
                     {"Lớp học"}
@@ -273,9 +273,9 @@ function Header() {
                     <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                       <ArrowForwardIosIcon fontSize="small" />{" "}
                       <Typography
-                        variant="subtitle1"
+                        variant="h6"
                         component="div"
-                        sx={{ fontWeight: 400 }}
+                        sx={{ fontWeight: 500 }}
                       >
                         {" "}
                         {currentPage}
@@ -417,7 +417,7 @@ function Header() {
                       noWrap={true}
                       variant="body1"
                       color="text.primary"
-                      fontSize={14}
+                      fontSize={16}
                       sx={{
                         underline: "none",
                       }}
@@ -469,7 +469,7 @@ function Header() {
                       noWrap={true}
                       variant="body1"
                       color="text.primary"
-                      fontSize={14}
+                      fontSize={16}
                       sx={{
                         underline: "none",
                       }}

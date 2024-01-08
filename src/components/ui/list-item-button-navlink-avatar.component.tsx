@@ -46,7 +46,7 @@ export default function ListItemNavLinkAvatar({
               <Typography
                 noWrap={true}
                 variant="body1"
-                fontSize={14}
+                fontSize={16}
                 color="text.primary"
                 sx={{
                   underline: "none",

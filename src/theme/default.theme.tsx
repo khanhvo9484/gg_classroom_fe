@@ -1,7 +1,9 @@
 import { createTheme } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
 
 const baselightTheme = createTheme({
+  typography: {
+    fontFamily: '"Google Sans", Roboto, Arial, sans-serif',
+  },
   components: {
     MuiContainer: {
       styleOverrides: {
