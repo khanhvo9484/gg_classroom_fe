@@ -33,3 +33,25 @@ export const stringToColor = (string: string) => {
 
   return color;
 };
+
+export default function stringAvatar(name: { name: string }) {
+  const nameParts = name.name.split(" ");
+  let displayName = "";
+
+  if (nameParts.length > 1) {
+    displayName = name.name.split(" ")[0][0] + name.name.split(" ")[1][0];
+  } else {
+    displayName = name.name.split(" ")[0][0];
+  }
+
+  return {
+    sx: {
+      bgcolor: stringToColor(name.name),
+      width: 32,
+      height: 32,
+      fontSize: 16,
+      mr: 3,
+    },
+    children: displayName,
+  };
+}

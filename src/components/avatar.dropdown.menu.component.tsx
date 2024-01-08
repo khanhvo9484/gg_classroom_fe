@@ -6,8 +6,13 @@ import { styled } from "@mui/system";
 import BackgroundLetterAvatars from "./avatar.for.name.component";
 import { useNavigate } from "react-router-dom";
 import Typography from "@mui/material/Typography";
+import UserModel from "@/models/user.model";
 
-export default function AvatarDropdown(name: { name: string }) {
+interface Props {
+  user: UserModel;
+}
+
+const AvatarDropdown: React.FC<Props> = ({ user }) => {
   const navigate = useNavigate();
   const createHandleMenuClick = (menuItem: string) => {
     return () => {
@@ -22,7 +27,7 @@ export default function AvatarDropdown(name: { name: string }) {
           border: "none",
         }}
       >
-        <BackgroundLetterAvatars name={name.name} />
+        <BackgroundLetterAvatars user={user} />
       </MenuButton>
       <Menu slots={{ listbox: Listbox }}>
         <MenuItem onClick={createHandleMenuClick("profile")}>
@@ -34,8 +39,9 @@ export default function AvatarDropdown(name: { name: string }) {
       </Menu>
     </Dropdown>
   );
-}
+};
 
+export default AvatarDropdown;
 const blue = {
   50: "#F0F7FF",
   100: "#C2E0FF",

@@ -80,7 +80,7 @@ function convertToRowDataWithStudentInfo(student) {
 const GradesPage = () => {
   const classService = new ClassService();
   const { courseId } = useParams();
-  const { stopLoading, startLoading } = useContext(LoadingContext);
+  const { isLoading, stopLoading, startLoading } = useContext(LoadingContext);
   const gridRef = useRef<AgGridReact>(null);
   const [rowData, setRowData] = useState<any[]>([]);
   const [colDefs, setColDefs] = useState<(ColDef | ColGroupDef)[]>([
@@ -192,7 +192,7 @@ const GradesPage = () => {
           <SheetMenu onExportCSV={onExportCSV} />
         </Box>
 
-        {colDefs.length > 2 && rowData && (
+        {colDefs.length > 2 && rowData && !isLoading && (
           <GradeTableComponent
             rowGrade={rowData}
             colGrid={colDefs}

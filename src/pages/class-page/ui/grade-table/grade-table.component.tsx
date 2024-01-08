@@ -30,7 +30,7 @@ const GradeTableComponent: React.FC<Props> = ({
   console.log("col : ", colDefs);
   const defaultColDef = useMemo(() => {
     return {
-      initialWidth: 150,
+      initialWidth: 160,
       wrapHeaderText: true,
       editable: true,
       filter: true,

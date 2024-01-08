@@ -59,7 +59,6 @@ const EditProfileForm: React.FC<Props> = ({
     });
 
   const { errors } = formState;
-  //   const accessToken = useSelector((state) => state.auth.access_token);
 
   const onSubmit = async (data: FormValue) => {
     const valueForm = {

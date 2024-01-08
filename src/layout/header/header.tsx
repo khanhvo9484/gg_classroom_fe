@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -16,13 +17,16 @@ import logo from "@/assets/icons/k3_logo.png";
 import LinearProgress from "@mui/material/LinearProgress";
 import { useContext } from "react";
 import LoadingContext from "@/context/loading.contenxt";
+import { selectUser } from "@/redux/auth.slice";
 
 const pages = [{ title: "Lớp học của tôi", link: "/home" }];
 
 function Header() {
   const { isLoading } = useContext(LoadingContext);
-  const user: UserModel = useSelector((state: any) => state.auth.user);
+  const userProfile = useSelector(selectUser);
+
   const location = useLocation();
+
   const path = location.pathname;
   return (
     <AppBar
@@ -96,8 +100,8 @@ function Header() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            {user && user.name ? (
-              <AvatarDropdown name={user.name} />
+            {userProfile ? (
+              <AvatarDropdown user={userProfile} />
             ) : path !== "/login" ? (
               <Link href="/login">
                 <Button variant="outlined" size="large">

@@ -1,3 +1,4 @@
+import UserModel from "@/models/user.model";
 import Avatar from "@mui/material/Avatar";
 
 function stringToColor(string: string) {
@@ -38,6 +39,16 @@ function stringAvatar(name: { name: string }) {
   };
 }
 
-export default function BackgroundLetterAvatars(name: { name: string }) {
-  return <Avatar {...stringAvatar(name)} />;
+interface Props {
+  user: UserModel;
 }
+
+const BackgroundLetterAvatars: React.FC<Props> = ({ user }) => {
+  if (user.avatar) {
+    return <Avatar src={user.avatar} />;
+  } else {
+    return <Avatar {...stringAvatar({ name: user.name })} />;
+  }
+};
+
+export default BackgroundLetterAvatars;

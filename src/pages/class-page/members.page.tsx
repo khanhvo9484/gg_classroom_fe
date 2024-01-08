@@ -11,7 +11,7 @@ import { IInvitationCourse } from "@/models/class.model";
 const MembersPage = () => {
   const classService = new ClassService();
   const { courseId } = useParams();
-  const { startLoading, stopLoading } = useContext(LoadingContext);
+  const { isLoading, startLoading, stopLoading } = useContext(LoadingContext);
   const [students, setListStudent] = useState<IMember[]>([]);
   const [teachers, setListTeacher] = useState<IMember[]>([]);
 
@@ -77,30 +77,32 @@ const MembersPage = () => {
 
   return (
     <Box sx={{ marginY: "2rem", minHeight: "600px" }}>
-      <Container
-        maxWidth={false}
-        sx={{
-          //   height: "500px",
-          maxWidth: "808px",
-        }}
-      >
-        <MemberListComponent
-          members={teachers}
-          membersInvite={teachersInvite}
-          handleAddMemberInvite={handleAddMemberInvite}
-          key={1}
-          isTeacherList={true}
-          title="Giáo viên"
-        />
-        <MemberListComponent
-          members={students}
-          membersInvite={studentsInvite}
-          handleAddMemberInvite={handleAddMemberInvite}
-          key={2}
-          isTeacherList={false}
-          title="Sinh viên"
-        />
-      </Container>
+      {!isLoading && (
+        <Container
+          maxWidth={false}
+          sx={{
+            //   height: "500px",
+            maxWidth: "808px",
+          }}
+        >
+          <MemberListComponent
+            members={teachers}
+            membersInvite={teachersInvite}
+            handleAddMemberInvite={handleAddMemberInvite}
+            key={1}
+            isTeacherList={true}
+            title="Giáo viên"
+          />
+          <MemberListComponent
+            members={students}
+            membersInvite={studentsInvite}
+            handleAddMemberInvite={handleAddMemberInvite}
+            key={2}
+            isTeacherList={false}
+            title="Sinh viên"
+          />
+        </Container>
+      )}
     </Box>
   );
 };

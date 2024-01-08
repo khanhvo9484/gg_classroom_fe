@@ -122,7 +122,6 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
 }));
 
 function Header() {
-  const userProfile = useSelector(selectUser);
   const classService = new ClassService();
   const { isLoading, stopLoading, startLoading } = useContext(LoadingContext);
   const [sidebarState, setSidebarState] = useState(true);
@@ -137,6 +136,7 @@ function Header() {
 
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState("");
+  const userProfile = useSelector(selectUser);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -181,7 +181,6 @@ function Header() {
     stopLoading();
   }, []);
 
-  const user: UserModel = useSelector((state: any) => state.auth.user);
   const courses = useSelector(selectCourses);
   const location = useLocation();
   const path = location.pathname;
@@ -337,8 +336,8 @@ function Header() {
                 </Menu>
 
                 <Box sx={{ flexGrow: 0 }}>
-                  {user && user.name ? (
-                    <AvatarDropdown name={user.name} />
+                  {userProfile ? (
+                    <AvatarDropdown user={userProfile} />
                   ) : path !== "/login" ? (
                     <Link href="/login">
                       <Button variant="outlined" size="large">

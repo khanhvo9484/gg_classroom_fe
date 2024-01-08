@@ -150,7 +150,7 @@ function AdminLayout() {
   };
 
   function updateCourses(courseId) {
-    console.log(`Just update courses: ${courseId}`)
+    console.log(`Just update courses: ${courseId}`);
   }
 
   function onFadeClose() {
@@ -165,7 +165,7 @@ function AdminLayout() {
 
         dispatch(
           setCourses({
-            courses : response.data
+            courses: response.data,
           })
         );
       } catch (error) {
@@ -186,149 +186,149 @@ function AdminLayout() {
   const path = location.pathname;
   return (
     <>
-        <Box sx={{ display: "flex" }}>
-          <AppBar
-            position="fixed"
-            color="transparent"
-            style={{ background: "white" }}
-            sx={{ boxShadow: "0px 2px 4px -1px rgba(0,0,0,0.2)", zIndex: 1201 }}
-          >
-            <Container maxWidth="xl">
-              <Toolbar disableGutters>
-                <Box sx={{ mr: 2 }}>
-                  <IconButton
-                    size="large"
-                    aria-label="account of current user"
-                    aria-controls="menu-appbar"
-                    aria-haspopup="true"
-                    color="inherit"
-                    onClick={() => {
-                      setSidebarState(true);
-                    }}
-                  >
-                    <MenuIcon />
-                  </IconButton>
-                </Box>
-                <Link
-                  href="/"
-                  sx={{
-                    mr: 2,
-                    display: { xs: "none", md: "flex" },
+      <Box sx={{ display: "flex" }}>
+        <AppBar
+          position="fixed"
+          color="transparent"
+          style={{ background: "white" }}
+          sx={{ boxShadow: "0px 2px 4px -1px rgba(0,0,0,0.2)", zIndex: 1201 }}
+        >
+          <Container maxWidth="xl">
+            <Toolbar disableGutters>
+              <Box sx={{ mr: 2 }}>
+                <IconButton
+                  size="large"
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  color="inherit"
+                  onClick={() => {
+                    setSidebarState(true);
                   }}
                 >
-                  <img
-                    src={logo}
-                    style={{
-                      height: "30px",
-                      width: "auto",
-                      margin: "auto 0",
-                      display: "block",
-                      cursor: "pointer",
-                    }}
-                  ></img>
-                </Link>
-
-                <Box
-                  sx={{
-                    flexGrow: 1,
-                    display: { xs: "none", md: "flex" },
-                    gap: 1,
+                  <MenuIcon />
+                </IconButton>
+              </Box>
+              <Link
+                href="/"
+                sx={{
+                  mr: 2,
+                  display: { xs: "none", md: "flex" },
+                }}
+              >
+                <img
+                  src={logo}
+                  style={{
+                    height: "30px",
+                    width: "auto",
+                    margin: "auto 0",
+                    display: "block",
+                    cursor: "pointer",
                   }}
+                ></img>
+              </Link>
+
+              <Box
+                sx={{
+                  flexGrow: 1,
+                  display: { xs: "none", md: "flex" },
+                  gap: 1,
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  component="div"
+                  sx={{ fontWeight: 400 }}
                 >
-                  <Typography
-                    variant="h6"
-                    component="div"
-                    sx={{ fontWeight: 400 }}
-                  >
-                    {currentPage ? (
-                      <>
-                        <ArrowForwardIosIcon
-                          sx={{ mb: "-3px" }}
-                          fontSize="small"
-                        />{" "}
-                        {currentPage}
-                      </>
-                    ) : (
-                      ""
-                    )}
-                  </Typography>
-                </Box>
-
-                <NotificationMenu />
-
-                <Box sx={{ flexGrow: 0 }}>
-                  {user && user.name ? (
-                    <AvatarDropdown name={user.name} />
-                  ) : path !== "/login" ? (
-                    <Link href="/login">
-                      <Button variant="outlined" size="large">
-                        Đăng nhập
-                      </Button>
-                    </Link>
+                  {currentPage ? (
+                    <>
+                      <ArrowForwardIosIcon
+                        sx={{ mb: "-3px" }}
+                        fontSize="small"
+                      />{" "}
+                      {currentPage}
+                    </>
                   ) : (
-                    <Link href="/sign-up">
-                      <Button variant="outlined" size="large">
-                        Đăng ký
-                      </Button>
-                    </Link>
+                    ""
                   )}
-                </Box>
-              </Toolbar>
-            </Container>
-            {isLoading && <LinearProgress />}
-          </AppBar>
+                </Typography>
+              </Box>
 
-          <Drawer
-            sx={{
-              flexShrink: 0,
-              "& .MuiDrawer-paper": {
-                boxSizing: "border-box",
-                overflowX: "hidden",
-              },
-              maxWidth: drawerWidth,
-            }}
-            onMouseEnter={() => {
-              setSidebarStateHover(true);
-            }}
-            onMouseLeave={() => {
-              setSidebarStateHover(false);
-            }}
-            variant="permanent"
-            anchor="left"
-            open={sidebarState || sidebarStateHover}
-          >
-            <DrawerHeader></DrawerHeader>
-            <Divider />
-            <List>
-              <ListItemNavLink
-                link="/admin/accounts"
-                text="Quản lý tài khoản"
-                Icon={HomeIcon}
-                onClick={setCurrentPage}
-              />
-              <ListItemNavLink
-                link="/admin/courses"
-                text="Quản lý lớp học"
-                Icon={CalendarTodayIcon}
-                onClick={setCurrentPage}
-              />
-              <ListItemNavLink
-                link="/admin/student-id"
-                text="Quản lý MSSV học sinh"
-                Icon={CalendarTodayIcon}
-                onClick={setCurrentPage}
-              />
-            </List>
-            <Divider />
-          </Drawer>
-          <Main open={sidebarState || sidebarStateHover}>
-            <DrawerHeader />
-            <Box>
-              <Outlet />
-            </Box>
-          </Main>
-        </Box>
-        <Toaster position="top-right" reverseOrder={false} />
+              <NotificationMenu />
+
+              <Box sx={{ flexGrow: 0 }}>
+                {user && user.name ? (
+                  <AvatarDropdown user={user} />
+                ) : path !== "/login" ? (
+                  <Link href="/login">
+                    <Button variant="outlined" size="large">
+                      Đăng nhập
+                    </Button>
+                  </Link>
+                ) : (
+                  <Link href="/sign-up">
+                    <Button variant="outlined" size="large">
+                      Đăng ký
+                    </Button>
+                  </Link>
+                )}
+              </Box>
+            </Toolbar>
+          </Container>
+          {isLoading && <LinearProgress />}
+        </AppBar>
+
+        <Drawer
+          sx={{
+            flexShrink: 0,
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              overflowX: "hidden",
+            },
+            maxWidth: drawerWidth,
+          }}
+          onMouseEnter={() => {
+            setSidebarStateHover(true);
+          }}
+          onMouseLeave={() => {
+            setSidebarStateHover(false);
+          }}
+          variant="permanent"
+          anchor="left"
+          open={sidebarState || sidebarStateHover}
+        >
+          <DrawerHeader></DrawerHeader>
+          <Divider />
+          <List>
+            <ListItemNavLink
+              link="/admin/accounts"
+              text="Quản lý tài khoản"
+              Icon={HomeIcon}
+              onClick={setCurrentPage}
+            />
+            <ListItemNavLink
+              link="/admin/courses"
+              text="Quản lý lớp học"
+              Icon={CalendarTodayIcon}
+              onClick={setCurrentPage}
+            />
+            <ListItemNavLink
+              link="/admin/student-id"
+              text="Quản lý MSSV học sinh"
+              Icon={CalendarTodayIcon}
+              onClick={setCurrentPage}
+            />
+          </List>
+          <Divider />
+        </Drawer>
+        <Main open={sidebarState || sidebarStateHover}>
+          <DrawerHeader />
+          <Box>
+            <Outlet />
+          </Box>
+        </Main>
+      </Box>
+      <Toaster position="top-right" reverseOrder={false} />
     </>
   );
 }
