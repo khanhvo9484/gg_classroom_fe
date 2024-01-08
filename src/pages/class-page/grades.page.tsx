@@ -16,16 +16,20 @@ function createGridHeaderConfig(
 ): (ColDef | ColGroupDef)[] {
   return data.map((item) => {
     const headerName = item.name;
-    console.log("id: ", item.id);
     const children = item.gradeSubComponent.map((child) => ({
       field: child.name,
       headerComponent: HeaderItemTableComponent,
       headerComponentParams: {
         name: child.name,
-        id: item.id,
+        idParent: item.id,
+        idChild: child.id,
         updateBoard: updateBoard,
       },
       cellEditor: "agNumberCellEditor",
+      cellEditorParams: {
+        min: 0,
+        max: 10,
+      },
     }));
 
     if (item.gradeSubComponent.length === 0) {
@@ -34,8 +38,14 @@ function createGridHeaderConfig(
         headerComponent: HeaderItemTableComponent,
         headerComponentParams: {
           name: headerName,
-          id: item.id,
+          idParent: item.id,
+          idChild: "",
           updateBoard: updateBoard,
+        },
+        cellEditor: "agNumberCellEditor",
+        cellEditorParams: {
+          min: 0,
+          max: 10,
         },
       };
     }

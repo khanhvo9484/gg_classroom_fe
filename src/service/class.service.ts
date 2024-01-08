@@ -13,6 +13,7 @@ import {
   API_STUDENT_GRADE,
   API_GET_STUDENT_GRADE_BOARD,
   API_GET_ALL_COURSES,
+  API_UPDATE_STUDENT_GRADE,
 } from "@/api/api.constant";
 import { customAxios } from "@/api/custom-axios";
 import { IBaseResponse } from "@/models/base.model";
@@ -29,12 +30,13 @@ import {
   IGradeStructure,
   IGradeStructureResponse,
   IStudentBoardGradeResponse,
+  IStudentGrade,
+  IUpdateStudentGradeRequest,
 } from "@/models/grade.model";
 import { IAllMemberCourseRespone } from "@/models/member.model";
 import { getSearchParams } from "@/utils/http.util";
 
 export class ClassService {
-
   async getAllCourses(): Promise<ICoursesRespone> {
     const { data: response } = await customAxios.get<ICoursesRespone>(
       `${API_COURSES}${API_GET_ALL_COURSES}`
@@ -148,6 +150,19 @@ export class ClassService {
           courseId
         )}`
       );
+
+    return response;
+  }
+
+  async updateStudentGrade(
+    updateStudentGradeRequest: IUpdateStudentGradeRequest
+  ): Promise<IBaseResponse<IStudentGrade>> {
+    const { data: response } = await customAxios.put<
+      IBaseResponse<IStudentGrade>
+    >(
+      `${API_STUDENT_GRADE}${API_UPDATE_STUDENT_GRADE}`,
+      updateStudentGradeRequest
+    );
 
     return response;
   }

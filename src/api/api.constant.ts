@@ -33,6 +33,7 @@ export const STUDENT_MAPPING_ID_XLSX_FILE_NAME =
 export const API_STUDENT_UPLOAD = "/upload-student-list";
 export const API_UPLOAD_STUDENT_GRADE = "/upload-student-grade";
 export const API_STUDENT_MAPPING_ID_UPLOAD = "/upload-student-mapping-id";
+export const API_UPDATE_STUDENT_GRADE = "/update-student-grade";
 
 export const API_GET_GRADE_STRUCTURE = "/get/{courseId}";
 

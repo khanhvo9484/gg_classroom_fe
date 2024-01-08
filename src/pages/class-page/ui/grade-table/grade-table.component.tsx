@@ -6,6 +6,10 @@ import { useState, useMemo, useEffect } from "react";
 import { Box } from "@mui/material";
 import { CellValueChangedEvent, ColDef, ColGroupDef } from "ag-grid-community";
 import "./grade-table.css";
+import { ClassService } from "@/service/class.service";
+import { IUpdateStudentGradeRequest } from "@/models/grade.model";
+import { useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 
 interface Props {
   colGrid: (ColDef | ColGroupDef)[];
@@ -19,8 +23,9 @@ const GradeTableComponent: React.FC<Props> = ({
   rowGrade,
   gridRef,
 }) => {
+  const classService = new ClassService();
   const [rowData, setRowData] = useState(rowGrade);
-
+  const { courseId } = useParams();
   const [colDefs] = useState<(ColDef | ColGroupDef)[]>(colGrid);
 
   useEffect(() => {
@@ -37,8 +42,24 @@ const GradeTableComponent: React.FC<Props> = ({
     };
   }, []);
 
-  const handleCellValueChange = (event: CellValueChangedEvent) => {
-    console.log("event: ", event);
+  const handleCellValueChange = async (event: CellValueChangedEvent) => {
+    const idParent = event.colDef.headerComponentParams.idParent;
+    const idChild = event.colDef.headerComponentParams.idChild;
+
+    const request: IUpdateStudentGradeRequest = {
+      courseId: courseId,
+      gradeId: idParent && idChild ? idChild : idParent,
+      grade: event.newValue,
+      studentOfficialId: event.data.studentOfficialId,
+    };
+
+    try {
+      await classService.updateStudentGrade(request);
+
+      toast.success("Cập nhật điểm thành công");
+    } catch (error) {
+      toast.error("Có lỗi xảy ra, cập nhật thất bại");
+    }
   };
   return (
     <Box>

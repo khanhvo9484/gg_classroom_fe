@@ -133,3 +133,10 @@ export interface IStudentGrade {
 
 export interface IStudentBoardGradeResponse
   extends IBaseResponse<IStudentGrade[]> {}
+
+export interface IUpdateStudentGradeRequest {
+  courseId: string;
+  gradeId: string;
+  studentOfficialId: string;
+  grade: number;
+}

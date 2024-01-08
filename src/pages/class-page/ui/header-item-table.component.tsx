@@ -10,7 +10,8 @@ import toast from "react-hot-toast";
 
 interface Props extends IHeaderParams {
   name: string;
-  id: string;
+  idParent: string;
+  idChild: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   updateBoard: (data: any) => void;
 }
@@ -31,7 +32,7 @@ const VisuallyHiddenInput = styled("input")({
 
 const HeaderItemTableComponent: React.FC<Props> = ({
   name,
-  id,
+  idParent,
   updateBoard,
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -41,7 +42,6 @@ const HeaderItemTableComponent: React.FC<Props> = ({
 
   const { courseId } = useParams();
 
-  console.log("id: ", id);
   const open = Boolean(anchorEl);
 
   const handleClose = () => {
@@ -61,21 +61,18 @@ const HeaderItemTableComponent: React.FC<Props> = ({
   };
 
   const downloadTemplate = () => {
-    console.log("Download temp late: ", id, courseId);
-    gradeFileService.getStudentGradeTemplateById(courseId, id);
+    gradeFileService.getStudentGradeTemplateById(courseId, idParent);
     handleClose();
   };
 
   const uploadGrade = async (event) => {
-    console.log("Upload: ", id, courseId);
-    console.log("vao day kho9ng");
     handleClose();
 
     try {
       const response = await gradeFileService.uploadStudentGradeById(
         event.target.files[0],
         courseId,
-        id
+        idParent
       );
       event.target.value = null;
       console.log("Resposne: ", response.data.data);
