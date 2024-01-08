@@ -360,6 +360,16 @@ function Header() {
               "& .MuiDrawer-paper": {
                 boxSizing: "border-box",
                 overflowX: "hidden",
+                "&::-webkit-scrollbar": {
+                  width: 8, // Width of the scrollbar
+                },
+                "&::-webkit-scrollbar-track": {
+                  backgroundColor: "#f5f5f5", // Color of the track
+                },
+                "&::-webkit-scrollbar-thumb": {
+                  backgroundColor: "#B2BABB", // Color of the thumb
+                  borderRadius: 10, // Radius of the thumb
+                },
               },
               maxWidth: drawerWidth,
             }}

@@ -13,8 +13,6 @@ import {
 import Button from "@mui/material/Button";
 import RoleContext from "@/context/role.context";
 import { ClassService } from "@/service/class.service";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import IconButton from "@mui/material/IconButton";
 import LoadingContext from "@/context/loading.contenxt";
 
 const useStyles = makeStyles(() => ({
@@ -259,9 +257,6 @@ const ClassPage = () => {
               label="Danh sách phúc khảo"
             />
           </Tabs>
-          <IconButton size="large" onClick={() => handleOpenSettingCourse()}>
-            <SettingsOutlinedIcon />
-          </IconButton>
         </Box>
         <Outlet />
       </Box>
