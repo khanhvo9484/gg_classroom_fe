@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import { IMember, IMemberRespone } from "../../models/member.model";
+import { IMemberRespone } from "../../models/member.model";
 import EditProfileForm from "../../components/ui/form/edit-profile.form";
 import BackgroundCover from "../../components/ui/background-cover.component";
 import ProfileComponent from "../../components/ui/profile.component";
@@ -11,11 +11,12 @@ import { formatDate } from "../../utils/common.util";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../redux/auth.slice";
+import UserModel from "@/models/user.model";
 
 const ProfilePage = () => {
   const [isOpenEditForm, setOpenEditForm] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState<IMember>();
+  const [user, setUser] = useState<UserModel>();
 
   const userProfile = useSelector(selectUser);
 
@@ -31,7 +32,7 @@ const ProfilePage = () => {
           ? formatDate(response.data.dob)
           : undefined;
 
-        const userRespone: IMember = {
+        const userRespone: UserModel = {
           ...response.data,
           dob: formattedDob,
         };
@@ -52,7 +53,7 @@ const ProfilePage = () => {
     setOpenEditForm(!isOpenEditForm);
   };
 
-  const updateUser = (user: IMember) => {
+  const updateUser = (user: UserModel) => {
     setUser(user);
   };
 

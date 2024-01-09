@@ -3,7 +3,7 @@ import { Menu } from "@mui/base/Menu";
 import { MenuButton as BaseMenuButton } from "@mui/base/MenuButton";
 import { MenuItem as BaseMenuItem, menuItemClasses } from "@mui/base/MenuItem";
 import { styled } from "@mui/system";
-import BackgroundLetterAvatars from "./avatar.for.name.component";
+import AvatarHelper from "@/utils/avatar-helper/avatar.helper";
 import { useNavigate } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import UserModel from "@/models/user.model";
@@ -27,7 +27,7 @@ const AvatarDropdown: React.FC<Props> = ({ user }) => {
           border: "none",
         }}
       >
-        <BackgroundLetterAvatars user={user} />
+        <AvatarHelper user={user} sx={{}}/>
       </MenuButton>
       <Menu slots={{ listbox: Listbox }}>
         <MenuItem onClick={createHandleMenuClick("profile")}>

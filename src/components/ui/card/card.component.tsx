@@ -1,11 +1,11 @@
-import Avatar from "@mui/material/Avatar";
+import AvatarHelper from "@/utils/avatar-helper/avatar.helper";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import { IMember } from "../../../models/member.model";
+import UserModel from "@/models/user.model";
 
 interface Props {
-  member: IMember;
+  member: UserModel;
 }
 
 const CardComponent: React.FC<Props> = ({ member }) => {
@@ -19,11 +19,7 @@ const CardComponent: React.FC<Props> = ({ member }) => {
           alignItems: "center",
         }}
       >
-        <Avatar
-          alt="Remy Sharp"
-          src={member.avatar}
-          sx={{ width: 156, height: 156, mb: 3 }}
-        />
+        <AvatarHelper user={member} sx={{ width: 156, height: 156, mb: 3 }}/>
         <Typography gutterBottom variant="h5" component="div">
           {member.name}
         </Typography>

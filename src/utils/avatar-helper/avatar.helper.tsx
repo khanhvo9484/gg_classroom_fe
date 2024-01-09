@@ -1,4 +1,5 @@
 import UserModel from "@/models/user.model";
+import { SxProps } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 
 function stringToColor(string: string) {
@@ -6,7 +7,7 @@ function stringToColor(string: string) {
   let i;
 
   /* eslint-disable no-bitwise */
-  for (i = 0; i < string.length; i += 1) {
+  for (i = 0; i < string?.length; i += 1) {
     hash = string.charCodeAt(i) + ((hash << 5) - hash);
   }
 
@@ -21,19 +22,20 @@ function stringToColor(string: string) {
   return color;
 }
 
-function stringAvatar(name: { name: string }) {
-  const nameParts = name.name.split(" ");
+function stringAvatar(user: UserModel, sx: SxProps) {
+  const nameParts = user?.name.split(" ");
   let displayName = "";
 
-  if (nameParts.length > 1) {
-    displayName = name.name.split(" ")[0][0] + name.name.split(" ")[1][0];
+  if (nameParts?.length > 1) {
+    displayName = user.name.split(" ")[0][0] + user.name.split(" ")[1][0];
   } else {
-    displayName = name.name.split(" ")[0][0];
+    displayName = user?.name.split(" ")[0][0];
   }
 
   return {
     sx: {
-      bgcolor: stringToColor(name.name),
+      ...sx,
+      bgcolor: stringToColor(user?.name),
     },
     children: displayName,
   };
@@ -41,13 +43,14 @@ function stringAvatar(name: { name: string }) {
 
 interface Props {
   user: UserModel;
+  sx: SxProps
 }
 
-const AvatarHelper: React.FC<Props> = ({ user }) => {
-  if (user.avatar) {
-    return <Avatar src={user.avatar} />;
+const AvatarHelper: React.FC<Props> = ({ user, sx }) => {
+  if (user?.avatar) {
+    return <Avatar src={user.avatar} sx={sx}/>;
   } else {
-    return <Avatar {...stringAvatar({ name: user.name })} />;
+    return <Avatar {...stringAvatar(user, sx)} />;
   }
 };
 

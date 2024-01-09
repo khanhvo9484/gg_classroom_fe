@@ -4,10 +4,8 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Avatar from "@mui/material/Avatar";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { IMember, IMemberRespone } from "../../../models/member.model";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
@@ -27,11 +25,14 @@ import { customAxios } from "../../../api/custom-axios";
 import { useDispatch } from "react-redux";
 import { updateUserProfile } from "../../../redux/auth.slice";
 import { LoadingButton } from "@mui/lab";
+import AvatarHelper from "@/utils/avatar-helper/avatar.helper";
+import UserModel from "@/models/user.model";
+import { UserModelRespone } from "@/models/user.model";
 
 interface Props {
-  member: IMember;
+  member: UserModel;
   openEditForm: () => void;
-  updateUser: (user: IMember) => void;
+  updateUser: (user: UserModel) => void;
 }
 
 type FormValue = {
@@ -46,13 +47,13 @@ const EditProfileForm: React.FC<Props> = ({
   updateUser,
 }) => {
   const dispatch = useDispatch();
-  const [userEdit, setUserEdit] = useState<IMember>(member);
+  const [userEdit, setUserEdit] = useState<UserModel>(member);
   const [isLoading, setLoading] = useState<boolean>(false);
   const { control, register, handleSubmit, formState, setValue } =
     useForm<FormValue>({
       defaultValues: {
         name: userEdit.name,
-        phoneNumber: userEdit.phoneNumber,
+        phoneNumber: userEdit.phone_number,
         dob: userEdit.dob,
         bio: userEdit.bio,
       },
@@ -70,7 +71,7 @@ const EditProfileForm: React.FC<Props> = ({
 
     setLoading(true);
     try {
-      const { data: response } = await customAxios.put<IMemberRespone>(
+      const { data: response } = await customAxios.put<UserModelRespone>(
         API_UPDATE_USER,
         valueForm
       );
@@ -79,7 +80,7 @@ const EditProfileForm: React.FC<Props> = ({
         ? formatDate(response.data.dob)
         : undefined;
 
-      const userRespone: IMember = {
+      const userRespone: UserModel = {
         ...response.data,
         dob: formattedDob,
       };
@@ -128,8 +129,8 @@ const EditProfileForm: React.FC<Props> = ({
                 alignItems: "center",
               }}
             >
-              <Avatar
-                src={userEdit.avatar}
+              <AvatarHelper
+                user={userEdit}
                 sx={{ width: 156, height: 156, mb: 3 }}
               />
               <Typography
@@ -202,7 +203,7 @@ const EditProfileForm: React.FC<Props> = ({
                       size="small"
                       id="outlined-basic"
                       variant="outlined"
-                      defaultValue={userEdit.phoneNumber}
+                      defaultValue={userEdit.phone_number}
                       {...register("phoneNumber")}
                     />
                   </Grid>

@@ -3,7 +3,6 @@ import {
   Card,
   CardHeader,
   Typography,
-  Avatar,
   CardActionArea,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -35,7 +34,7 @@ export default function Notification(props: { notification: INotification }) {
           <CardHeader
             sx={{ paddingBottom: "5px" }}
             avatar={
-              <AvatarHelper user={notification.actor}/>
+              <AvatarHelper user={notification.actor} sx={{}}/>
             }
             title={
               <Typography variant="body1" sx={{ fontSize: 15 }}>

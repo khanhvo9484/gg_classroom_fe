@@ -1,12 +1,12 @@
 import { IBase, IBaseResponse } from "./base.model";
-import { IMember } from "./member.model";
+import UserModel from "./user.model";
 
 export interface ICourse extends IBase {
   name: string;
   description?: string;
   inviteCode: string;
   courseOwnerId: string;
-  courseOwner: IMember;
+  courseOwner: UserModel;
   roleInCourse: string;
   isDeleted?: boolean;
 }

@@ -3,7 +3,8 @@ import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Avatar from "@mui/material/Avatar";
+import AvatarHelper from "@/utils/avatar-helper/avatar.helper";
+import { Avatar } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
@@ -17,14 +18,14 @@ import {
   IInvitationCourseRequest,
 } from "@/models/class.model";
 import { ClassService } from "@/service/class.service";
-import { IMember } from "@/models/member.model";
 import { useParams } from "react-router-dom";
 import RoleContext from "@/context/role.context";
+import UserModel from "@/models/user.model";
 
 interface Props {
   title: string;
   isTeacherList: boolean;
-  members: IMember[];
+  members: UserModel[];
   membersInvite: IInvitationCourse[];
   handleAddMemberInvite: (
     newInvitation: IInvitationCourse,
@@ -121,12 +122,10 @@ const MemberListComponent: React.FC<Props> = ({
               <>
                 <ListItem key={index} alignItems="center">
                   <ListItemAvatar sx={{ marginTop: 0, minWidth: 50 }}>
-                    <Avatar
-                      sx={{
-                        bgcolor: "#4173E0",
-                        width: 32,
-                        height: 32,
-                      }}
+
+                    <AvatarHelper
+                      sx={{}}
+                      user={member}
                     />
                   </ListItemAvatar>
                   <ListItemText

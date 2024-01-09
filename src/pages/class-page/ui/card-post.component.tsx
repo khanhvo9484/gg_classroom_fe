@@ -2,13 +2,20 @@ import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
-import Avatar from "@mui/material/Avatar";
+import AvatarHelper from "@/utils/avatar-helper/avatar.helper";
 import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Typography from "@mui/material/Typography";
 import CommentComponent from "./comment.component";
+import UserModel from "@/models/user.model";
 
-const PostComponent = () => {
+interface Props {
+  account: UserModel
+}
+
+const PostComponent: React.FC<Props> = ({
+  account
+}) => {
   return (
     <Card
       sx={{
@@ -21,9 +28,7 @@ const PostComponent = () => {
       <CardHeader
         sx={{ paddingBottom: "0" }}
         avatar={
-          <Avatar sx={{ bgcolor: "red" }} aria-label="recipe">
-            R
-          </Avatar>
+          <AvatarHelper sx={{}} user={account}/>
         }
         action={
           <IconButton aria-label="settings">

@@ -10,7 +10,6 @@ import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import Avatar from "@mui/material/Avatar";
 import ListItemText from "@mui/material/ListItemText";
 import { Stack, TextField } from "@mui/material";
 import UserModel from "@/models/user.model";
@@ -20,6 +19,7 @@ import { customAxios } from "@/api/custom-axios";
 import { Form, FormikProvider, useFormik } from "formik";
 import { LoadingButton } from "@mui/lab";
 import toast from "react-hot-toast";
+import AvatarHelper from "@/utils/avatar-helper/avatar.helper";
 
 const FadeInJoin = ({ onFadeClose }) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -145,10 +145,9 @@ const FadeInJoin = ({ onFadeClose }) => {
                     maxWidth: 280,
                   }}
                 >
-                  <Avatar
-                    sx={{ minWidth: 15, minHeight: 15, mr: 2 }}
-                    src={user.avatar}
-                  ></Avatar>
+                  <AvatarHelper
+                    user={user} sx={{}}
+                  ></AvatarHelper>
                   <ListItemText primary={user.name} secondary={user.email} />
                 </Stack>
               </Box>

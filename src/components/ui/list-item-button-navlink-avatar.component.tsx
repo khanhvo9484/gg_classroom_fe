@@ -1,9 +1,8 @@
 import { NavLink } from "react-router-dom";
 import ListItemButton from "@mui/material/ListItemButton";
-import Avatar from "@mui/material/Avatar";
 import ListItemText from "@mui/material/ListItemText";
 import { Typography } from "@mui/material";
-import stringAvatar from "@/utils/common.util";
+import AvatarHelper from "@/utils/avatar-helper/avatar.helper";
 
 export default function ListItemNavLinkAvatar({
   link,
@@ -31,14 +30,9 @@ export default function ListItemNavLinkAvatar({
             borderBottomRightRadius: isActive ? 32 : 0,
           }}
         >
-          {course.courseOwner.avatar ? (
-            <Avatar
-              sx={{ width: 24, height: 24, mr: 3 }}
-              src={course.courseOwner.avatar}
-            ></Avatar>
-          ) : (
-            <Avatar {...stringAvatar({ name: course.courseOwner.name })} />
-          )}
+          <AvatarHelper
+            user={course.courseOwner} sx={{mr: 3, ml:-1}}
+          ></AvatarHelper>
 
           <ListItemText
             disableTypography

@@ -4,15 +4,15 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import { IMember } from "../../models/member.model";
+import UserModel from "@/models/user.model";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import AvatarHelper from "@/utils/avatar-helper/avatar.helper";
 
 interface Props {
-  member: IMember;
+  member: UserModel;
   openEditForm: () => void;
 }
 
@@ -31,9 +31,8 @@ const ProfileComponent: React.FC<Props> = ({ member, openEditForm }) => {
                 alignItems: "center",
               }}
             >
-              <Avatar
-                src={member.avatar}
-                sx={{ width: 156, height: 156, mb: 3 }}
+              <AvatarHelper
+                user={member} sx={{}}
               />
               <Typography
                 gutterBottom
@@ -87,7 +86,7 @@ const ProfileComponent: React.FC<Props> = ({ member, openEditForm }) => {
                   <Typography gutterBottom sx={{ fontWeight: 550 }}>
                     Số điện thoại
                   </Typography>
-                  <Typography gutterBottom>{member.phoneNumber}</Typography>
+                  <Typography gutterBottom>{member.phone_number}</Typography>
                 </Grid>
                 <Grid xs={4}>
                   <Typography gutterBottom sx={{ fontWeight: 550 }}>

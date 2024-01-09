@@ -5,15 +5,15 @@ import { useContext, useEffect, useState } from "react";
 import LoadingContext from "@/context/loading.contenxt";
 import { ClassService } from "@/service/class.service";
 import { useParams } from "react-router-dom";
-import { IMember } from "@/models/member.model";
+import UserModel from "@/models/user.model";
 import { IInvitationCourse } from "@/models/class.model";
 
 const MembersPage = () => {
   const classService = new ClassService();
   const { courseId } = useParams();
   const { isLoading, startLoading, stopLoading } = useContext(LoadingContext);
-  const [students, setListStudent] = useState<IMember[]>();
-  const [teachers, setListTeacher] = useState<IMember[]>();
+  const [students, setListStudent] = useState<UserModel[]>();
+  const [teachers, setListTeacher] = useState<UserModel[]>();
 
   const [studentsInvite, setListStudentInvite] = useState<IInvitationCourse[]>(
     []

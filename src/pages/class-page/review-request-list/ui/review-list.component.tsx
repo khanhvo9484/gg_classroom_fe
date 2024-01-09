@@ -1,16 +1,8 @@
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
-import ListItemText from "@mui/material/ListItemText";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { useContext, useState } from "react";
-import { useSelector } from "react-redux";
-import { selectUser } from "@/redux/auth.slice";
 import { useParams } from "react-router-dom";
-import RoleContext from "@/context/role.context";
 import { Grid, ListItemButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
@@ -20,9 +12,6 @@ interface Props {
 const ReviewRequestListComponent: React.FC<Props> = ({
 }) => {
   const { courseId } = useParams();
-
-  const user = useSelector(selectUser);
-  const { isTeacher } = useContext(RoleContext);
 
   const navigate = useNavigate();
 

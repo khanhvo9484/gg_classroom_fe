@@ -23,10 +23,10 @@ import { customAxios } from "../../../api/custom-axios";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../../redux/auth.slice";
-import UserModel from "../../../models/user.model";
 import { API_FACEBOOK_LOGIN, API_GOOGLE_LOGIN } from "@/api/api.constant";
 import fbLogo from "@/assets/icons/Facebook_logo.svg";
 import ggLogo from "@/assets/icons/Google_logo.svg";
+import UserModel from "../../../models/user.model";
 
 const easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {

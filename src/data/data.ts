@@ -2,21 +2,46 @@ import image8 from "../assets/images/khanh.png";
 import image7 from "../assets/images/khang.png";
 import image1 from "../assets/images/jack.png";
 import { IMember } from "../models/member.model";
+import UserModel from "@/models/user.model";
 
-export const members: IMember[] = [
+export const members: UserModel[] = [
   {
+    phone_number: null,
+    isSuspensed: null,
+    isBlocked: null,
+    studentOfficialId: null,
+    email: null,
+    role: null,
+    dob: null,
+    accountType: null,
     id: "3",
     name: "Khang Duy",
     avatar: image7,
     bio: "Khang, tư duy sắc bén, đam mê mã nguồn mở và lập trình. Sở thích của anh không chỉ giải quyết vấn đề mà còn nghiên cứu và áp dụng công nghệ mới.",
   },
   {
+    phone_number: null,
+    isSuspensed: null,
+    isBlocked: null,
+    studentOfficialId: null,
+    email: null,
+    role: null,
+    dob: null,
+    accountType: null,
     id: "4",
     name: "Khanh Võ",
     avatar: image8,
     bio: "Khanh, người sáng tạo và năng động, tận hưởng niềm vui lập trình và đam mê mã nguồn mở để thách thức bản thân và đóng góp cho cộng đồng.",
   },
   {
+    phone_number: null,
+    isSuspensed: null,
+    isBlocked: null,
+    studentOfficialId: null,
+    email: null,
+    role: null,
+    dob: null,
+    accountType: null,
     id: "5",
     name: "Khoa Nguyễn",
     avatar: image1,

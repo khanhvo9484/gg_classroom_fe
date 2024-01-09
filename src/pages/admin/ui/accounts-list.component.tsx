@@ -1,12 +1,7 @@
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import Divider from "@mui/material/Divider";
-import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { Grid, IconButton, Pagination, Stack } from "@mui/material";
-import BlockIcon from '@mui/icons-material/Block';
-import GppBadIcon from '@mui/icons-material/GppBad';
+import { Grid, Pagination, Stack } from "@mui/material";
 import useAllUser from "@/hooks/all-users.hook";
 import AccountComponent from "./account.component";
 import { ChangeEvent, useState } from "react";
@@ -73,108 +68,6 @@ const AccountListComponent: React.FC<Props> = () => {
                 </Grid>
             </Box>
             <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-                    <ListItem sx={{borderRadius: 2}}
-                    >
-                        <Grid container >
-                            <Grid xs={1} item>
-                                <Avatar sx={{ bgcolor: "red" }} aria-label="recipe">
-                                    R
-                                </Avatar>
-                            </Grid>
-                            <Grid xs={2} item>
-                                <Typography
-                                    variant="body1"
-                                    sx={{fontSize:14}}
-                                    >
-                                    {`Nguyễn Đăng Khoa`}
-                                </Typography>
-                            </Grid>
-                            <Grid xs={3} item>
-                                <Typography
-                                    variant="body1"
-                                    sx={{ marginLeft: 1, fontSize:14 }}
-                                    >
-                                    {`topsiu1.ds@gmail.com`}
-                                </Typography>
-                            </Grid>
-                            <Grid xs={2} item>
-                                <Typography
-                                    variant="body1"
-                                    sx={{ marginLeft: 2, fontSize:14 }}
-                                    >
-                                    {`0392512651`}
-                                </Typography>
-                            </Grid>
-                            <Grid xs={2} item>
-                                <Typography
-                                    variant="body1"
-                                    sx={{ marginLeft: 3, fontSize:14 }}
-                                    >
-                                    {`04/02/2002`}
-                                </Typography>
-                            </Grid>
-                            <Grid xs={2} sx={{mt: -1}} item>
-                                <IconButton>
-                                    <BlockIcon />
-                                </IconButton>
-                                <IconButton>
-                                    <GppBadIcon />
-                                </IconButton>
-                            </Grid>
-                        </Grid>
-                    </ListItem>
-                    <Divider/>
-                    <ListItem sx={{borderRadius: 2}}
-                    >
-                        <Grid container >
-                            <Grid xs={1} item>
-                                <Avatar sx={{ bgcolor: "red" }} aria-label="recipe">
-                                    R
-                                </Avatar>
-                            </Grid>
-                            <Grid xs={2} item>
-                                <Typography
-                                    variant="body1"
-                                    sx={{fontSize:14}}
-                                    >
-                                    {`Nguyễn Đăng Khoa`}
-                                </Typography>
-                            </Grid>
-                            <Grid xs={3} item>
-                                <Typography
-                                    variant="body1"
-                                    sx={{ marginLeft: 1, fontSize:14 }}
-                                    >
-                                    {`topsiu1.ds@gmail.com`}
-                                </Typography>
-                            </Grid>
-                            <Grid xs={2} item>
-                                <Typography
-                                    variant="body1"
-                                    sx={{ marginLeft: 2, fontSize:14 }}
-                                    >
-                                    {`0392512651`}
-                                </Typography>
-                            </Grid>
-                            <Grid xs={2} item>
-                                <Typography
-                                    variant="body1"
-                                    sx={{ marginLeft: 3, fontSize:14 }}
-                                    >
-                                    {`04/02/2002`}
-                                </Typography>
-                            </Grid>
-                            <Grid xs={2} sx={{mt: -1}} item>
-                                <IconButton>
-                                    <BlockIcon color="error" />
-                                </IconButton>
-                                <IconButton>
-                                    <GppBadIcon color="warning"/>
-                                </IconButton>
-                            </Grid>
-                        </Grid>
-                    </ListItem>
-                    <Divider/>
                     {users && usersPagination.map((user) => {
                          return (<AccountComponent account={user}/>)
                     })}

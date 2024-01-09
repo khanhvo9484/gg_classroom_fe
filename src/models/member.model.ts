@@ -1,5 +1,6 @@
 import { IBaseResponse } from "./base.model";
 import { IInvitationCourse } from "./class.model";
+import UserModel from "./user.model";
 
 export interface IMember {
   id: string;
@@ -12,14 +13,14 @@ export interface IMember {
   phoneNumber?: string;
 }
 
-export interface IMemberRespone extends IBaseResponse<IMember> {
+export interface IMemberRespone extends IBaseResponse<UserModel> {
   createAt: string;
   updatedAt: string;
 }
 
 export interface IMemberList {
-  students: IMember[];
-  teachers: IMember[];
+  students: UserModel[];
+  teachers: UserModel[];
 }
 
 export interface IAllMemberCourse {

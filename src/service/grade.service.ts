@@ -1,9 +1,8 @@
 import {
-    API_GRADE_STRUCTURE,
-    API_GET_GRADE_STRUTURE,
+    API_STUDENT_GRADE
 } from "@/api/api.constant";
 import { customAxios } from "@/api/custom-axios";
-import { IGradeRespone } from "@/models/grade.model";
+import { IGradeResponse } from "@/models/grade.model";
 
 const mockData = {
     statusCode: "200",
@@ -57,12 +56,12 @@ const mockData = {
 }
 
 export class GradeService {
-    async getGrade(courseId: string): Promise<IGradeRespone> {
-        // const { data: response } = await customAxios.get<IGradeRespone>(
-        //     `${API_GRADE_STRUCTURE}${API_GET_GRADE_STRUTURE}/${courseId}/`
-        // );
-        console.log(courseId);
+    async getGrade(courseId_studentOfficialId_String): Promise<IGradeResponse> {
+        const { data: response } = await customAxios.get<IGradeResponse>(
+            `${API_STUDENT_GRADE}/${courseId_studentOfficialId_String}/`
+        );
+        console.log(courseId_studentOfficialId_String);
 
-        return mockData;
+        return response;
     }
 }

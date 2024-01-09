@@ -2,13 +2,15 @@ import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, FormikProvider, useFormik } from "formik";
 import * as Yup from "yup";
-import { Box, TextField, Stack, Button, CardContent, Avatar } from "@mui/material";
+import { Box, TextField, Stack, CardContent } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import Divider from "@mui/material/Divider";
 import { useParams } from "react-router-dom";
 import SendIcon from '@mui/icons-material/Send';
+import UserModel from "@/models/user.model";
+import AvatarHelper from "@/utils/avatar-helper/avatar.helper";
 
 const easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {
@@ -21,14 +23,17 @@ const animate = {
   },
 };
 
-export interface SimpleDialogProps {
+export interface CommentProps {
+    account: UserModel
 }
 
-export default function CommentInputComponent(props: SimpleDialogProps) {
+const CommentInputComponent: React.FC<CommentProps> = ({
+    account
+}) => {
 
-    const { courseId } = useParams();
+    // const { courseId } = useParams();
 
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const CommentSchema = Yup.object().shape({
         comment: Yup.string().required("Bạn cần nhập câu trả lời của bạn!")
@@ -82,12 +87,10 @@ export default function CommentInputComponent(props: SimpleDialogProps) {
                             animate={animate}
                         >
                             <Stack direction="row">
-                                <Avatar
-                                    sx={{ bgcolor: "blue", width: 32, height: 32 , mr: 4, ml:2}}
-                                    aria-label="recipe"
-                                >
-                                    KT
-                                </Avatar>
+                                <AvatarHelper
+                                    sx={{ width: 32, height: 32 , mr: 4, ml:2}}
+                                    user={account}
+                                />
                                 <TextField
                                     fullWidth
                                     required
@@ -116,3 +119,5 @@ export default function CommentInputComponent(props: SimpleDialogProps) {
         </CardContent>
     );
 }
+
+export default CommentInputComponent

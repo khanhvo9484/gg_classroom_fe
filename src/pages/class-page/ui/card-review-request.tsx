@@ -2,23 +2,29 @@ import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
-import Avatar from "@mui/material/Avatar";
+import AvatarHelper from "@/utils/avatar-helper/avatar.helper";
+import UserModel from "@/models/user.model";
 import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Typography from "@mui/material/Typography";
 import CommentComponent from "./comment.component";
-import { IGradeReview } from "@/models/grade.review.model";
-import { Box, Button, Divider, Grid } from "@mui/material";
+import { Button, Divider, Grid } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useContext } from "react";
 import RoleContext from "@/context/role.context";
 import CommentInputComponent from "./comment-input.component";
 
-const GradeReviewPost = () => {
+interface Props {
+    account: UserModel
+}
+
+const GradeReviewPost: React.FC<Props> = ({
+    account
+}) => {
     const {courseId} = useParams();
     const {reviewId} = useParams();
 
-    const { isTeacher, setIsTeacher } = useContext(RoleContext);
+    const { isTeacher, } = useContext(RoleContext);
 
     console.log(courseId);
     console.log(reviewId);
@@ -36,9 +42,7 @@ const GradeReviewPost = () => {
             <CardHeader
                 sx={{ paddingBottom: "0" }}
                 avatar={
-                    <Avatar sx={{ bgcolor: "red" }} aria-label="recipe">
-                        R
-                    </Avatar>
+                    <AvatarHelper sx={{}} user={account}/>
                 }
                 action={
                     <>

@@ -1,44 +1,6 @@
 import { IBase } from "./base.model";
 import { IBaseResponse } from "./base.model";
 
-export interface IGrade extends IBase {
-  gradeComponent: Array<{
-    gradeComponentId: string;
-    gradeComponentName: string;
-    percentage: number;
-    totalGrade: number;
-    gradeSubComponent: Array<{
-      gradeSubComponentId: string;
-      gradeSubComponentName: string;
-      percentage: number;
-      grade: number;
-    }>;
-  }>;
-}
-
-export interface IGradeSingle {
-  gradeComponentId: string;
-  gradeComponentName: string;
-  percentage: number;
-  totalGrade: number;
-  gradeSubComponent: Array<{
-    gradeSubComponentId: string;
-    gradeSubComponentName: string;
-    percentage: number;
-    grade: number;
-  }>;
-}
-
-export interface ISubGrade {
-  gradeSubComponentId: string;
-  gradeSubComponentName: string;
-  percentage: number;
-  grade: number;
-}
-
-export interface IGradesRespone extends IBaseResponse<IGrade[]> {}
-export interface IGradeRespone extends IBaseResponse<IGrade> {}
-
 export interface IGradeItem {
   id?: string;
   _id?: string;
@@ -63,6 +25,9 @@ export interface IGradeItemComponent {
   totalGrade?: string;
   gradeSubComponent?: IGradeItem[];
 }
+
+export interface IGradeResponse
+  extends IBaseResponse<IGradeItemComponent[]> {}
 
 export interface IGradeStructureUpdateRequest {
   courseId: string;

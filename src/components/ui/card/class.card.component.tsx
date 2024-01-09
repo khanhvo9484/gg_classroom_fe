@@ -7,7 +7,6 @@ import { Card } from "@mui/material";
 import { Box } from "@mui/material";
 import { CardActionArea } from "@mui/material";
 import { CardHeader } from "@mui/material";
-import Avatar from "@mui/material/Avatar";
 import CardMenu from "@/components/card.dropdown.menu.component";
 import { ICourse } from "@/models/class.model";
 import React, { useEffect, useState } from "react";
@@ -22,6 +21,7 @@ import ImageRead from "@/assets/images/img_read.jpg";
 import ImageBackToSchool from "@/assets/images/img_backtoschool.jpg";
 import ImageLearnLang from "@/assets/images/img_learnlanguage.jpg";
 import ImageGrad from "@/assets/images/img_graduation.jpg";
+import AvatarHelper from "@/utils/avatar-helper/avatar.helper";
 
 function stringToColor(string: string) {
   let hash = 0;
@@ -111,30 +111,14 @@ const ClassCard: React.FC<Props> = ({
             height: 170,
           }}
         >
-          {course.courseOwner && course.courseOwner.avatar ? (
-            <Avatar
-              aria-label="recipe"
-              sx={{
-                minWidth: 80,
-                minHeight: 80,
-                mt: -5,
-                ml: 29,
-                bgcolor: AvatarBgColor,
-              }}
-              src={course.courseOwner.avatar}
-            ></Avatar>
-          ) : (
-            <Avatar
-              aria-label="recipe"
-              sx={{
-                minWidth: 80,
-                minHeight: 80,
-                mt: -5,
-                ml: 29,
-                bgcolor: AvatarBgColor,
-                children: shortName(course.courseOwner.name),
-              }}
-            ></Avatar>
+          {course.courseOwner &&  (
+            <AvatarHelper user={course.courseOwner} sx={{
+              minWidth: 80,
+              minHeight: 80,
+              mt: -5,
+              ml: 29,
+              bgcolor: AvatarBgColor,
+            }}/>
           )}
         </CardActionArea>
       );

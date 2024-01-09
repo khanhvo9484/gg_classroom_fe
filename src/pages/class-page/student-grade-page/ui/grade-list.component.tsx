@@ -26,8 +26,10 @@ interface Props {
 
 const GradeList: React.FC<Props> = () => {
     const { courseId } = useParams();
-    const {grade, gradeIsLoading, gradeError } = useGrade(courseId);
+
     const user = useSelector(selectUser);
+
+    const {grade, gradeIsLoading, gradeError } = useGrade(courseId, user?.studentOfficialId);
 
     const navigate = useNavigate();
 
@@ -48,69 +50,73 @@ const GradeList: React.FC<Props> = () => {
         setIsGradeReviewRequestDialogOpen(true);
     };
 
-    return (
-        <>
-            <List
-                sx={{ width: '100%', bgcolor: 'background.paper', borderRadius: 5 }}
-                component="nav"
-                aria-labelledby="nested-list-subheader"
-            >
-                {!gradeIsLoading && grade.gradeComponent &&
-                    grade.gradeComponent.map((grade, index) => {
-                        return (
-                            <>
-                                <ListItemButton
-                                    selected={selectedIndex === index}
-                                    onClick={(event) => {handleListItemClick(event, index,
-                                                                            null,
-                                                                            grade)}}
-                                    sx={itemStyle}
-                                >
-                                    <ListItemIcon>
-                                        <StarIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={grade.gradeComponentName}/>
-                                    <Box sx={{display: 'flex',
-                                                        justifyContent: 'end' }}>
-                                        <ListItemText primary={`Điểm: ${grade.totalGrade}`}
-                                                    secondary={`${grade.percentage}%`} />
-                                    </Box>
-                                </ListItemButton>
-                                <Collapse in={true} timeout="auto" unmountOnExit>
-                                    <Divider />
-                                    <List component="div" disablePadding>
-                                    {grade.gradeSubComponent &&
-                                        grade.gradeSubComponent.map((subGrade, subIndex) => {
-                                            return (
-                                                <ListItemButton sx={{...itemStyle,  pl: 6}}>
-                                                    <ListItemIcon>
-                                                        <StarBorder />
-                                                    </ListItemIcon>
-                                                    <ListItemText primary={subGrade.gradeSubComponentName} />
-                                                    <Box sx={{display: 'flex',
-                                                        justifyContent: 'end' }}>
-                                                            <ListItemText primary={`Điểm: ${subGrade.grade}`}
-                                                                secondary={`${subGrade.percentage}%`} />
-                                                    </Box>
-                                                </ListItemButton>
-                                            )
-                                        })}
-                                    </List>
-                                </Collapse>
-                            </>
-                        )
-                })}
-            </List>
-            <GradeReviewRequestDialog
-                open={isGradeReviewRequestDialogOpen}
-                onClose={() => {
-                    setIsGradeReviewRequestDialogOpen(false);
-                }}
-                grade={currentGrade}
-                subGrade={currentSubGrade}
-            />
-        </>
-    );
+    if (user?.studentOfficialId){
+        return (
+            <>
+                <List
+                    sx={{ width: '100%', bgcolor: 'background.paper', borderRadius: 5 }}
+                    component="nav"
+                    aria-labelledby="nested-list-subheader"
+                >
+                    {!gradeIsLoading && grade &&
+                        grade.map((gradeItem, index) => {
+                            return (
+                                <>
+                                    <ListItemButton
+                                        selected={selectedIndex === index}
+                                        onClick={(event) => {handleListItemClick(event, index,
+                                                                                null,
+                                                                                gradeItem)}}
+                                        sx={itemStyle}
+                                        key={gradeItem._id}
+                                    >
+                                        <ListItemIcon>
+                                            <StarIcon />
+                                        </ListItemIcon>
+                                        <ListItemText primary={gradeItem.name}/>
+                                        <Box sx={{display: 'flex',
+                                                            justifyContent: 'end' }}>
+                                            <ListItemText primary={`Điểm: ${gradeItem.totalGrade}`}
+                                                        secondary={`${gradeItem.percentage}%`} />
+                                        </Box>
+                                    </ListItemButton>
+                                    <Collapse in={true} timeout="auto" unmountOnExit>
+                                        <Divider />
+                                        <List component="div" disablePadding>
+                                        {gradeItem.gradeSubComponent &&
+                                            gradeItem.gradeSubComponent.map((subGrade) => {
+                                                return (
+                                                    <ListItemButton sx={{...itemStyle,  pl: 6}} key={subGrade._id}>
+                                                        <ListItemIcon>
+                                                            <StarBorder />
+                                                        </ListItemIcon>
+                                                        <ListItemText primary={subGrade.name} />
+                                                        <Box sx={{display: 'flex',
+                                                            justifyContent: 'end' }}>
+                                                                <ListItemText primary={`Điểm: ${subGrade.grade}`}
+                                                                    secondary={`${subGrade.percentage}%`} />
+                                                        </Box>
+                                                    </ListItemButton>
+                                                )
+                                            })}
+                                        </List>
+                                    </Collapse>
+                                </>
+                            )
+                    })}
+                </List>
+                <GradeReviewRequestDialog
+                    open={isGradeReviewRequestDialogOpen}
+                    onClose={() => {
+                        setIsGradeReviewRequestDialogOpen(false);
+                    }}
+                    grade={currentGrade}
+                    subGrade={currentSubGrade}
+                />
+            </>
+    )} else {
+        return ("You are not allow to see grade!");
+    }
 };
 
 export default GradeList;
