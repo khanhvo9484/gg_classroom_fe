@@ -12,43 +12,21 @@ import { useSelector } from "react-redux";
 import AvatarDropdown from "../components/avatar.dropdown.menu.component";
 import logo from "@/assets/icons/k3_logo.png";
 import { styled, Theme, CSSObject } from "@mui/material/styles";
-import { Collapse, LinearProgress, MenuItem, Paper } from "@mui/material";
+import {LinearProgress } from "@mui/material";
 import MuiDrawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
 import HomeIcon from "@mui/icons-material/Home";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-import TopicOutlinedIcon from "@mui/icons-material/TopicOutlined";
-import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
-import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
-import { ClassService } from "@/service/class.service";
 import Typography from "@mui/material/Typography";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ListItemNavLink from "@/components/ui/list-item-button-navlink.component";
-import ListItemNavLinkAvatar from "@/components/ui/list-item-button-navlink-avatar.component";
-import AddIcon from "@mui/icons-material/Add";
 import { Outlet } from "react-router-dom";
-import AddCourseDialog from "@/components/ui/dialog/add-course.dialog.component";
 import { Toaster } from "react-hot-toast";
-import FadeInJoin from "@/components/join.fadein.component";
-import Zoom from "@mui/material/Zoom";
 import LoadingContext from "@/context/loading.contenxt";
-import { useContext, useEffect, useState } from "react";
-import JoinCodeByCodeDialog from "@/components/ui/dialog/join-course-by-code-dialog.component";
-import Menu from "@mui/material/Menu";
-import { selectUser } from "@/redux/auth.slice";
-import { useDispatch } from "react-redux";
-import { selectCourses } from "@/redux/courses.slice";
-import { setCourses } from "@/redux/courses.slice";
+import { useContext, useState } from "react";
 import NotificationMenu from "@/components/notification.menu/notification.menu.component";
+import { selectUser } from "@/redux/auth.slice";
 const drawerWidth = 250;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -121,67 +99,13 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
 }));
 
 function AdminLayout() {
-  const userProfile = useSelector(selectUser);
-  const classService = new ClassService();
-  const { isLoading, stopLoading, startLoading } = useContext(LoadingContext);
+
+  const { isLoading} = useContext(LoadingContext);
   const [sidebarState, setSidebarState] = useState(true);
   const [sidebarStateHover, setSidebarStateHover] = useState(false);
-  const [isSchoolOpen, setIsSchoolOpen] = useState(true);
-  const [isEnrolledOpen, setIsEnrolledOpen] = useState(true);
-  const [isCreateCourseDialogOpen, setIsCreateCourseDialogOpen] =
-    useState(false);
-  const [isOpenJoinCourseByCodeDialog, setIsOpenJoinCourseByCodeDialog] =
-    useState(false);
-  const [isOpenFadeInJoin, setIsOpenFadeInJoin] = useState(false);
 
-  const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState("");
-
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
-  const openMenuAdd = Boolean(anchorEl);
-
-  const handleOpenMenuAdd = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleCloseMenuAdd = () => {
-    setAnchorEl(null);
-  };
-
-  function updateCourses(courseId) {
-    console.log(`Just update courses: ${courseId}`);
-  }
-
-  function onFadeClose() {
-    setIsOpenFadeInJoin(false);
-  }
-
-  useEffect(() => {
-    startLoading();
-    const getAllCourse = async () => {
-      try {
-        const response = await classService.getAllCourse();
-
-        dispatch(
-          setCourses({
-            courses: response.data,
-          })
-        );
-      } catch (error) {
-        console.log(error);
-        // throw error;
-      }
-    };
-
-    if (!courses) {
-      getAllCourse();
-    }
-    stopLoading();
-  }, []);
-
-  const user: UserModel = useSelector((state: any) => state.auth.user);
-  const courses = useSelector(selectCourses);
+  const user: UserModel = useSelector(selectUser);
   const location = useLocation();
   const path = location.pathname;
   return (

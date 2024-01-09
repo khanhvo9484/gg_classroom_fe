@@ -11,12 +11,13 @@ function useAllUser() {
         return response.data;
     }
 
-    const { data, error, isLoading } = useSWR("Nothing", fetcher)
+    const { data, error, isLoading, mutate } = useSWR("all-users", fetcher)
 
     return {
       users: data,
       usersIsLoading: isLoading,
-      usersError: error
+      usersError: error,
+      usersMutate: mutate
     }
 }
 

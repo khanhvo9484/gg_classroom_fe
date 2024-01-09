@@ -26,6 +26,7 @@ import {
   IVeryfiJoinCourseResponse,
   ITokenVeryfiJoinCourseRequest,
   IJoinCourseByCodeRequest,
+  ICourse,
 } from "@/models/class.model";
 import {
   IGradeStructure,
@@ -41,7 +42,7 @@ import { getSearchParams } from "@/utils/http.util";
 export class ClassService {
   async getAllCourses(): Promise<ICoursesRespone> {
     const { data: response } = await customAxios.get<ICoursesRespone>(
-      `${API_COURSES}${API_GET_ALL_COURSES}`
+      `${API_GET_ALL_COURSES}`
     );
 
     return response;
@@ -71,6 +72,29 @@ export class ClassService {
       `${API_COURSES}${API_GET_COURSE_BY_ID.replace("{courseId}", courseId)}`,
       { signal }
     );
+
+    return response;
+  }
+
+  async archivedCourseById(courseId: string): Promise<ICourseRespone>{
+    const { data: response }  = await customAxios.post(
+      `${API_COURSES}/delete-course/${courseId}`
+    );
+
+    return response;
+  }
+
+  async reviveCourse(course: ICourse): Promise<ICourseRespone>{
+    const payload = {
+      description: course.description,
+      name: course.name,
+      isDeleted: false,
+      id: course.id,
+    };
+      const {data: response} = await customAxios.put(
+          "/courses/update-course",
+          payload
+      );
 
     return response;
   }

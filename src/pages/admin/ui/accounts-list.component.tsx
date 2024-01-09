@@ -4,11 +4,12 @@ import Divider from "@mui/material/Divider";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { Grid, IconButton } from "@mui/material";
+import { Grid, IconButton, Pagination, Stack } from "@mui/material";
 import BlockIcon from '@mui/icons-material/Block';
 import GppBadIcon from '@mui/icons-material/GppBad';
 import useAllUser from "@/hooks/all-users.hook";
 import AccountComponent from "./account.component";
+import { ChangeEvent, useState } from "react";
 
 interface Props {
 }
@@ -16,6 +17,14 @@ interface Props {
 const AccountListComponent: React.FC<Props> = () => {
 
     const { users} = useAllUser();
+
+    const [currentPageNumber, setCurrentPageNumber] = useState(1);
+
+    const usersPagination = users?.slice((currentPageNumber - 1)*15, currentPageNumber*15)
+
+    const handlePageChange = (event: ChangeEvent<unknown>, pageNumber: number) => {
+        setCurrentPageNumber(pageNumber);
+    }
 
     return (
         <Box sx={{ marginTop: 4, marginBottom: 10 }}>
@@ -166,10 +175,16 @@ const AccountListComponent: React.FC<Props> = () => {
                         </Grid>
                     </ListItem>
                     <Divider/>
-                    {users && users.map((user) => {
+                    {users && usersPagination.map((user) => {
                          return (<AccountComponent account={user}/>)
                     })}
             </List>
+            {users && (
+                <Stack alignItems="center">
+                    <Pagination count={Math.ceil(users?.length/15)} color="primary"
+                    onChange={(event, pageNumber) => handlePageChange(event, pageNumber)}/>
+                </Stack>
+            )}
         </Box>
     );
 };

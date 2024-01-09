@@ -62,7 +62,7 @@ const ArchivedCoursesPage = () => {
         const payload = {
             description: course.description,
             name: course.name,
-            isDeleted: true,
+            isDeleted: false,
             id: course.id,
         };
         try {

@@ -68,7 +68,7 @@ const HomePage = () => {
 
   async function archiveCourse(courseId) {
     try {
-      const response = await customAxios.delete(
+      const response = await customAxios.post(
         `/courses/delete-course/${courseId}`
       );
 

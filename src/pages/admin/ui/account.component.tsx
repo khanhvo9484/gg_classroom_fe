@@ -42,9 +42,13 @@ const AccountComponent: React.FC<Props> = ({
     const avatarColor = stringToColor(account.name);
     const dob = convertDob(account.dob);
 
+    const HandleSuspendClick = () => {
+
+    }
+
     return (
         <>
-            <ListItem sx={{borderRadius: 2}}
+            <ListItem sx={{borderRadius: 2}} key={account.id}
             >
                 <Grid container >
                     <Grid xs={1} item>
@@ -85,10 +89,10 @@ const AccountComponent: React.FC<Props> = ({
                         </Typography>
                     </Grid>
                     <Grid xs={2} sx={{mt: -1}} item>
-                        <IconButton>
+                        <IconButton onClick={() => HandleSuspendClick()}>
                             <GppBadIcon color={account.isBlocked ? "warning" : "action"}/>
                         </IconButton>
-                        <IconButton>
+                        <IconButton onClick={() => HandleBanClick()}>
                             <BlockIcon color={account.isBlocked ? "error" : "action"} />
                         </IconButton>
                     </Grid>

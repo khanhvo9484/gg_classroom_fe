@@ -10,12 +10,13 @@ function useAllCourses() {
         return response.data;
     }
 
-    const { data, error, isLoading } = useSWR("Nothing", fetcher)
+    const { data, error, isLoading, mutate } = useSWR("all-courses", fetcher)
 
     return {
       courses: data,
       coursesIsLoading: isLoading,
-      coursesError: error
+      coursesError: error,
+      coursesMutate: mutate
     }
 }
 
