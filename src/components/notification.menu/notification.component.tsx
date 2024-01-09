@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import React from "react";
 import { useParams } from "react-router-dom";
 import { INotification } from "@/models/notification.model";
+import AvatarHelper from "@/utils/avatar-helper/avatar.helper";
 
 export default function Notification(props: { notification: INotification }) {
   const { notification } = props;
@@ -34,13 +35,11 @@ export default function Notification(props: { notification: INotification }) {
           <CardHeader
             sx={{ paddingBottom: "5px" }}
             avatar={
-              <Avatar sx={{ bgcolor: "red" }} aria-label="recipe">
-                R
-              </Avatar>
+              <AvatarHelper user={notification.actor}/>
             }
             title={
               <Typography variant="body1" sx={{ fontSize: 15 }}>
-                <span style={{ fontWeight: 700 }}>{notification.actor.id}</span>{" "}
+                <span style={{ fontWeight: 700 }}>{notification.actor.name}</span>{" "}
                 {notification.content}
               </Typography>
             }

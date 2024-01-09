@@ -25,6 +25,8 @@ function Header() {
   const { isLoading } = useContext(LoadingContext);
   const userProfile = useSelector(selectUser);
 
+  console.log(userProfile);
+
   const location = useLocation();
 
   const path = location.pathname;

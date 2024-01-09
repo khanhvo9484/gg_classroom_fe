@@ -20,7 +20,7 @@ const connectSocket = (user) => {
 const initialState = {
   user: localStorage.getItem("user")
     ? JSON.parse(localStorage.getItem("user") || "")
-    : {},
+    : false,
   access_token: localStorage.getItem("access_token") || "",
   refresh_token: localStorage.getItem("access_token") || "",
 };

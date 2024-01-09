@@ -91,11 +91,12 @@ export default function NotificationMenu() {
           <Paper
             sx={{
               border: "0.5px solid #6566660a",
-              p: 0,
+              p: 1,
+              m:3,
               bgcolor: "background.paper",
               borderRadius: "12px",
-              maxWidth: 300,
-              minWidth: 300,
+              maxWidth: 320,
+              minWidth: 320,
               maxHeight: 600, // Set your desired maximum height
               overflowY: "auto", // Add scrollbar when content exceeds maxHeight
             }}
