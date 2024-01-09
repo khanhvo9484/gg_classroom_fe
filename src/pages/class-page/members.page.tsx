@@ -12,8 +12,8 @@ const MembersPage = () => {
   const classService = new ClassService();
   const { courseId } = useParams();
   const { isLoading, startLoading, stopLoading } = useContext(LoadingContext);
-  const [students, setListStudent] = useState<IMember[]>([]);
-  const [teachers, setListTeacher] = useState<IMember[]>([]);
+  const [students, setListStudent] = useState<IMember[]>();
+  const [teachers, setListTeacher] = useState<IMember[]>();
 
   const [studentsInvite, setListStudentInvite] = useState<IInvitationCourse[]>(
     []
@@ -56,17 +56,17 @@ const MembersPage = () => {
     const getAllMemberInCourse = async (courseId: string) => {
       try {
         startLoading();
-
         const response = await classService.getAllMemberInCourse(courseId);
 
         setListTeacher(response.data.memberList.teachers);
         setListStudent(response.data.memberList.students);
 
         filterMemberInvite(response.data.invitationList);
-        stopLoading();
       } catch (error) {
         console.log(error);
         throw error;
+      } finally {
+        stopLoading();
       }
     };
 
@@ -77,7 +77,7 @@ const MembersPage = () => {
 
   return (
     <Box sx={{ marginY: "2rem", minHeight: "600px" }}>
-      {!isLoading && (
+      {!isLoading && teachers && students && (
         <Container
           maxWidth={false}
           sx={{
