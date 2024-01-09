@@ -61,9 +61,13 @@ export class ClassService {
     return response;
   }
 
-  async getCourseById(courseId: string): Promise<ICourseRespone> {
+  async getCourseById(
+    courseId: string,
+    signal?: AbortSignal
+  ): Promise<ICourseRespone> {
     const { data: response } = await customAxios.get<ICourseRespone>(
-      `${API_COURSES}${API_GET_COURSE_BY_ID.replace("{courseId}", courseId)}`
+      `${API_COURSES}${API_GET_COURSE_BY_ID.replace("{courseId}", courseId)}`,
+      { signal }
     );
 
     return response;
