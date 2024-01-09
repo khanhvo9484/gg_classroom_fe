@@ -14,6 +14,7 @@ import {
   API_GET_STUDENT_GRADE_BOARD,
   API_GET_ALL_COURSES,
   API_UPDATE_STUDENT_GRADE,
+  API_MARK_GRADE_FINAL,
 } from "@/api/api.constant";
 import { customAxios } from "@/api/custom-axios";
 import { IBaseResponse } from "@/models/base.model";
@@ -29,6 +30,7 @@ import {
 import {
   IGradeStructure,
   IGradeStructureResponse,
+  IMarkFinallyGrade,
   IStudentBoardGradeResponse,
   IStudentGrade,
   IUpdateStudentGradeRequest,
@@ -167,6 +169,16 @@ export class ClassService {
       `${API_STUDENT_GRADE}${API_UPDATE_STUDENT_GRADE}`,
       updateStudentGradeRequest
     );
+
+    return response;
+  }
+
+  async markFinalizeGrade(
+    markFinallizeGrade: IMarkFinallyGrade
+  ): Promise<IBaseResponse<IStudentGrade>> {
+    const { data: response } = await customAxios.put<
+      IBaseResponse<IStudentGrade>
+    >(`${API_GRADE_STRUCTURE}${API_MARK_GRADE_FINAL}`, markFinallizeGrade);
 
     return response;
   }

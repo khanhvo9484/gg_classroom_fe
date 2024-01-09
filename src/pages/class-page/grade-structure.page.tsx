@@ -41,6 +41,7 @@ interface SortableListProps {
   onDeleteGradeItem: (index: number) => void;
   addSubGrade: (index: number) => void;
   deleteSubGrade: (parentIndex: number, subIndex: number) => void;
+  isEditTable: boolean;
 }
 
 interface ScoreTypeProps {
@@ -58,6 +59,7 @@ interface ScoreTypeProps {
   }>;
   updateRemainPercent: () => void;
   deleteSubGrade: (parentIndex: number, subIndex: number) => void;
+  isEditTable: boolean;
 }
 
 const SortableScoreTypeComponent = SortableElement<ScoreTypeProps>(
@@ -72,6 +74,7 @@ const SortableScoreTypeComponent = SortableElement<ScoreTypeProps>(
     setValue,
     addSubGrade,
     deleteSubGrade,
+    isEditTable,
   }) => (
     <ScoreTypeComponent
       gradeItemComponent={value}
@@ -84,6 +87,7 @@ const SortableScoreTypeComponent = SortableElement<ScoreTypeProps>(
       addSubGrade={addSubGrade}
       deleteSubGrade={deleteSubGrade}
       setValue={setValue}
+      isEditTable={isEditTable}
     />
   ),
   { withRef: true }
@@ -100,6 +104,7 @@ const SortableStack = SortableContainer<SortableListProps>(
     onDeleteGradeItem,
     addSubGrade,
     deleteSubGrade,
+    isEditTable,
   }) => (
     <Stack>
       {items.map((value, index) => (
@@ -116,6 +121,7 @@ const SortableStack = SortableContainer<SortableListProps>(
           setValue={setValue}
           addSubGrade={addSubGrade}
           deleteSubGrade={deleteSubGrade}
+          isEditTable={isEditTable}
         />
       ))}
     </Stack>
@@ -124,6 +130,8 @@ const SortableStack = SortableContainer<SortableListProps>(
 const GradeStructurePage = () => {
   const classService = new ClassService();
   const [listScoreType, setListScoreType] = useState<IGradeItemComponent[]>();
+  const [isEditGradeStructure, setIsEditGradeStructure] =
+    useState<boolean>(true);
   const [remainingPercent, setRemaninPercent] = useState(100);
   const { courseId } = useParams();
   const [isValidForm, setIsValidForm] = useState<boolean>(false);
@@ -158,7 +166,7 @@ const GradeStructurePage = () => {
       try {
         const response = await classService.getGradeStructureCourse(courseId);
         setListScoreType(response.data.gradeComponent);
-
+        setIsEditGradeStructure(response.data.isEditable);
         console.log("Call api");
         setValue("grades", response.data.gradeComponent);
         calculatePercent();
@@ -424,6 +432,7 @@ const GradeStructurePage = () => {
               <SortableStack
                 distance={1}
                 items={listScoreType}
+                isEditTable={isEditGradeStructure}
                 onSortEnd={onSortEnd}
                 control={control}
                 register={register}
@@ -438,7 +447,7 @@ const GradeStructurePage = () => {
               />
             )}
           </CardContent>
-          <Box sx={{ display: "flex", p: 4, justifyContent: "space-between" }}>
+          <Box sx={{ display: "flex", p: 3, justifyContent: "space-between" }}>
             <Box>
               <Box>
                 {listScoreType && listScoreType.length > 0 && (
@@ -451,7 +460,7 @@ const GradeStructurePage = () => {
                 )}
               </Box>
             </Box>
-            {isTeacher && (
+            {isTeacher && isEditGradeStructure && (
               <Box>
                 <Button
                   size="small"

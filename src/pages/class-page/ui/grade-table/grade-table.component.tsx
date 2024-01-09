@@ -32,7 +32,6 @@ const GradeTableComponent: React.FC<Props> = ({
     setRowData(rowGrade);
   }, [rowGrade]);
 
-  console.log("col : ", colDefs);
   const defaultColDef = useMemo(() => {
     return {
       initialWidth: 160,
@@ -63,7 +62,7 @@ const GradeTableComponent: React.FC<Props> = ({
   };
   return (
     <Box>
-      <Box className="ag-theme-quartz" sx={{ height: "90vh" }}>
+      <Box className="ag-theme-quartz" sx={{ height: "80vh" }}>
         <AgGridReact
           ref={gridRef}
           rowData={rowData}

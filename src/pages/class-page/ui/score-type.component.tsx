@@ -33,6 +33,7 @@ interface Props {
   }>;
   addSubGrade: (index: number) => void;
   deleteSubGrade: (parentIndex: number, subIndex: number) => void;
+  isEditTable: boolean;
 }
 
 const useStyles = makeStyles(() => ({
@@ -59,6 +60,7 @@ const ScoreTypeComponent: React.FC<Props> = ({
   setValue,
   addSubGrade,
   deleteSubGrade,
+  isEditTable,
 }) => {
   const [isExpand, setIsExpand] = useState<boolean>(true);
   const [gradeItemSub, setGradeItemSub] = useState<IGradeItem[]>(
@@ -134,7 +136,7 @@ const ScoreTypeComponent: React.FC<Props> = ({
       <Box
         sx={{
           mb: "1rem",
-          zIndex: 99999999,
+          // zIndex: 99999999,
           display: "flex",
           alignItems: "center",
           flexDirection: "column",
@@ -152,6 +154,7 @@ const ScoreTypeComponent: React.FC<Props> = ({
               {...register(`grades[${index}].name`, {
                 required: true,
               })}
+              readOnly={!isEditTable}
             />
           </FormControl>
           <FormControl required variant="filled" sx={{ mr: "18px" }}>
@@ -166,6 +169,7 @@ const ScoreTypeComponent: React.FC<Props> = ({
                 required: true,
                 onChange: () => handeOnChange(),
               })}
+              readOnly={!isEditTable}
             />
           </FormControl>
 
@@ -179,12 +183,16 @@ const ScoreTypeComponent: React.FC<Props> = ({
           >
             {isExpand ? <ExpandMoreIcon /> : <ExpandLessIcon />}
           </IconButton>
-          <IconButton size="large" onClick={() => handleAddSubGrade(index)}>
-            <AddIcon />
-          </IconButton>
-          <IconButton size="large" onClick={() => handleDeleteGradeItem()}>
-            <CloseIcon />
-          </IconButton>
+          {isEditTable && (
+            <>
+              <IconButton size="large" onClick={() => handleAddSubGrade(index)}>
+                <AddIcon />
+              </IconButton>
+              <IconButton size="large" onClick={() => handleDeleteGradeItem()}>
+                <CloseIcon />
+              </IconButton>
+            </>
+          )}
         </Box>
 
         {/* Child loop*/}
@@ -203,7 +211,11 @@ const ScoreTypeComponent: React.FC<Props> = ({
                     paddingLeft: "26px",
                   }}
                 ></Box>
-                <FormControl required={true} variant="filled" sx={{ mr: 3 }}>
+                <FormControl
+                  required={true}
+                  variant="filled"
+                  sx={{ mr: 3, mb: !isEditTable ? 2 : 0 }}
+                >
                   <InputLabel htmlFor="component-filled">
                     Danh mục điểm
                   </InputLabel>
@@ -216,9 +228,14 @@ const ScoreTypeComponent: React.FC<Props> = ({
                         required: true,
                       }
                     )}
+                    readOnly={!isEditTable}
                   />
                 </FormControl>
-                <FormControl required variant="filled" sx={{ mr: 1 }}>
+                <FormControl
+                  required
+                  variant="filled"
+                  sx={{ mr: 1, mb: !isEditTable ? 2 : 0 }}
+                >
                   <InputLabel htmlFor="component-filled">Tỉ lệ %</InputLabel>
                   <FilledInput
                     id="component-filled"
@@ -233,18 +250,21 @@ const ScoreTypeComponent: React.FC<Props> = ({
                         onChange: () => handleSubGradeChange(item),
                       }
                     )}
+                    readOnly={!isEditTable}
                   />
                 </FormControl>
 
-                <IconButton
-                  size="large"
-                  className={classes.closeIcon}
-                  onClick={() => {
-                    handleDeleteSubGradeItem(index, idx);
-                  }}
-                >
-                  <CloseIcon sx={{ pb: "22px" }} />
-                </IconButton>
+                {isEditTable && (
+                  <IconButton
+                    size="large"
+                    className={classes.closeIcon}
+                    onClick={() => {
+                      handleDeleteSubGradeItem(index, idx);
+                    }}
+                  >
+                    <CloseIcon sx={{ pb: "22px" }} />
+                  </IconButton>
+                )}
               </Box>
             ))}
         </Box>

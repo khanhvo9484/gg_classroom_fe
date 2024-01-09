@@ -6,9 +6,10 @@ import { ClassService } from "@/service/class.service";
 import { useParams } from "react-router-dom";
 import LoadingContext from "@/context/loading.contenxt";
 import { ColDef, ColGroupDef } from "ag-grid-community";
-import HeaderItemTableComponent from "./ui/header-item-table.component";
+import HeaderItemTableComponent from "./ui/grade-table/header-item-table.component";
 import SheetMenu from "@/components/sheet.menu.component";
 import { AgGridReact } from "ag-grid-react";
+import HeaderGroupTableComponent from "./ui/grade-table/header-group-table.component";
 
 function createGridHeaderConfig(
   data: any,
@@ -17,7 +18,7 @@ function createGridHeaderConfig(
   return data.map((item) => {
     const headerName = item.name;
     const children = item.gradeSubComponent.map((child) => ({
-      field: child.name,
+      field: child.name.replace(/\s+/g, "").toLowerCase(),
       headerComponent: HeaderItemTableComponent,
       headerComponentParams: {
         name: child.name,
@@ -55,6 +56,13 @@ function createGridHeaderConfig(
       headerClass: "my-css-class",
       marryChildren: true,
       children,
+      headerGroupComponent: HeaderGroupTableComponent,
+      headerGroupComponentParams: {
+        name: headerName,
+        idParent: item.id,
+        idChild: "",
+        updateBoard: updateBoard,
+      },
     };
   });
 }
@@ -64,6 +72,8 @@ function convertToRowDataWithStudentInfo(student) {
     studentOfficialId: student.studentOfficialId,
     fullName: student.fullName,
   };
+
+  console.log("row value temp: ", rowValues);
 
   function processComponent(component) {
     if (component.gradeSubComponent && component.gradeSubComponent.length > 0) {
@@ -83,7 +93,7 @@ function convertToRowDataWithStudentInfo(student) {
   student.grade.gradeComponent.forEach((component) =>
     processComponent(component)
   );
-
+  console.log("Row value: ", rowValues);
   return rowValues;
 }
 
@@ -129,28 +139,27 @@ const GradesPage = () => {
     startLoading();
     const getStudentGradeBoardByCourse = async () => {
       try {
-        const response = await classService.getStudentGradeBoardByCourseId(
+        const responseStudentGrade =
+          await classService.getStudentGradeBoardByCourseId(courseId);
+
+        const responseGradeStruc = await classService.getGradeStructureCourse(
           courseId
         );
         const columnMap = createGridHeaderConfig(
-          response.data[0].grade.gradeComponent,
+          responseGradeStruc.data.gradeComponent,
           updateBoard
         );
 
         console.log("column Map: ", columnMap);
 
-        setColDefs((prevColDefs) => [...prevColDefs, ...columnMap]);
-
-        console.log("response : ", response.data);
-        const rowValuesList = response.data.map((student) =>
+        console.log("response : ", responseStudentGrade.data);
+        const rowValuesList = responseStudentGrade.data.map((student) =>
           convertToRowDataWithStudentInfo(student)
         );
 
         setRowData(rowValuesList);
-
+        setColDefs((prevColDefs) => [...prevColDefs, ...columnMap]);
         console.log("row value: ", rowValuesList);
-
-        console.log("column Map: ", colDefs);
       } catch (error) {
         console.log(error);
       } finally {

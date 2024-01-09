@@ -1,12 +1,12 @@
-import { Box, IconButton, Typography, styled } from "@mui/material";
+import { Box, IconButton, Menu, Typography, styled } from "@mui/material";
 import { IHeaderParams } from "ag-grid-community";
-import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { MouseEvent, useState } from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useParams } from "react-router-dom";
 import { GradeFileService } from "@/service/grade.file.service";
 import toast from "react-hot-toast";
+import { ClassService } from "@/service/class.service";
 
 interface Props extends IHeaderParams {
   name: string;
@@ -16,7 +16,7 @@ interface Props extends IHeaderParams {
   updateBoard: (data: any) => void;
 }
 
-const options = ["Tải bảng điểm mẫu", "Upload điểm"];
+const options = ["Công bố điểm", "Tải bảng điểm mẫu", "Upload điểm"];
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -34,11 +34,14 @@ const HeaderItemTableComponent: React.FC<Props> = ({
   name,
   idParent,
   updateBoard,
+  idChild,
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isShowMoreButton, setIsShowMoreButton] = useState<boolean>(false);
-  // const [selectedIndex, setSelectedIndex] = useState(null);
   const gradeFileService = new GradeFileService();
+  const classService = new ClassService();
+
+  console.log("parent: ", idParent, idChild);
 
   const { courseId } = useParams();
 
@@ -98,6 +101,21 @@ const HeaderItemTableComponent: React.FC<Props> = ({
     setIsShowMoreButton(false);
   };
 
+  const handleMarkFinalizeGrade = async () => {
+    try {
+      await classService.markFinalizeGrade({
+        courseId,
+        gradeComponentId: idParent,
+      });
+
+      toast.success("Công bố điểm thành công");
+    } catch (error) {
+      toast.error("Thất bại, đã có lỗi xảy ra!");
+    } finally {
+      handleClose();
+    }
+  };
+
   return (
     <>
       <Box
@@ -134,12 +152,18 @@ const HeaderItemTableComponent: React.FC<Props> = ({
             role: "listbox",
           }}
         >
-          <MenuItem key={0} onClick={(event) => handleMenuItemClick(event, 0)}>
-            {options[0]}
+          {idParent && !idChild && (
+            <MenuItem key={0} onClick={() => handleMarkFinalizeGrade()}>
+              {options[0]}
+            </MenuItem>
+          )}
+
+          <MenuItem key={1} onClick={(event) => handleMenuItemClick(event, 1)}>
+            {options[1]}
           </MenuItem>
 
           <MenuItem key={"Students Mapping Sheet"} component="label">
-            {options[1]}
+            {options[2]}
             <VisuallyHiddenInput
               type="file"
               onInputCapture={(event) => {

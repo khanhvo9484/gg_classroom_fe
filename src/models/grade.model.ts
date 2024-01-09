@@ -64,17 +64,6 @@ export interface IGradeItemComponent {
   gradeSubComponent?: IGradeItem[];
 }
 
-export interface IGradeStructure {
-  id?: string;
-  _id?: string;
-  courseId: string;
-  status?: string;
-  gradeComponent: IGradeItemComponent[];
-}
-
-export interface IGradeStructureResponse
-  extends IBaseResponse<IGradeStructure> {}
-
 export interface IGradeStructureUpdateRequest {
   courseId: string;
   gradeComponent: IGradeItemComponent[];
@@ -110,6 +99,7 @@ export interface IGradeStructure {
   _id?: string;
   courseId: string;
   status?: string;
+  isEditable?: boolean;
   gradeComponent: IGradeItemComponent[];
 }
 
@@ -139,4 +129,9 @@ export interface IUpdateStudentGradeRequest {
   gradeId: string;
   studentOfficialId: string;
   grade: number;
+}
+
+export interface IMarkFinallyGrade {
+  courseId: string;
+  gradeComponentId: string;
 }

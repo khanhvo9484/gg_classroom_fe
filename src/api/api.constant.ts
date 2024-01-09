@@ -38,6 +38,7 @@ export const API_UPDATE_STUDENT_GRADE = "/update-student-grade";
 export const API_GET_GRADE_STRUCTURE = "/get/{courseId}";
 
 export const API_GRADE_STRUCTURE = "/grade-structure";
+export const API_MARK_GRADE_FINAL = "/mark-grade-final";
 export const API_GET_GRADE_STRUTURE = "/get";
 export const API_UPDATE_GRADE_REWRITE = "/update-grade-rewrite";
 
