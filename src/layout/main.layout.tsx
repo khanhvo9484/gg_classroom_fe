@@ -7,7 +7,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import AvatarDropdown from "../components/avatar.dropdown.menu.component";
 import logo from "@/assets/icons/k3_logo.png";
@@ -132,7 +132,7 @@ function Header() {
   const [isOpenJoinCourseByCodeDialog, setIsOpenJoinCourseByCodeDialog] =
     useState(false);
   const [isOpenFadeInJoin, setIsOpenFadeInJoin] = useState(false);
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState("");
   const userProfile = useSelector(selectUser);
@@ -222,10 +222,13 @@ function Header() {
                   </IconButton>
                 </Box>
                 <Link
-                  href="/"
+                  // href="/"
                   sx={{
                     mr: 2,
                     display: { xs: "none", md: "flex" },
+                  }}
+                  onClick={() => {
+                    navigate("/");
                   }}
                 >
                   <img
@@ -241,7 +244,7 @@ function Header() {
                 </Link>
 
                 <Link
-                  href="/home"
+                  // href="/home"
                   underline="none"
                   sx={{
                     ml: 2,
@@ -257,6 +260,9 @@ function Header() {
                     variant="h6"
                     sx={{ fontWeight: 500 }}
                     component="div"
+                    onClick={() => {
+                      navigate("/home");
+                    }}
                   >
                     {"Lớp học"}
                   </Typography>

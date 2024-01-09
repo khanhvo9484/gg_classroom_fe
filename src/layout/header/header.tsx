@@ -9,8 +9,7 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import AdbIcon from "@mui/icons-material/Adb";
 import Link from "@mui/material/Link";
-import { useLocation } from "react-router-dom";
-import UserModel from "../../models/user.model";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import AvatarDropdown from "../../components/avatar.dropdown.menu.component";
 import logo from "@/assets/icons/k3_logo.png";
@@ -24,6 +23,7 @@ const pages = [{ title: "Lớp học của tôi", link: "/home" }];
 function Header() {
   const { isLoading } = useContext(LoadingContext);
   const userProfile = useSelector(selectUser);
+  const navigate = useNavigate();
 
   console.log(userProfile);
 
@@ -39,7 +39,10 @@ function Header() {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Link
-            href="/"
+            // href="/"
+            onClick={() => {
+              navigate("/");
+            }}
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -94,7 +97,9 @@ function Header() {
               <Button
                 key={page.title}
                 sx={{ my: 2, color: "black", display: "block" }}
-                href={page.link}
+                onClick={() => {
+                  navigate("/home");
+                }}
               >
                 {page.title}
               </Button>

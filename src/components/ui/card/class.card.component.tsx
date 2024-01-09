@@ -22,6 +22,7 @@ import ImageBackToSchool from "@/assets/images/img_backtoschool.jpg";
 import ImageLearnLang from "@/assets/images/img_learnlanguage.jpg";
 import ImageGrad from "@/assets/images/img_graduation.jpg";
 import AvatarHelper from "@/utils/avatar-helper/avatar.helper";
+import { useNavigate } from "react-router-dom";
 
 function stringToColor(string: string) {
   let hash = 0;
@@ -87,6 +88,12 @@ const ClassCard: React.FC<Props> = ({
   const [, setBgGradient] = useState(
     "linear-gradient(to right, #FFFFFF, #FFFFFF)"
   ); // Default background color
+  const navigate = useNavigate();
+
+  const handleNavigation = () => {
+    // Use the history.push method to navigate to the desired page
+    navigate(`/course/${course.id}`);
+  };
 
   function updateCourses() {
     console.log("Update courses success!");
@@ -111,14 +118,17 @@ const ClassCard: React.FC<Props> = ({
             height: 170,
           }}
         >
-          {course.courseOwner &&  (
-            <AvatarHelper user={course.courseOwner} sx={{
-              minWidth: 80,
-              minHeight: 80,
-              mt: -5,
-              ml: 29,
-              bgcolor: AvatarBgColor,
-            }}/>
+          {course.courseOwner && (
+            <AvatarHelper
+              user={course.courseOwner}
+              sx={{
+                minWidth: 80,
+                minHeight: 80,
+                mt: -5,
+                ml: 29,
+                bgcolor: AvatarBgColor,
+              }}
+            />
           )}
         </CardActionArea>
       );
@@ -193,10 +203,20 @@ const ClassCard: React.FC<Props> = ({
           )
         }
         title={
-          <Link href={`/course/${course.id}`} underline="none">
+          // <Link href={`/course/${course.id}`} underline="none">
+          <Typography
+            variant="h6"
+            component="div"
+            color="info.light"
+            sx={{
+              ":hover": {
+                textDecoration: "underline",
+              },
+            }}
+            onClick={handleNavigation}
+          >
+            {course.name}
             <Typography
-              variant="h6"
-              component="div"
               color="info.light"
               sx={{
                 ":hover": {
@@ -204,19 +224,10 @@ const ClassCard: React.FC<Props> = ({
                 },
               }}
             >
-              {course.name}
-              <Typography
-                color="info.light"
-                sx={{
-                  ":hover": {
-                    textDecoration: "underline",
-                  },
-                }}
-              >
-                {course.description}
-              </Typography>
+              {course.description}
             </Typography>
-          </Link>
+          </Typography>
+          // </Link>
         }
         subheader={
           <Link href="#" underline="none">

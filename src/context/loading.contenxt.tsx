@@ -11,7 +11,7 @@ const LoadingContext = createContext<LoadingContextProps>(
   {} as LoadingContextProps
 );
 export const LoadingProvider = ({ children }) => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const startLoading = () => {
     setIsLoading(true);
   };
