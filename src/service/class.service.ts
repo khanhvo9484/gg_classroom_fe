@@ -76,25 +76,25 @@ export class ClassService {
     return response;
   }
 
-  async archivedCourseById(courseId: string): Promise<ICourseRespone>{
-    const { data: response }  = await customAxios.post(
+  async archivedCourseById(courseId: string): Promise<ICourseRespone> {
+    const { data: response } = await customAxios.post(
       `${API_COURSES}/delete-course/${courseId}`
     );
 
     return response;
   }
 
-  async reviveCourse(course: ICourse): Promise<ICourseRespone>{
+  async reviveCourse(course: ICourse): Promise<ICourseRespone> {
     const payload = {
       description: course.description,
       name: course.name,
       isDeleted: false,
       id: course.id,
     };
-      const {data: response} = await customAxios.put(
-          "/courses/update-course",
-          payload
-      );
+    const { data: response } = await customAxios.put(
+      "/courses/update-course",
+      payload
+    );
 
     return response;
   }
@@ -199,10 +199,11 @@ export class ClassService {
 
   async markFinalizeGrade(
     markFinallizeGrade: IMarkFinallyGrade
-  ): Promise<IBaseResponse<IStudentGrade>> {
-    const { data: response } = await customAxios.put<
-      IBaseResponse<IStudentGrade>
-    >(`${API_GRADE_STRUCTURE}${API_MARK_GRADE_FINAL}`, markFinallizeGrade);
+  ): Promise<IGradeStructureResponse> {
+    const { data: response } = await customAxios.put<IGradeStructureResponse>(
+      `${API_GRADE_STRUCTURE}${API_MARK_GRADE_FINAL}`,
+      markFinallizeGrade
+    );
 
     return response;
   }

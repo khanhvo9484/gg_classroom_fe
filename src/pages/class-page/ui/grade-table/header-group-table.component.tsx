@@ -7,13 +7,16 @@ import { GradeFileService } from "@/service/grade.file.service";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { ClassService } from "@/service/class.service";
+import { IGradeStructureResponse } from "@/models/grade.model";
 
 interface Props extends IHeaderGroupParams {
   name: string;
   idParent: string;
   idChild: string;
+  percentage: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   updateBoard: (data: any) => void;
+  handleMakeFinallize: (gradesStruct: IGradeStructureResponse) => void;
 }
 const options = ["Công bố điểm", "Tải bảng điểm mẫu", "Upload điểm"];
 
@@ -34,6 +37,8 @@ const HeaderGroupTableComponent: React.FC<Props> = ({
   idParent,
   idChild,
   updateBoard,
+  handleMakeFinallize,
+  percentage,
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isShowMoreButton, setIsShowMoreButton] = useState<boolean>(false);
@@ -101,12 +106,13 @@ const HeaderGroupTableComponent: React.FC<Props> = ({
 
   const handleMarkFinalizeGrade = async () => {
     try {
-      await classService.markFinalizeGrade({
+      const response = await classService.markFinalizeGrade({
         courseId,
         gradeComponentId: idParent,
       });
 
       toast.success("Công bố điểm thành công");
+      handleMakeFinallize(response);
     } catch (error) {
       toast.error("Thất bại, đã có lỗi xảy ra!");
     } finally {
@@ -128,12 +134,14 @@ const HeaderGroupTableComponent: React.FC<Props> = ({
             alignItems: "center",
           }}
         >
-          <Typography sx={{ fontWeight: 500, flex: 0 }}>{name}</Typography>
+          <Typography sx={{ fontWeight: 500, flex: 0 }}>
+            {name} {`(${percentage}%)`}
+          </Typography>
           {isShowMoreButton && (
             <IconButton
               aria-label="settings"
               onClick={(event) => handleOpenMore(event)}
-              sx={{ position: "absolute", right: "120px" }}
+              sx={{ position: "absolute", right: "40px" }}
             >
               <MoreVertIcon />
             </IconButton>

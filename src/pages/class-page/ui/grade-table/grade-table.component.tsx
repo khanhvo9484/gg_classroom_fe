@@ -4,7 +4,12 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { useState, useMemo, useEffect } from "react";
 import { Box } from "@mui/material";
-import { CellValueChangedEvent, ColDef, ColGroupDef } from "ag-grid-community";
+import {
+  CellEditingStoppedEvent,
+  CellValueChangedEvent,
+  ColDef,
+  ColGroupDef,
+} from "ag-grid-community";
 import "./grade-table.css";
 import { ClassService } from "@/service/class.service";
 import { IUpdateStudentGradeRequest } from "@/models/grade.model";
@@ -26,11 +31,15 @@ const GradeTableComponent: React.FC<Props> = ({
   const classService = new ClassService();
   const [rowData, setRowData] = useState(rowGrade);
   const { courseId } = useParams();
-  const [colDefs] = useState<(ColDef | ColGroupDef)[]>(colGrid);
+  const [colDefs, setColDefs] = useState<(ColDef | ColGroupDef)[]>(colGrid);
 
   useEffect(() => {
     setRowData(rowGrade);
-  }, [rowGrade]);
+  }, [rowGrade, colGrid]);
+
+  useEffect(() => {
+    setColDefs(colGrid);
+  }, [colGrid]);
 
   const defaultColDef = useMemo(() => {
     return {
@@ -41,22 +50,26 @@ const GradeTableComponent: React.FC<Props> = ({
     };
   }, []);
 
-  const handleCellValueChange = async (event: CellValueChangedEvent) => {
+  const handleCellValueChange = async (event: CellEditingStoppedEvent) => {
     const idParent = event.colDef.headerComponentParams.idParent;
     const idChild = event.colDef.headerComponentParams.idChild;
-
+    const oldValue = event.oldValue;
     const request: IUpdateStudentGradeRequest = {
       courseId: courseId,
       gradeId: idParent && idChild ? idChild : idParent,
       grade: event.newValue,
       studentOfficialId: event.data.studentOfficialId,
     };
+    // const rowNode = gridRef.current!.api.getRowNode(event.node.id)!;
 
     try {
       await classService.updateStudentGrade(request);
+      // rowNode.setDataValue(event.column.getColId(), event.newValue);
 
       toast.success("Cập nhật điểm thành công");
     } catch (error) {
+      const rowNode = gridRef.current!.api.getRowNode(event.node.id)!;
+      rowNode.setDataValue(event.column.getColId(), oldValue);
       toast.error("Có lỗi xảy ra, cập nhật thất bại");
     }
   };
@@ -71,7 +84,7 @@ const GradeTableComponent: React.FC<Props> = ({
           suppressRowHoverHighlight={true}
           headerHeight={48}
           groupHeaderHeight={48}
-          onCellValueChanged={(event) => handleCellValueChange(event)}
+          onCellEditingStopped={(event) => handleCellValueChange(event)}
         />
       </Box>
     </Box>

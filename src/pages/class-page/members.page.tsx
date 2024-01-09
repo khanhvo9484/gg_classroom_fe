@@ -55,6 +55,7 @@ const MembersPage = () => {
   useEffect(() => {
     const getAllMemberInCourse = async (courseId: string) => {
       try {
+        // setIsLoading(true);
         startLoading();
         const response = await classService.getAllMemberInCourse(courseId);
 
@@ -66,6 +67,7 @@ const MembersPage = () => {
         console.log(error);
         throw error;
       } finally {
+        // setIsLoading(false);
         stopLoading();
       }
     };

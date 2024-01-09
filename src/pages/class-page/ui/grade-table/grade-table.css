@@ -20,4 +20,6 @@
 
 .my-css-class{
     justify-content: center;
+    background-color:  rgba(186, 255, 186, 0.27);
+    --ag-header-cell-hover-background-color: rgba(186, 255, 186, 0.27);
 }

@@ -7,13 +7,16 @@ import { useParams } from "react-router-dom";
 import { GradeFileService } from "@/service/grade.file.service";
 import toast from "react-hot-toast";
 import { ClassService } from "@/service/class.service";
+import { IGradeStructureResponse } from "@/models/grade.model";
 
 interface Props extends IHeaderParams {
   name: string;
   idParent: string;
   idChild: string;
+  percentage: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   updateBoard: (data: any) => void;
+  handleMakeFinallize: (gradesStruct: IGradeStructureResponse) => void;
 }
 
 const options = ["Công bố điểm", "Tải bảng điểm mẫu", "Upload điểm"];
@@ -35,6 +38,8 @@ const HeaderItemTableComponent: React.FC<Props> = ({
   idParent,
   updateBoard,
   idChild,
+  percentage,
+  handleMakeFinallize,
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isShowMoreButton, setIsShowMoreButton] = useState<boolean>(false);
@@ -103,10 +108,11 @@ const HeaderItemTableComponent: React.FC<Props> = ({
 
   const handleMarkFinalizeGrade = async () => {
     try {
-      await classService.markFinalizeGrade({
+      const response = await classService.markFinalizeGrade({
         courseId,
         gradeComponentId: idParent,
       });
+      handleMakeFinallize(response);
 
       toast.success("Công bố điểm thành công");
     } catch (error) {
@@ -130,7 +136,9 @@ const HeaderItemTableComponent: React.FC<Props> = ({
             justifyContent: "space-between",
           }}
         >
-          <Typography sx={{ fontWeight: 500 }}>{name}</Typography>
+          <Typography sx={{ fontWeight: 500 }}>
+            {name} {`(${percentage}%)`}
+          </Typography>
           {isShowMoreButton && (
             <IconButton
               aria-label="settings"
