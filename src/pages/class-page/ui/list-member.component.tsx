@@ -117,12 +117,11 @@ const MemberListComponent: React.FC<Props> = ({
       </Box>
       <List sx={{ width: "100%", bgcolor: "background.paper" }}>
         {members &&
-          members.map((member, index) => {
+          members.map((member,) => {
             return (
               <>
-                <ListItem key={index} alignItems="center">
+                <ListItem key={member.id} alignItems="center">
                   <ListItemAvatar sx={{ marginTop: 0, minWidth: 50 }}>
-
                     <AvatarHelper
                       sx={{}}
                       user={member}
@@ -140,15 +139,16 @@ const MemberListComponent: React.FC<Props> = ({
                   sx={{ marginTop: 1 }}
                   variant="fullWidth"
                   component="li"
+                  key={member.email}
                 />
               </>
             );
           })}
         {membersInvite &&
-          membersInvite.map((member, index) => {
+          membersInvite.map((member,) => {
             return (
               <>
-                <ListItem key={index} alignItems="center">
+                <ListItem key={member.id} alignItems="center">
                   <ListItemAvatar sx={{ marginTop: 0, minWidth: 50 }}>
                     <Avatar sx={{ width: 32, height: 32 }} />
                   </ListItemAvatar>
@@ -171,6 +171,7 @@ const MemberListComponent: React.FC<Props> = ({
                   sx={{ marginTop: 1 }}
                   variant="fullWidth"
                   component="li"
+                  key={member.inviteeEmail}
                 />
               </>
             );

@@ -133,7 +133,7 @@ export default function SheetMenu({ onExportCSV }) {
         <MenuItem
           key={"Students Mapping Template"}
           onClick={() => {
-            gradeFileService.getStudentGradeMappingIdTemplate();
+            gradeFileService.getStudentGradeMappingIdTemplate(courseId);
           }}
         >
           {"Tải mẫu bảng đăng ký MSSV"}

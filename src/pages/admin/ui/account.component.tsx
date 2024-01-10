@@ -80,7 +80,7 @@ const AccountComponent: React.FC<Props> = ({
                     </Grid>
                 </Grid>
             </ListItem>
-            <Divider/>
+            <Divider component={"li"}/>
         </>
     );
 };

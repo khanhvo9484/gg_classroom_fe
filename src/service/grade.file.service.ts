@@ -39,13 +39,13 @@ export class GradeFileService {
     return;
   }
 
-  async getStudentGradeMappingIdTemplate() {
+  async getStudentGradeMappingIdTemplate(courseId: string) {
     const access_token = localStorage.getItem("access_token");
 
     fetch(
       `${
         import.meta.env.VITE_API_URL
-      }${API_STUDENT_GRADE}${API_GET_STUDENT_MAPPING_ID_XLSX}`,
+      }${API_STUDENT_GRADE}${API_GET_STUDENT_MAPPING_ID_XLSX}/${courseId}`,
       {
         credentials: "same-origin",
         method: "get",
