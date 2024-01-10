@@ -6,9 +6,9 @@ import { selectUser } from "@/redux/auth.slice";
 const RequiredAdmin = () => {
     const user = useSelector(selectUser);
     if (
-        user.role !== "user"
+        user.role !== "admin"
     ) {
-        return <Navigate to={`/test`}></Navigate>;
+        return <Navigate to={`/home`}></Navigate>;
     }
 
     return <Outlet />;
