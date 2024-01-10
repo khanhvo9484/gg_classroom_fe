@@ -1,11 +1,13 @@
 import { deleteUser } from "../redux/auth.slice";
 import { useDispatch, useSelector } from "react-redux";
 import { customAxios } from "../api/custom-axios";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Box, CircularProgress } from "@mui/material";
 import socket from "@socket/socket";
 import { useState, useEffect } from "react";
+
 const SignOut = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const refreshToken = useSelector((state: any) => state.auth.refresh_token);
   const [isLoading, setIsLoading] = useState(true);
@@ -13,14 +15,21 @@ const SignOut = () => {
   socket.disconnect();
 
   useEffect(() => {
+    const abortController = new AbortController();
+    const { signal } = abortController;
     async function signOut() {
-      dispatch(deleteUser());
       await customAxios.post("/auth/refresh-token/sign-out", {
         refresh_token: refreshToken,
+        signal,
       });
+      dispatch(deleteUser());
       setIsLoading(false);
+      navigate("/", { replace: true, state: { from: "sign-out" } });
     }
     signOut();
+    return () => {
+      abortController.abort();
+    };
   }, []);
 
   return (
@@ -37,7 +46,6 @@ const SignOut = () => {
           <CircularProgress size={"3rem"} />
         </Box>
       )}
-      {!isLoading && <Navigate to="/" />}
     </>
   );
 };
