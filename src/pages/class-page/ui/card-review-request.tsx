@@ -89,6 +89,8 @@ const GradeReviewPost: React.FC<Props> = () => {
     const { isTeacher, } = useContext(RoleContext);
     const [commentData, setCommentData] = useState(commentsList);
 
+    console.log(commentData);
+
     const updateData = (newComment: Comment) => {
         setCommentData([...commentData, newComment]);
     }

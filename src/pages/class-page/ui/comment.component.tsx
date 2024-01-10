@@ -20,6 +20,7 @@ export interface CommentProps {
 const CommentComponent: React.FC<CommentProps> = ({
   comment
 }) => {
+  console.log(comment);
   return (
     <CardContent>
       <CardHeader

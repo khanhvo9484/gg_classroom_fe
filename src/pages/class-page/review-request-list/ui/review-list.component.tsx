@@ -9,8 +9,7 @@ import { useNavigate } from "react-router-dom";
 interface Props {
 }
 
-const ReviewRequestListComponent: React.FC<Props> = ({
-}) => {
+const ReviewRequestListComponent: React.FC<Props> = () => {
   const { courseId } = useParams();
 
   const navigate = useNavigate();
