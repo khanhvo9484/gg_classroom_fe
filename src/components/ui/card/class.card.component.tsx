@@ -222,6 +222,7 @@ const ClassCard: React.FC<Props> = ({
               sx={{
                 ":hover": {
                   textDecoration: "underline",
+                  cursor: "pointer",
                 },
                 cursor: "pointer",
               }}

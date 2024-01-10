@@ -2,7 +2,7 @@
 import { useContext, useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { Box, Stack } from "@mui/material";
+import { Box, LinearProgress, Stack } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { SortableContainer, SortableElement } from "react-sortable-hoc";
@@ -23,7 +23,6 @@ import {
 } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { ClassService } from "@/service/class.service";
-import LoadingContext from "@/context/loading.contenxt";
 import toast from "react-hot-toast";
 import RoleContext from "@/context/role.context";
 
@@ -136,7 +135,8 @@ const GradeStructurePage = () => {
   const { courseId } = useParams();
   const [isValidForm, setIsValidForm] = useState<boolean>(false);
   const [isValidPercent, setIsValidPercent] = useState<boolean>(false);
-  const { isLoading, stopLoading, startLoading } = useContext(LoadingContext);
+  const [isLoading, setIsLoading] = useState(true);
+
   const { isTeacher } = useContext(RoleContext);
 
   const {
@@ -161,7 +161,7 @@ const GradeStructurePage = () => {
   console.log("value form: ", getValues().grades);
   useEffect(() => {
     console.log("Call api");
-    startLoading();
+    setIsLoading(true);
     const getGradeStructure = async () => {
       try {
         const response = await classService.getGradeStructureCourse(courseId);
@@ -173,7 +173,7 @@ const GradeStructurePage = () => {
       } catch (error) {
         console.log(error);
       } finally {
-        stopLoading();
+        setIsLoading(false);
       }
     };
 
@@ -307,7 +307,7 @@ const GradeStructurePage = () => {
 
   const handleSave = async () => {
     if (isValidForm) {
-      startLoading();
+      setIsLoading(true);
 
       console.log("value: ", getValues());
       console.log("List: ", listScoreType);
@@ -324,7 +324,7 @@ const GradeStructurePage = () => {
         toast.success("Lưu cấu trúc điểm thành công");
 
         console.log("Response: ", response);
-        stopLoading();
+        setIsLoading(false);
         setIsValidForm(false);
       } catch (error) {
         console.log("Error");
@@ -396,6 +396,8 @@ const GradeStructurePage = () => {
 
   return (
     <>
+      {isLoading && <LinearProgress sx={{ top: -5 }} />}
+
       <Box
         sx={{
           display: "flex",

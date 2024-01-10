@@ -8,52 +8,54 @@ import Box from "@mui/material/Box";
 import { useSelector } from "react-redux";
 import { selectUser } from "@/redux/auth.slice";
 import GradeList from "@/pages/class-page/student-grade-page/ui/grade-list.component";
+import { IGradeStructure, IStudentGrade } from "@/models/grade.model";
 
 interface Props {
-
+  grade: IGradeStructure;
+  gradeStudent: IStudentGrade;
 }
 
-const GradePageBodyComponent: React.FC<Props> = () => {
-    const user = useSelector(selectUser);
+const GradePageBodyComponent: React.FC<Props> = ({ grade, gradeStudent }) => {
+  const user = useSelector(selectUser);
 
-    return (
-        <Box sx={{ marginTop: 4, marginBottom: 10 }}>
-            <Box
+  return (
+    <Box sx={{ marginTop: 4, marginBottom: 10 }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          borderBottom: "1px solid rgb(95,99,104)",
+          paddingBottom: 1,
+        }}
+      >
+        <List>
+          <ListItem key={1} alignItems="center">
+            <ListItemAvatar sx={{ marginTop: 0, minWidth: 50 }}>
+              <AvatarHelper
                 sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                borderBottom: "1px solid rgb(95,99,104)",
-                paddingBottom: 1,
+                  width: 64,
+                  height: 64,
                 }}
-            >
-                <List>
-                    <ListItem key={1} alignItems="center">
-                        <ListItemAvatar sx={{ marginTop: 0, minWidth: 50 }}>
-                            <AvatarHelper
-                            sx={{
-                                width: 64,
-                                height: 64,
-                            }}
-                            user={user}
-                            />
-                        </ListItemAvatar>
-                        <ListItemText
-                            primary={
-                                <Typography
-                                    variant="h4"
-                                    sx={{ marginLeft: 2, color: "rgb(25,103,210)" }}
-                                >
-                                    {user.name}
-                                </Typography>
-                            }
-                        />
-                    </ListItem>
-                </List>
-            </Box>
-            <GradeList/>
-        </Box>
-    );
+                user={user}
+              />
+            </ListItemAvatar>
+            <ListItemText
+              primary={
+                <Typography
+                  variant="h4"
+                  sx={{ marginLeft: 2, color: "rgb(25,103,210)" }}
+                >
+                  {user.name}
+                </Typography>
+              }
+            />
+          </ListItem>
+        </List>
+      </Box>
+      <GradeList grade={grade} gradeStudent={gradeStudent} />
+    </Box>
+  );
 };
 
 export default GradePageBodyComponent;

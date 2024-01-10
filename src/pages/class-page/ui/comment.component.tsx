@@ -8,27 +8,21 @@ import Box from "@mui/material/Box";
 import React from "react";
 
 export interface Comment {
-  account: UserModel,
-  comment: string,
-  createdTime: string,
+  account: UserModel;
+  comment: string;
+  createdTime: string;
 }
 
 export interface CommentProps {
-  comment: Comment
+  comment: Comment;
 }
 
-const CommentComponent: React.FC<CommentProps> = ({
-  comment
-}) => {
-  console.log(comment);
+const CommentComponent: React.FC<CommentProps> = ({ comment }) => {
   return (
     <CardContent>
       <CardHeader
         sx={{}}
-        avatar={
-          <AvatarHelper
-            sx={{}}  user={comment.account}/>
-        }
+        avatar={<AvatarHelper sx={{}} user={comment?.account} />}
         action={
           <IconButton aria-label="settings">
             <MoreVertIcon />
@@ -38,14 +32,14 @@ const CommentComponent: React.FC<CommentProps> = ({
           <Box sx={{ display: "flex", gap: 1 }}>
             {" "}
             <Typography variant="body2" sx={{ fontWeight: 500 }}>
-              {comment.account.name}
+              {comment?.account.name}
             </Typography>
-            <Typography variant="body2">{comment.createdTime}</Typography>
+            <Typography variant="body2">{comment?.createdTime}</Typography>
           </Box>
         }
         subheader={
           <Typography mt={0.5} variant="body2">
-            {comment.comment}
+            {comment?.comment}
           </Typography>
         }
       />

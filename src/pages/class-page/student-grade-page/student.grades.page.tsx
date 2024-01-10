@@ -1,39 +1,69 @@
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import GradePageBodyComponent from "./ui/grade-page-body.component";
-import { useContext, useEffect, useState } from "react";
-import LoadingContext from "@/context/loading.contenxt";
-import { ClassService } from "@/service/class.service";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import RoleContext from "@/context/role.context";
+import { useSelector } from "react-redux";
+import { selectUser } from "@/redux/auth.slice";
+import { IGradeStructure, IStudentGrade } from "@/models/grade.model";
+import { GradeService } from "@/service/grade.service";
+import { LinearProgress } from "@mui/material";
 
 const StudentViewGradePage = () => {
-  const classService = new ClassService();
+  const gradeService = new GradeService();
   const { courseId } = useParams();
-  const { startLoading, stopLoading } = useContext(LoadingContext);
-  const { isTeacher } = useContext(RoleContext);
+  const user = useSelector(selectUser);
+
+  const [gradeStudent, setGradeStudent] = useState<IStudentGrade>();
+  const [grade, setGrade] = useState<IGradeStructure>();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    
-  }, []);
+    const getGradeMemberById = async () => {
+      try {
+        setIsLoading(true);
+        const response = await gradeService.getGradeByStudentId(
+          user.studentOfficialId!,
+          courseId
+        );
 
-  if (isTeacher){
-    return (<></>)
-  } else {
-    return (
-      <Box sx={{ marginY: "2rem", minHeight: "600px" }}>
-        <Container
+        setGradeStudent(response.data);
+        setGrade(response.data.grade);
+
+        console.log("RESPOSEN grade student: ", response.data);
+        console.log("RESPOSEN grade : ", response.data.grade);
+      } catch (error) {
+        console.log(error);
+        throw error;
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (courseId) {
+      getGradeMemberById();
+    }
+  }, [courseId]);
+
+  return (
+    <>
+      {isLoading && <LinearProgress sx={{ top: -5 }} />}
+
+      {!isLoading && (
+        <Box sx={{ marginY: "2rem", minHeight: "600px" }}>
+          <Container
             maxWidth={false}
             sx={{
-            //   height: "500px",
-            maxWidth: "808px",
+              //   height: "500px",
+              maxWidth: "808px",
             }}
-        >
-            <GradePageBodyComponent/>
-        </Container>
-      </Box>
-    )
-  }
+          >
+            <GradePageBodyComponent grade={grade} gradeStudent={gradeStudent} />
+          </Container>
+        </Box>
+      )}
+    </>
+  );
 };
 
 export default StudentViewGradePage;

@@ -251,9 +251,8 @@ function Header() {
                     mr: 2,
                     mb: 0,
                     ":hover": {
-                      color: "#767bbe",
-                      backgroundColor: "#dad9d979",
-                      borderRadius: "5px",
+                      color: "#19aa77",
+                      cursor: "pointer",
                     },
                     color: "text.primary",
                   }}

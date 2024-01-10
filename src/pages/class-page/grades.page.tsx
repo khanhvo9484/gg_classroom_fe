@@ -1,5 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Box, Button, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  LinearProgress,
+  TextField,
+  Typography,
+} from "@mui/material";
 import GradeTableComponent from "./ui/grade-table/grade-table.component";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ClassService } from "@/service/class.service";
@@ -222,6 +228,8 @@ const GradesPage = () => {
 
   return (
     <>
+      {isLoading && <LinearProgress sx={{ top: -5 }} />}
+
       <Box sx={{ mt: 2, mb: 2 }}>
         {colDefs.length > 2 && rowData && !isLoading && (
           <>

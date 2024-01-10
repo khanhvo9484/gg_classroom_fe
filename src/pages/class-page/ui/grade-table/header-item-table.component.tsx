@@ -62,9 +62,9 @@ const HeaderItemTableComponent: React.FC<Props> = ({
 
     if (index === 0) {
       // Tải bảng điểm mẫu
-      downloadTemplate();
     } else if (index === 1) {
       // Upload diiem
+      downloadTemplate();
     }
   };
 

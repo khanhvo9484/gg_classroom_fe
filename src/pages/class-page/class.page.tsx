@@ -53,12 +53,13 @@ const ClassPage = () => {
   });
 
   useEffect(() => {
-    const abortController = new AbortController();
-    const { signal } = abortController;
+    // const abortController = new AbortController();
+    // const { signal } = abortController;
+    // signal
     startLoading();
     const getCourseById = async (courseId: string) => {
       try {
-        const response = await classService.getCourseById(courseId, signal);
+        const response = await classService.getCourseById(courseId);
         const role = response.data.roleInCourse;
 
         if (role === "teacher") {
@@ -75,11 +76,11 @@ const ClassPage = () => {
       getCourseById(courseId);
     }
     stopLoading();
-    return () => {
-      // Cleanup function to handle component unmount
-      abortController.abort();
-      // Additional cleanup logic if needed
-    };
+    // return () => {
+    //   // Cleanup function to handle component unmount
+    //   abortController.abort();
+    //   // Additional cleanup logic if needed
+    // };
   }, [stateCourse]);
 
   const getPartAfterCourseId = () => {

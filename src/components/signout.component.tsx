@@ -15,17 +15,20 @@ const SignOut = () => {
   socket.disconnect();
 
   useEffect(() => {
-    const abortController = new AbortController();
+    // const abortController = new AbortController();
     // const { signal } = abortController;
     async function signOut() {
+      await customAxios.post("/auth/refresh-token/sign-out", {
+        // signal,
+      });
       dispatch(deleteUser());
       setIsLoading(false);
       navigate("/", { replace: true, state: { from: "sign-out" } });
     }
     signOut();
-    return () => {
-      abortController.abort();
-    };
+    // return () => {
+    //   abortController.abort();
+    // };
   }, []);
 
   return (

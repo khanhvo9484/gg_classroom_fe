@@ -1,17 +1,17 @@
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import MemberListComponent from "./ui/list-member.component";
-import { useContext, useEffect, useState } from "react";
-import LoadingContext from "@/context/loading.contenxt";
+import { useEffect, useState } from "react";
 import { ClassService } from "@/service/class.service";
 import { useParams } from "react-router-dom";
 import UserModel from "@/models/user.model";
 import { IInvitationCourse } from "@/models/class.model";
+import LinearProgress from "@mui/material/LinearProgress";
 
 const MembersPage = () => {
   const classService = new ClassService();
   const { courseId } = useParams();
-  const { isLoading, startLoading, stopLoading } = useContext(LoadingContext);
+  const [isLoading, setIsLoading] = useState(true);
   const [students, setListStudent] = useState<UserModel[]>();
   const [teachers, setListTeacher] = useState<UserModel[]>();
 
@@ -55,8 +55,8 @@ const MembersPage = () => {
   useEffect(() => {
     const getAllMemberInCourse = async (courseId: string) => {
       try {
-        // setIsLoading(true);
-        startLoading();
+        setIsLoading(true);
+        // startLoading();
         const response = await classService.getAllMemberInCourse(courseId);
 
         setListTeacher(response.data.memberList.teachers);
@@ -67,8 +67,8 @@ const MembersPage = () => {
         console.log(error);
         throw error;
       } finally {
-        // setIsLoading(false);
-        stopLoading();
+        setIsLoading(false);
+        // stopLoading();
       }
     };
 
@@ -78,34 +78,37 @@ const MembersPage = () => {
   }, []);
 
   return (
-    <Box sx={{ marginY: "2rem", minHeight: "600px" }}>
-      {!isLoading && teachers && students && (
-        <Container
-          maxWidth={false}
-          sx={{
-            //   height: "500px",
-            maxWidth: "808px",
-          }}
-        >
-          <MemberListComponent
-            members={teachers}
-            membersInvite={teachersInvite}
-            handleAddMemberInvite={handleAddMemberInvite}
-            key={1}
-            isTeacherList={true}
-            title="Giáo viên"
-          />
-          <MemberListComponent
-            members={students}
-            membersInvite={studentsInvite}
-            handleAddMemberInvite={handleAddMemberInvite}
-            key={2}
-            isTeacherList={false}
-            title="Sinh viên"
-          />
-        </Container>
-      )}
-    </Box>
+    <>
+      {isLoading && <LinearProgress sx={{ top: -5 }} />}
+      <Box sx={{ marginY: "2rem", minHeight: "600px" }}>
+        {!isLoading && (
+          <Container
+            maxWidth={false}
+            sx={{
+              //   height: "500px",
+              maxWidth: "808px",
+            }}
+          >
+            <MemberListComponent
+              members={teachers}
+              membersInvite={teachersInvite}
+              handleAddMemberInvite={handleAddMemberInvite}
+              key={1}
+              isTeacherList={true}
+              title="Giáo viên"
+            />
+            <MemberListComponent
+              members={students}
+              membersInvite={studentsInvite}
+              handleAddMemberInvite={handleAddMemberInvite}
+              key={2}
+              isTeacherList={false}
+              title="Sinh viên"
+            />
+          </Container>
+        )}
+      </Box>
+    </>
   );
 };
 

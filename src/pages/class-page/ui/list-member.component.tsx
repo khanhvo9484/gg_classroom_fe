@@ -21,7 +21,7 @@ import { ClassService } from "@/service/class.service";
 import { useParams } from "react-router-dom";
 import RoleContext from "@/context/role.context";
 import UserModel from "@/models/user.model";
-
+import toast from "react-hot-toast";
 interface Props {
   title: string;
   isTeacherList: boolean;
@@ -70,11 +70,12 @@ const MemberListComponent: React.FC<Props> = ({
         invitationRequest
       );
 
-      setLoadingInvitation(false);
-      handleCloseModalInvite();
       handleAddMemberInvite(response.data, isTeacherList);
     } catch (error) {
-      console.log(error);
+      toast.error("Đã có lỗi trong quá trình gởi lời mời tham gia.");
+    } finally {
+      setLoadingInvitation(false);
+      handleCloseModalInvite();
     }
   };
 
@@ -117,15 +118,12 @@ const MemberListComponent: React.FC<Props> = ({
       </Box>
       <List sx={{ width: "100%", bgcolor: "background.paper" }}>
         {members &&
-          members.map((member,) => {
+          members.map((member) => {
             return (
               <>
                 <ListItem key={member.id} alignItems="center">
                   <ListItemAvatar sx={{ marginTop: 0, minWidth: 50 }}>
-                    <AvatarHelper
-                      sx={{}}
-                      user={member}
-                    />
+                    <AvatarHelper sx={{}} user={member} />
                   </ListItemAvatar>
                   <ListItemText
                     primary={
@@ -145,7 +143,7 @@ const MemberListComponent: React.FC<Props> = ({
             );
           })}
         {membersInvite &&
-          membersInvite.map((member,) => {
+          membersInvite.map((member) => {
             return (
               <>
                 <ListItem key={member.id} alignItems="center">
