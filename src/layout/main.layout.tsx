@@ -251,20 +251,27 @@ function Header() {
                     mr: 2,
                     mb: 0,
                     ":hover": {
-                      color: "#19aa77",
+                      color: "#767bbe",
+                      backgroundColor: "#dad9d979",
+                      borderRadius: "5px",
                     },
                     color: "text.primary",
                   }}
                 >
                   <Typography
-                    variant="h6"
-                    sx={{ fontWeight: 500 }}
+                    variant="body1"
+                    sx={{
+                      fontWeight: 500,
+                      cursor: "pointer",
+
+                      padding: "5px 10px",
+                    }}
                     component="div"
                     onClick={() => {
                       navigate("/home");
                     }}
                   >
-                    {"Lớp học"}
+                    {"LỚP HỌC"}
                   </Typography>
                 </Link>
 

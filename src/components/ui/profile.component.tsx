@@ -31,9 +31,7 @@ const ProfileComponent: React.FC<Props> = ({ member, openEditForm }) => {
                 alignItems: "center",
               }}
             >
-              <AvatarHelper
-                user={member} sx={{}}
-              />
+              <AvatarHelper user={member} sx={{}} />
               <Typography
                 gutterBottom
                 variant="h5"
@@ -89,10 +87,24 @@ const ProfileComponent: React.FC<Props> = ({ member, openEditForm }) => {
                   <Typography gutterBottom>{member.phone_number}</Typography>
                 </Grid>
                 <Grid xs={4}>
-                  <Typography gutterBottom sx={{ fontWeight: 550 }}>
+                  <Typography
+                    gutterBottom
+                    sx={{
+                      fontWeight: 550,
+                    }}
+                  >
                     Email
                   </Typography>
-                  <Typography>{member.email}</Typography>
+                  <Typography
+                    sx={{
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      maxWidth: "100%", // Ensures it takes 100% of the container width
+                    }}
+                  >
+                    {member.email}
+                  </Typography>
                 </Grid>
                 <Grid xs={4}>
                   <Typography gutterBottom sx={{ fontWeight: 550 }}>
@@ -102,9 +114,11 @@ const ProfileComponent: React.FC<Props> = ({ member, openEditForm }) => {
                 </Grid>
                 <Grid xs={4}>
                   <Typography gutterBottom sx={{ fontWeight: 550 }}>
-                    Vai trò
+                    MSSV
                   </Typography>
-                  <Typography gutterBottom>{member.role}</Typography>
+                  <Typography gutterBottom>
+                    {member.studentOfficialId || "Chưa có MSSV"}
+                  </Typography>
                 </Grid>
                 <Grid xs={4}>
                   <Typography gutterBottom sx={{ fontWeight: 550 }}>

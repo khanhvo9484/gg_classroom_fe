@@ -211,6 +211,7 @@ const ClassCard: React.FC<Props> = ({
             sx={{
               ":hover": {
                 textDecoration: "underline",
+                cursor: "pointer",
               },
             }}
             onClick={handleNavigation}
@@ -222,6 +223,7 @@ const ClassCard: React.FC<Props> = ({
                 ":hover": {
                   textDecoration: "underline",
                 },
+                cursor: "pointer",
               }}
             >
               {course.description}

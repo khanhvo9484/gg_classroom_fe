@@ -227,6 +227,19 @@ const EditProfileForm: React.FC<Props> = ({
                       )}
                     />
                   </Grid>
+                  <Grid xs={6}>
+                    <Typography gutterBottom sx={{ fontWeight: 550 }}>
+                      MSSV
+                    </Typography>
+                    <TextField
+                      sx={{ width: "100%" }}
+                      size="small"
+                      id="outlined-basic"
+                      variant="outlined"
+                      defaultValue={userEdit.phone_number}
+                      {...register("phoneNumber")}
+                    />
+                  </Grid>
                   <Grid xs={12}>
                     <Typography gutterBottom sx={{ fontWeight: 550 }}>
                       Mô tả

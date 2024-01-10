@@ -19,7 +19,7 @@ const ProfilePage = () => {
   const [user, setUser] = useState<UserModel>();
 
   const userProfile = useSelector(selectUser);
-
+  document.title = "Trang cá nhân";
   useEffect(() => {
     setLoading(true);
     const getUserById = async () => {
