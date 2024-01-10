@@ -11,6 +11,8 @@ import { useParams } from "react-router-dom";
 import SendIcon from '@mui/icons-material/Send';
 import UserModel from "@/models/user.model";
 import AvatarHelper from "@/utils/avatar-helper/avatar.helper";
+import { useSelector } from "react-redux";
+import { selectUser } from "@/redux/auth.slice";
 
 const easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {
@@ -24,16 +26,20 @@ const animate = {
 };
 
 export interface CommentProps {
-    account: UserModel
+    updateData: (newComment) => void
+}
+
+export interface Comment {
+    account: UserModel,
+    comment: string,
+    createdTime: string,
 }
 
 const CommentInputComponent: React.FC<CommentProps> = ({
-    account
+    updateData,
 }) => {
 
-    // const { courseId } = useParams();
-
-    // const navigate = useNavigate();
+    const userProfile = useSelector(selectUser);
 
     const CommentSchema = Yup.object().shape({
         comment: Yup.string().required("Bạn cần nhập câu trả lời của bạn!")
@@ -49,6 +55,12 @@ const CommentInputComponent: React.FC<CommentProps> = ({
             const payload = {
                 comment: values.comment
             };
+            const newComment: Comment = {
+                comment: values.comment,
+                account: userProfile,
+                createdTime: (new Date()).toDateString()
+            }
+            updateData(newComment);
             const response = true;
             if (response) {
                 toast.success("Trả lời thành công.");
@@ -89,7 +101,7 @@ const CommentInputComponent: React.FC<CommentProps> = ({
                             <Stack direction="row">
                                 <AvatarHelper
                                     sx={{ width: 32, height: 32 , mr: 4, ml:2}}
-                                    user={account}
+                                    user={userProfile}
                                 />
                                 <TextField
                                     fullWidth

@@ -7,12 +7,18 @@ import { Divider, Typography, CardContent } from "@mui/material";
 import Box from "@mui/material/Box";
 import React from "react";
 
+export interface Comment {
+  account: UserModel,
+  comment: string,
+  createdTime: string,
+}
+
 export interface CommentProps {
-  account: UserModel
+  comment: Comment
 }
 
 const CommentComponent: React.FC<CommentProps> = ({
-  account
+  comment
 }) => {
   return (
     <CardContent>
@@ -20,7 +26,7 @@ const CommentComponent: React.FC<CommentProps> = ({
         sx={{}}
         avatar={
           <AvatarHelper
-            sx={{}}  user={account}/>
+            sx={{}}  user={comment.account}/>
         }
         action={
           <IconButton aria-label="settings">
@@ -31,14 +37,14 @@ const CommentComponent: React.FC<CommentProps> = ({
           <Box sx={{ display: "flex", gap: 1 }}>
             {" "}
             <Typography variant="body2" sx={{ fontWeight: 500 }}>
-              Khầy Khan
+              {comment.account.name}
             </Typography>
-            <Typography variant="body2">2:01</Typography>
+            <Typography variant="body2">{comment.createdTime}</Typography>
           </Box>
         }
         subheader={
           <Typography mt={0.5} variant="body2">
-            Bài giảng hay lắm thầy ơi
+            {comment.comment}
           </Typography>
         }
       />

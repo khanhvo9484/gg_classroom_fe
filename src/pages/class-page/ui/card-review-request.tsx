@@ -9,22 +9,95 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Typography from "@mui/material/Typography";
 import CommentComponent from "./comment.component";
 import { Button, Divider, Grid } from "@mui/material";
-import { useParams } from "react-router-dom";
-import { useContext } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useContext, useState } from "react";
 import RoleContext from "@/context/role.context";
 import CommentInputComponent from "./comment-input.component";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-interface Props {
-    account: UserModel
+export interface Comment {
+    account: UserModel,
+    comment: string,
+    createdTime: string
 }
 
-const GradeReviewPost: React.FC<Props> = ({
-    account
-}) => {
+const commentsList: Comment[] = [
+    {
+      account: {
+        "id": "USA8FONM4c",
+        "name": "Khoa Khang Khanh",
+        "email": "khoa@gmail.com",
+        "role": "admin",
+        "avatar": null,
+        "bio": null,
+        "phone_number": null,
+        "dob": "2002-04-02T00:00:00.000Z",
+        "studentOfficialId": null,
+        "isBlocked": false,
+        "isSuspended": false,
+        "accountType": "local"
+      },
+      comment: "Thầy ơi phúc khảo nhẹ tay.",
+      createdTime: "2:01",
+    },
+    {
+      account: {
+        "id": "USA8FONM4c",
+        "name": "Khoa Khang Khanh",
+        "email": "khoa@gmail.com",
+        "role": "admin",
+        "avatar": null,
+        "bio": null,
+        "phone_number": null,
+        "dob": "2002-04-02T00:00:00.000Z",
+        "studentOfficialId": null,
+        "isBlocked": false,
+        "isSuspended": false,
+        "accountType": "local"
+      },
+      comment: "Thầy ơi phúc khảo nhẹ tay.",
+      createdTime: "2:01",
+    },
+    {
+      account: {
+        "id": "USA8FONM4c",
+        "name": "Khoa Khang Khanh",
+        "email": "khoa@gmail.com",
+        "role": "admin",
+        "avatar": null,
+        "bio": null,
+        "phone_number": null,
+        "dob": "2002-04-02T00:00:00.000Z",
+        "studentOfficialId": null,
+        "isBlocked": false,
+        "isSuspended": false,
+        "accountType": "local"
+      },
+      comment: "Thầy ơi phúc khảo nhẹ tay.",
+      createdTime: "2:01",
+    },
+]
+
+interface Props {
+}
+
+const GradeReviewPost: React.FC<Props> = () => {
     const {courseId} = useParams();
     const {reviewId} = useParams();
+    const navigate = useNavigate();
 
     const { isTeacher, } = useContext(RoleContext);
+    const [commentData, setCommentData] = useState(commentsList);
+
+    const updateData = (newComment: Comment) => {
+        setCommentData([...commentData, newComment]);
+    }
+
+    const handleBackClick = () => {
+        navigate(`/course/${courseId}/grade-review`, { replace: true });
+    }
+
+    const account = commentsList[0].account;
 
     console.log(courseId);
     console.log(reviewId);
@@ -51,6 +124,11 @@ const GradeReviewPost: React.FC<Props> = ({
                                 Sửa điểm
                             </Button>
                         )}
+
+                        <IconButton aria-label="settings">
+                            <ArrowBackIcon onClick={handleBackClick}/>
+                        </IconButton>
+
                         <IconButton aria-label="settings">
                             <MoreVertIcon />
                         </IconButton>
@@ -137,9 +215,12 @@ const GradeReviewPost: React.FC<Props> = ({
                     </Grid>
                 </Grid>
             </CardContent>
-            <CommentComponent />
-            <CommentComponent />
-            <CommentInputComponent />
+            {commentData && commentData.map((comment,) => {
+                return (
+                    <CommentComponent comment={comment}/>
+                )
+            })}
+            <CommentInputComponent updateData={updateData}/>
             <CardActions disableSpacing></CardActions>
         </Card>
     );

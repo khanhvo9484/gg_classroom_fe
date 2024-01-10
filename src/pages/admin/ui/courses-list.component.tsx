@@ -1,7 +1,7 @@
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { Grid, Pagination, Stack } from "@mui/material";
+import { Grid, Pagination, Stack, TextField } from "@mui/material";
 import useAllCourses from "@/hooks/all-courses.hook";
 import CourseComponent from "./course.component";
 import { ChangeEvent, useState } from "react";
@@ -22,6 +22,17 @@ const CourseListComponent: React.FC<Props> = () => {
 
     return (
         <Box sx={{ marginTop: 4, marginBottom: 10 }}>
+            <Box
+                sx={{ display: "flex", alignItems: "center", gap: 3 }}
+            >
+                <TextField
+                id="filter-text-box"
+                label="Tìm kiếm"
+                type="search"
+                onInput={() => console.log("abc")}
+                sx={{ width: "400px" }}
+                />
+            </Box>
             <Box
                 sx={{
                 display: "flex",

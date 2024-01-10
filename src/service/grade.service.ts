@@ -58,7 +58,7 @@ const mockData = {
 export class GradeService {
     async getGrade(courseId_studentOfficialId_String): Promise<IGradeResponse> {
         const { data: response } = await customAxios.get<IGradeResponse>(
-            `${API_STUDENT_GRADE}/${courseId_studentOfficialId_String}/`
+            `${API_STUDENT_GRADE}${API_STUDENT_GRADE}/${courseId_studentOfficialId_String}/`
         );
         console.log(courseId_studentOfficialId_String);
 

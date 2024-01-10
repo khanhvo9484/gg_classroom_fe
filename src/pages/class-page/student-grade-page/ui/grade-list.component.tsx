@@ -50,6 +50,8 @@ const GradeList: React.FC<Props> = () => {
         setIsGradeReviewRequestDialogOpen(true);
     };
 
+    console.log(user);
+
     if (user?.studentOfficialId){
         return (
             <>

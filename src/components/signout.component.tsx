@@ -9,19 +9,15 @@ import { useState, useEffect } from "react";
 const SignOut = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const refreshToken = useSelector((state: any) => state.auth.refresh_token);
+  // const refreshToken = useSelector((state: any) => state.auth.refresh_token);
   const [isLoading, setIsLoading] = useState(true);
   // 🙄 disconnect socket
   socket.disconnect();
 
   useEffect(() => {
     const abortController = new AbortController();
-    const { signal } = abortController;
+    // const { signal } = abortController;
     async function signOut() {
-      await customAxios.post("/auth/refresh-token/sign-out", {
-        refresh_token: refreshToken,
-        signal,
-      });
       dispatch(deleteUser());
       setIsLoading(false);
       navigate("/", { replace: true, state: { from: "sign-out" } });
