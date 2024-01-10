@@ -23,6 +23,7 @@
     "array-move": "^4.0.0",
     "axios": "^1.6.2",
     "dayjs": "^1.11.10",
+    "fast-sort": "^3.4.0",
     "file-saver": "^2.0.5",
     "formik": "^2.4.5",
     "framer-motion": "^10.16.5",
