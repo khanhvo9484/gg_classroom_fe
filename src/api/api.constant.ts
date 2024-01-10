@@ -16,8 +16,9 @@ export const API_GET_ALL_COURSE_MEMBER = "/get-all-course-member";
 export const API_JOIN_BY_TOKEN = "/join-by-token";
 export const API_JOIN_BY_CODE = "/join-by-invite-code";
 
-export const API_GRADE_REVIEW = "/home";
+export const API_GRADE_REVIEW = "/grade-review";
 export const API_GET_ALL_GRADE_REVIEW = "/home";
+export const API_CREATE_GRADE_REVIEW = "/create-grade-review";
 
 export const API_STUDENT_GRADE = "/student-grade";
 export const API_GET_STUDENT_XLSX = "/student-xlsx-template";

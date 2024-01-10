@@ -105,6 +105,11 @@ const ProfileComponent: React.FC<Props> = ({ member, openEditForm }) => {
                   >
                     {member.email}
                   </Typography>
+                  {!member.isVerified && (
+                    <Typography variant="subtitle2" sx={{ color: "red" }}>
+                      *Email chưa được xác thực
+                    </Typography>
+                  )}
                 </Grid>
                 <Grid xs={4}>
                   <Typography gutterBottom sx={{ fontWeight: 550 }}>

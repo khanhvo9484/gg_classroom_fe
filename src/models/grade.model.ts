@@ -1,4 +1,3 @@
-import { IBase } from "./base.model";
 import { IBaseResponse } from "./base.model";
 
 export interface IGradeItem {
@@ -26,8 +25,7 @@ export interface IGradeItemComponent {
   gradeSubComponent?: IGradeItem[];
 }
 
-export interface IGradeResponse
-  extends IBaseResponse<IGradeItemComponent[]> {}
+export interface IGradeResponse extends IBaseResponse<IGradeItemComponent[]> {}
 
 export interface IGradeStructureUpdateRequest {
   courseId: string;

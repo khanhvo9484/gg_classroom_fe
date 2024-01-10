@@ -10,8 +10,9 @@ export default interface UserModel {
   avatar: string;
   accountType: string;
   phone_number: string;
-  isSuspended: boolean;
-  isBlocked: boolean;
+  isSuspended?: boolean;
+  isBlocked?: boolean;
+  isVerified?: boolean;
   studentOfficialId: string;
 }
 
