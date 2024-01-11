@@ -20,7 +20,7 @@ import { FormHelperText } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { motion } from "framer-motion";
 import { customAxios } from "../../../api/custom-axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../../redux/auth.slice";
 import { API_FACEBOOK_LOGIN, API_GOOGLE_LOGIN } from "@/api/api.constant";
@@ -70,7 +70,6 @@ const LoginForm = () => {
           email: values.email,
           password: values.password,
         };
-        // 👇️ const data: CreateUserResponse
         const response = await customAxios.post("/auth/sign-in", payload);
 
         const user: UserModel = response.data.data.user;
@@ -86,7 +85,11 @@ const LoginForm = () => {
             })
           );
 
-          navigate(navigateTo, { replace: true });
+          if (user.role === "admin") {
+            navigate("/admin/accounts", { replace: true });
+          } else {
+            navigate(navigateTo, { replace: true });
+          }
         } else {
           setSignUpError(true);
           setErrorMessage("Server return error data.");
