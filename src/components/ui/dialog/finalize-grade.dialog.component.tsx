@@ -40,10 +40,10 @@ export interface SimpleDialogProps {
 }
 
 export interface updateGradeRequest {
-    courseId: string,
-    studentOfficialId: string,
-    gradeId: string,
-    grade: number,
+  courseId: string;
+  studentOfficialId: string;
+  gradeId: string;
+  grade: number;
 }
 
 export default function FinalizeGradeDialog(props: SimpleDialogProps) {
@@ -65,7 +65,7 @@ export default function FinalizeGradeDialog(props: SimpleDialogProps) {
 
   const formik = useFormik({
     initialValues: {
-      grade: infoGrade?.currentGrade
+      grade: infoGrade?.currentGrade,
     },
     validationSchema: FinalizeGradeSchema,
     onSubmit: async (values) => {
@@ -105,7 +105,7 @@ export default function FinalizeGradeDialog(props: SimpleDialogProps) {
   };
 
   return (
-    <Dialog onClose={handleClose} open={open} sx={{maxWidth: 800, width: 600, ml: 100}}>
+    <Dialog onClose={handleClose} open={open}>
       {inforGradeReview && (
         <Box sx={{ py: 2 }}>
           <DialogTitle sx={{ pb: 0 }}>
@@ -165,9 +165,7 @@ export default function FinalizeGradeDialog(props: SimpleDialogProps) {
                       inputProps={{ min: 0, max: 10 }}
                       type="number"
                       {...getFieldProps("grade")}
-                      error={Boolean(
-                        touched.grade && errors.grade
-                      )}
+                      error={Boolean(touched.grade && errors.grade)}
                       helperText={touched.grade && errors.grade}
                     />
                   </Box>
@@ -195,9 +193,7 @@ export default function FinalizeGradeDialog(props: SimpleDialogProps) {
                         type="submit"
                         variant="text"
                         loading={isSubmitting}
-                        disabled={Boolean(
-                          errors.grade || !touched.grade
-                        )}
+                        disabled={Boolean(errors.grade || !touched.grade)}
                       >
                         {isSubmitting ? "loading..." : "Cập nhật điểm"}
                       </LoadingButton>

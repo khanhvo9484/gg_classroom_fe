@@ -3,13 +3,15 @@ import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { useParams } from "react-router-dom";
-import { Grid, ListItemButton, Popover } from "@mui/material";
+import { Grid, ListItemButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import StudentGradeReviewItem from "./review-item";
 import { useState, useEffect, useContext } from "react";
 import { customAxios } from "@/api/custom-axios";
 import UserModel from "@/models/user.model";
 import RoleContext from "@/context/role.context";
+import LinearProgress from "@mui/material/LinearProgress";
+
 export interface IGradeReviewFinal {
   gradeReviewId: string;
   gradeReviewerId: string;
@@ -50,9 +52,11 @@ const API_GRADE_REVIEW_LIST =
 const ReviewRequestListComponent: React.FC<Props> = () => {
   const { courseId } = useParams();
   const [reviews, setReviews] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { isTeacher } = useContext(RoleContext);
   useEffect(() => {
     try {
+      setIsLoading(true);
       const fetcher = async (): Promise<IGradeReviewResponseKZ[]> => {
         if (isTeacher) {
           const { data: response } = await customAxios.get(
@@ -78,6 +82,8 @@ const ReviewRequestListComponent: React.FC<Props> = () => {
       fetcher();
     } catch (e) {
       console.log(e);
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
@@ -90,95 +96,100 @@ const ReviewRequestListComponent: React.FC<Props> = () => {
   };
 
   return (
-    <Box sx={{ marginTop: 4, marginBottom: 10 }}>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          borderBottom: "1px solid rgb(95,99,104)",
-          paddingBottom: 1,
-        }}
-      >
-        <Grid container>
-          <Grid xs={2}>
-            <Typography
-              variant="h6"
-              sx={{ marginLeft: 2, color: "rgb(25,103,210)" }}
-            >
-              {`Tên sinh viên`}
-            </Typography>
-          </Grid>
-          <Grid xs={2}>
-            <Typography
-              variant="h6"
-              sx={{ marginLeft: 2, color: "rgb(25,103,210)" }}
-            >
-              {`Tên bài tập`}
-            </Typography>
-          </Grid>
-          <Grid xs={2}>
-            <Typography
-              variant="h6"
-              sx={{ marginLeft: 2, color: "rgb(25,103,210)" }}
-            >
-              {`Điểm hiện tại`}
-            </Typography>
-          </Grid>
-          <Grid xs={2}>
-            <Typography
-              variant="h6"
-              sx={{ marginLeft: 2, color: "rgb(25,103,210)" }}
-            >
-              {`Điểm mong muốn`}
-            </Typography>
-          </Grid>
-          <Grid xs={2}>
-            <Typography
-              variant="h6"
-              sx={{ marginLeft: 2, color: "rgb(25,103,210)" }}
-            >
-              {`Trạng thái`}
-            </Typography>
-          </Grid>
-          <Grid xs={2}>
-            <Typography
-              variant="h6"
-              sx={{ marginLeft: 2, color: "rgb(25,103,210)" }}
-            >
-              {`Thời gian`}
-            </Typography>
-          </Grid>
-        </Grid>
-      </Box>
-      <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-        {reviews.length > 0 &&
-          reviews.map((review: IGradeReviewResponseKZ) => {
-            return (
-              <ListItemButton
-                sx={{
-                  borderRadius: 2,
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-                onClick={() => handleRequestClick(review.id)}
-              >
-                <StudentGradeReviewItem
-                  key={review.id}
-                  studentName={review.user?.name}
-                  assignmentName={review.gradeName}
-                  status={GradeReviewStatusDict[review.status]}
-                  currentGrade={review.currentGrade.toString()}
-                  expectedGrade={review.expectedGrade.toString()}
-                  createdAt={review.createdAt}
-                />
-              </ListItemButton>
-            );
-          })}
+    <>
+      {isLoading && <LinearProgress sx={{ top: -36 }} />}
+      {!isLoading && (
+        <Box sx={{ marginBottom: 10 }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              borderBottom: "1px solid rgb(95,99,104)",
+              paddingBottom: 1,
+            }}
+          >
+            <Grid container>
+              <Grid xs={2}>
+                <Typography
+                  variant="h6"
+                  sx={{ marginLeft: 2, color: "rgb(25,103,210)" }}
+                >
+                  {`Tên sinh viên`}
+                </Typography>
+              </Grid>
+              <Grid xs={2}>
+                <Typography
+                  variant="h6"
+                  sx={{ marginLeft: 2, color: "rgb(25,103,210)" }}
+                >
+                  {`Tên bài tập`}
+                </Typography>
+              </Grid>
+              <Grid xs={2}>
+                <Typography
+                  variant="h6"
+                  sx={{ marginLeft: 2, color: "rgb(25,103,210)" }}
+                >
+                  {`Điểm hiện tại`}
+                </Typography>
+              </Grid>
+              <Grid xs={2}>
+                <Typography
+                  variant="h6"
+                  sx={{ marginLeft: 2, color: "rgb(25,103,210)" }}
+                >
+                  {`Điểm mong muốn`}
+                </Typography>
+              </Grid>
+              <Grid xs={2}>
+                <Typography
+                  variant="h6"
+                  sx={{ marginLeft: 2, color: "rgb(25,103,210)" }}
+                >
+                  {`Trạng thái`}
+                </Typography>
+              </Grid>
+              <Grid xs={2}>
+                <Typography
+                  variant="h6"
+                  sx={{ marginLeft: 2, color: "rgb(25,103,210)" }}
+                >
+                  {`Thời gian`}
+                </Typography>
+              </Grid>
+            </Grid>
+          </Box>
+          <List sx={{ width: "100%", bgcolor: "background.paper" }}>
+            {reviews.length > 0 &&
+              reviews.map((review: IGradeReviewResponseKZ) => {
+                return (
+                  <ListItemButton
+                    sx={{
+                      borderRadius: 2,
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                    onClick={() => handleRequestClick(review.id)}
+                  >
+                    <StudentGradeReviewItem
+                      key={review.id}
+                      studentName={review.user?.name}
+                      assignmentName={review.gradeName}
+                      status={GradeReviewStatusDict[review.status]}
+                      currentGrade={review.currentGrade.toString()}
+                      expectedGrade={review.expectedGrade.toString()}
+                      createdAt={review.createdAt}
+                    />
+                  </ListItemButton>
+                );
+              })}
 
-        <Divider sx={{ marginTop: 1 }} variant="fullWidth" component="li" />
-      </List>
-    </Box>
+            <Divider sx={{ marginTop: 1 }} variant="fullWidth" component="li" />
+          </List>
+        </Box>
+      )}
+    </>
   );
 };
 
