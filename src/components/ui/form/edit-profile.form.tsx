@@ -40,6 +40,7 @@ type FormValue = {
   phoneNumber: string;
   dob: string;
   bio: string;
+  studentOfficialId: string;
 };
 const EditProfileForm: React.FC<Props> = ({
   member,
@@ -53,9 +54,10 @@ const EditProfileForm: React.FC<Props> = ({
     useForm<FormValue>({
       defaultValues: {
         name: userEdit.name,
-        phoneNumber: userEdit.phone_number,
+        phoneNumber: userEdit.phoneNumber,
         dob: userEdit.dob,
         bio: userEdit.bio,
+        studentOfficialId: userEdit.studentOfficialId,
       },
     });
 
@@ -85,13 +87,13 @@ const EditProfileForm: React.FC<Props> = ({
         dob: formattedDob,
       };
 
-      setLoading(false);
       toast.success(STRING_UPDATE_PROFILE_SUCCESS);
       updateUser(userRespone);
       dispatch(updateUserProfile({ user: userRespone }));
       openEditForm();
     } catch (error) {
       toast.error(STRING_ERROR);
+      setLoading(false);
     }
   };
 
@@ -203,7 +205,7 @@ const EditProfileForm: React.FC<Props> = ({
                       size="small"
                       id="outlined-basic"
                       variant="outlined"
-                      defaultValue={userEdit.phone_number}
+                      defaultValue={userEdit.phoneNumber}
                       {...register("phoneNumber")}
                     />
                   </Grid>
@@ -236,8 +238,10 @@ const EditProfileForm: React.FC<Props> = ({
                       size="small"
                       id="outlined-basic"
                       variant="outlined"
-                      defaultValue={userEdit.phone_number}
-                      {...register("phoneNumber")}
+                      // value={userEdit.studentOfficialId}
+                      defaultValue={userEdit.studentOfficialId}
+                      disabled={userEdit.studentOfficialId ? true : false}
+                      {...register("studentOfficialId")}
                     />
                   </Grid>
                   <Grid xs={12}>

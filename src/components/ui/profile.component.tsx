@@ -84,7 +84,7 @@ const ProfileComponent: React.FC<Props> = ({ member, openEditForm }) => {
                   <Typography gutterBottom sx={{ fontWeight: 550 }}>
                     Số điện thoại
                   </Typography>
-                  <Typography gutterBottom>{member.phone_number}</Typography>
+                  <Typography gutterBottom>{member.phoneNumber}</Typography>
                 </Grid>
                 <Grid xs={4}>
                   <Typography

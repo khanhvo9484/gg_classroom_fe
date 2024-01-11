@@ -9,11 +9,11 @@ export default interface UserModel {
   bio: string;
   avatar: string;
   accountType: string;
-  phone_number: string;
+  phoneNumber: string;
   isSuspended?: boolean;
   isBlocked?: boolean;
   isVerified?: boolean;
-  studentOfficialId: string;
+  studentOfficialId?: string;
 }
 
 export interface UserModelsRespone extends IBaseResponse<UserModel[]> {}
