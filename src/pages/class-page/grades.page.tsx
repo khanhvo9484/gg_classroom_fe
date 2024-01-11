@@ -17,7 +17,7 @@ import { AgGridReact } from "ag-grid-react";
 import HeaderGroupTableComponent from "./ui/grade-table/header-group-table.component";
 import NoDocumentImg from "@/assets/images/NoDocuments.png";
 import AddIcon from "@mui/icons-material/Add";
-import { IGradeStructureResponse } from "@/models/grade.model";
+import { IGradeStructureResponse, IStudentGrade } from "@/models/grade.model";
 
 function createGridHeaderConfig(
   data: any,
@@ -226,6 +226,10 @@ const GradesPage = () => {
     });
   }, []);
 
+  const onUploadStudentList = (studentGrade: IStudentGrade[]) => {
+    updateRowBoard(studentGrade);
+  };
+
   return (
     <>
       {isLoading && <LinearProgress sx={{ top: -5 }} />}
@@ -253,7 +257,10 @@ const GradesPage = () => {
                   sx={{ width: "400px" }}
                 />
               </Box>
-              <SheetMenu onExportCSV={onExportCSV} />
+              <SheetMenu
+                onExportCSV={onExportCSV}
+                onUploadStudentList={onUploadStudentList}
+              />
             </Box>
             <GradeTableComponent
               rowGrade={rowData}

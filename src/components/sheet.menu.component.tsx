@@ -22,11 +22,7 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-// interface Props {
-//   onExportCSV: () => void;
-// }
-
-export default function SheetMenu({ onExportCSV }) {
+export default function SheetMenu({ onExportCSV, onUploadStudentList }) {
   const { courseId } = useParams();
 
   const [anchorElUpload, setAnchorElUpload] =
@@ -61,21 +57,12 @@ export default function SheetMenu({ onExportCSV }) {
       );
       event.target.value = null;
 
-      if (response.status == 201) {
-        handleCloseUpload();
-        toast.success("Tải lên bảng học sinh thành công.");
-        setTimeout(() => {
-          //   navigate(`/course/${courseId}/grades`, { replace: true });
-          //   console.log("reload lai trang");
-          window.location.reload();
-        }, 500);
-      } else {
-        toast.error("Tải lên bảng học sinh thất bại.");
-      }
+      onUploadStudentList(response.data);
+      handleCloseUpload();
+      toast.success("Tải lên bảng học sinh thành công.");
     } catch (error) {
       toast.error("Tải lên bảng học sinh thất bại.");
       console.log(error);
-      // throw error;
     }
   };
 
