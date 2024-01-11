@@ -1,5 +1,6 @@
-import { Grid, Typography } from "@mui/material";
+import { Button, Grid, Typography } from "@mui/material";
 import React from "react";
+import { GradeReviewStatus } from "./review-list.component";
 
 const StudentGradeReviewItem = (params: {
   studentName: string;
@@ -18,7 +19,7 @@ const StudentGradeReviewItem = (params: {
     createdAt,
   } = params;
   return (
-    <Grid container>
+    <Grid container sx={{}}>
       <Grid xs={2}>
         <Typography variant="body1">{studentName}</Typography>
       </Grid>
@@ -38,9 +39,21 @@ const StudentGradeReviewItem = (params: {
         </Typography>
       </Grid>
       <Grid xs={2}>
-        <Typography variant="body1" sx={{ marginLeft: 3 }}>
-          {status}
-        </Typography>
+        <Button
+          variant={"outlined"}
+          color={
+            status === GradeReviewStatus.APPROVED
+              ? "primary"
+              : status === GradeReviewStatus.PENDING
+              ? "warning"
+              : "error"
+          }
+          sx={{ marginLeft: 3 }}
+        >
+          <Typography variant="body1" sx={{}}>
+            {status}
+          </Typography>
+        </Button>
       </Grid>
       <Grid xs={2}>
         <Typography variant="body1" sx={{ marginLeft: 3 }}>

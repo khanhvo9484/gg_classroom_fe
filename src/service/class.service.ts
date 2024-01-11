@@ -68,12 +68,18 @@ export class ClassService {
     courseId: string,
     signal?: AbortSignal
   ): Promise<ICourseRespone> {
-    const { data: response } = await customAxios.get<ICourseRespone>(
-      `${API_COURSES}${API_GET_COURSE_BY_ID.replace("{courseId}", courseId)}`,
-      { signal }
-    );
-
-    return response;
+    if (!signal) {
+      const { data: response } = await customAxios.get<ICourseRespone>(
+        `${API_COURSES}${API_GET_COURSE_BY_ID.replace("{courseId}", courseId)}`
+      );
+      return response;
+    } else {
+      const { data: response } = await customAxios.get<ICourseRespone>(
+        `${API_COURSES}${API_GET_COURSE_BY_ID.replace("{courseId}", courseId)}`,
+        { signal }
+      );
+      return response;
+    }
   }
 
   async archivedCourseById(courseId: string): Promise<ICourseRespone> {

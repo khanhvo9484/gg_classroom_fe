@@ -12,77 +12,18 @@ import { useState } from "react";
 import CommentInputComponent from "./comment-input.component";
 
 export interface Comment {
-  account: UserModel,
-  comment: string,
-  createdTime: string,
+  account: UserModel;
+  comment: string;
+  createdTime: string;
 }
 
-export interface Props {
-}
-
-const commentsList: Comment[] = [
-  {
-    account: {
-      "id": "USA8FONM4c",
-      "name": "Khoa Khang Khanh",
-      "email": "khoa@gmail.com",
-      "role": "admin",
-      "avatar": null,
-      "bio": null,
-      "phone_number": null,
-      "dob": "2002-04-02T00:00:00.000Z",
-      "studentOfficialId": null,
-      "isBlocked": false,
-      "isSuspended": false,
-      "accountType": "local"
-    },
-    comment: "Thầy ơi phúc khảo nhẹ tay.",
-    createdTime: "2:01",
-  },
-  {
-    account: {
-      "id": "USA8FONM4c",
-      "name": "Khoa Khang Khanh",
-      "email": "khoa@gmail.com",
-      "role": "admin",
-      "avatar": null,
-      "bio": null,
-      "phone_number": null,
-      "dob": "2002-04-02T00:00:00.000Z",
-      "studentOfficialId": null,
-      "isBlocked": false,
-      "isSuspended": false,
-      "accountType": "local"
-    },
-    comment: "Thầy ơi phúc khảo nhẹ tay.",
-    createdTime: "2:01",
-  },
-  {
-    account: {
-      "id": "USA8FONM4c",
-      "name": "Khoa Khang Khanh",
-      "email": "khoa@gmail.com",
-      "role": "admin",
-      "avatar": null,
-      "bio": null,
-      "phone_number": null,
-      "dob": "2002-04-02T00:00:00.000Z",
-      "studentOfficialId": null,
-      "isBlocked": false,
-      "isSuspended": false,
-      "accountType": "local"
-    },
-    comment: "Thầy ơi phúc khảo nhẹ tay.",
-    createdTime: "2:01",
-  },
-]
+export interface Props {}
 
 const PostComponent: React.FC<Props> = () => {
-  const account = commentsList[0].account;
-  const [commentData, setCommentData ] = useState(commentsList);
+  const [commentData, setCommentData] = useState([]);
   const updateData = (newComment: Comment) => {
     setCommentData([...commentData, newComment]);
-  }
+  };
 
   return (
     <Card
@@ -95,9 +36,9 @@ const PostComponent: React.FC<Props> = () => {
     >
       <CardHeader
         sx={{ paddingBottom: "0" }}
-        avatar={
-          <AvatarHelper sx={{}} user={account}/>
-        }
+        // avatar={
+        //   <AvatarHelper sx={{}} user={}/>
+        // }
         action={
           <IconButton aria-label="settings">
             <MoreVertIcon />
@@ -117,12 +58,17 @@ const PostComponent: React.FC<Props> = () => {
           mussels, if you like.
         </Typography>
       </CardContent>
-      {commentData && commentData.map((comment,) => {
-          return (
-              <CommentComponent comment={comment}/>
-          )
-      })}
-      <CommentInputComponent updateData={updateData}/>
+      {/* {commentData &&
+        commentData.map((comment, index) => {
+          return <CommentComponent comment={comment} key={index} />;
+        })} */}
+      <CommentInputComponent
+        updateData={updateData}
+        rollbackData={updateData}
+        gradeReviewId="1"
+        courseId="1"
+        ownerId="1"
+      />
       <CardActions disableSpacing></CardActions>
     </Card>
   );

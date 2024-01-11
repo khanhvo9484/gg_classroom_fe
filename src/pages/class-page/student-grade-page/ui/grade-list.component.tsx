@@ -79,61 +79,57 @@ const GradeList: React.FC<Props> = ({ grade, gradeStudent }) => {
         component="nav"
         aria-labelledby="nested-list-subheader"
       >
-        {grade &&
-          grade.gradeComponent.map((gradeItem) => {
-            return (
-              <>
-                <ListItemButton
-                  onClick={(event) => {
-                    handleListItemClick(event, gradeItem);
-                  }}
-                  sx={itemStyle}
-                  key={gradeItem._id}
-                >
-                  <ListItemIcon>
-                    <StarIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={gradeItem.name} />
-                  <Box sx={{ display: "flex", justifyContent: "end" }}>
-                    <ListItemText
-                      primary={`Điểm: ${gradeItem.totalGrade}`}
-                      secondary={`${gradeItem.percentage}%`}
-                    />
-                  </Box>
-                </ListItemButton>
-                <Collapse in={true} timeout="auto" unmountOnExit>
-                  <Divider />
-                  <List component="div" disablePadding>
-                    {gradeItem.gradeSubComponent &&
-                      gradeItem.gradeSubComponent.map((subGrade) => {
-                        return (
-                          <ListItemButton
-                            sx={{ ...itemStyle, pl: 6 }}
-                            key={subGrade._id}
-                            onClick={(event) => {
-                              handleListItemClick(event, subGrade);
-                            }}
-                          >
-                            <ListItemIcon>
-                              <StarBorder />
-                            </ListItemIcon>
-                            <ListItemText primary={subGrade.name} />
-                            <Box
-                              sx={{ display: "flex", justifyContent: "end" }}
-                            >
-                              <ListItemText
-                                primary={`Điểm: ${subGrade.grade}`}
-                                secondary={`${subGrade.percentage}%`}
-                              />
-                            </Box>
-                          </ListItemButton>
-                        );
-                      })}
-                  </List>
-                </Collapse>
-              </>
-            );
-          })}
+        {grade?.gradeComponent?.map((gradeItem) => {
+          return (
+            <>
+              <ListItemButton
+                onClick={(event) => {
+                  handleListItemClick(event, gradeItem);
+                }}
+                sx={itemStyle}
+                key={gradeItem._id}
+              >
+                <ListItemIcon>
+                  <StarIcon />
+                </ListItemIcon>
+                <ListItemText primary={gradeItem.name} />
+                <Box sx={{ display: "flex", justifyContent: "end" }}>
+                  <ListItemText
+                    primary={`Điểm: ${gradeItem.totalGrade}`}
+                    secondary={`${gradeItem.percentage}%`}
+                  />
+                </Box>
+              </ListItemButton>
+              <Collapse in={true} timeout="auto" unmountOnExit>
+                <Divider />
+                <List component="div" disablePadding>
+                  {gradeItem.gradeSubComponent?.map((subGrade) => {
+                    return (
+                      <ListItemButton
+                        sx={{ ...itemStyle, pl: 6 }}
+                        key={subGrade._id}
+                        onClick={(event) => {
+                          handleListItemClick(event, subGrade);
+                        }}
+                      >
+                        <ListItemIcon>
+                          <StarBorder />
+                        </ListItemIcon>
+                        <ListItemText primary={subGrade.name} />
+                        <Box sx={{ display: "flex", justifyContent: "end" }}>
+                          <ListItemText
+                            primary={`Điểm: ${subGrade.grade}`}
+                            secondary={`${subGrade.percentage}%`}
+                          />
+                        </Box>
+                      </ListItemButton>
+                    );
+                  })}
+                </List>
+              </Collapse>
+            </>
+          );
+        })}
       </List>
 
       <GradeReviewRequestDialog

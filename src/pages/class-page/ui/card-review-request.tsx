@@ -10,73 +10,42 @@ import Typography from "@mui/material/Typography";
 import CommentComponent from "./comment.component";
 import { Button, Divider, Grid, Box } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useState, useEffect, useRef } from "react";
 import RoleContext from "@/context/role.context";
 import CommentInputComponent from "./comment-input.component";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ImgsViewer from "react-images-viewer";
-export interface Comment {
-  account: UserModel;
-  comment: string;
-  createdTime: string;
+import { customAxios } from "@/api/custom-axios";
+import { IGradeReviewResponseKZ } from "../review-request-list/ui/review-list.component";
+import { GradeReviewStatusDict } from "../review-request-list/ui/review-list.component";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
+import socket from "@/socket/socket";
+import { GradeReviewStatus } from "@/models/grade.review.model";
+export interface IGradeReviewComment {
+  id: string;
+  userId: string;
+  gradeReviewId: string;
+  content: string;
+
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date;
+  user: UserModel;
+  gradeReview: IGradeReviewResponseKZ;
 }
 
-const commentsList: Comment[] = [
-  {
-    account: {
-      id: "USA8FONM4c",
-      name: "Khoa Khang Khanh",
-      email: "khoa@gmail.com",
-      role: "admin",
-      avatar: null,
-      bio: null,
-      phone_number: null,
-      dob: "2002-04-02T00:00:00.000Z",
-      studentOfficialId: null,
-      isBlocked: false,
-      isSuspended: false,
-      accountType: "local",
-    },
-    comment: "Thầy ơi phúc khảo nhẹ tay.",
-    createdTime: "2:01",
-  },
-  {
-    account: {
-      id: "USA8FONM4c",
-      name: "Khoa Khang Khanh",
-      email: "khoa@gmail.com",
-      role: "admin",
-      avatar: null,
-      bio: null,
-      phone_number: null,
-      dob: "2002-04-02T00:00:00.000Z",
-      studentOfficialId: null,
-      isBlocked: false,
-      isSuspended: false,
-      accountType: "local",
-    },
-    comment: "Thầy ơi phúc khảo nhẹ tay.",
-    createdTime: "2:01",
-  },
-  {
-    account: {
-      id: "USA8FONM4c",
-      name: "Khoa Khang Khanh",
-      email: "khoa@gmail.com",
-      role: "admin",
-      avatar: null,
-      bio: null,
-      phone_number: null,
-      dob: "2002-04-02T00:00:00.000Z",
-      studentOfficialId: null,
-      isBlocked: false,
-      isSuspended: false,
-      accountType: "local",
-    },
-    comment: "Thầy ơi phúc khảo nhẹ tay.",
-    createdTime: "2:01",
-  },
-];
+export interface IGradeReviewFinal {
+  createdAt: Date;
+  deletedAt: Date;
+
+  explaination: string;
+
+  finalGrade: number;
+  gradeReviewId: string;
+  reviewer: UserModel;
+  reviewerId: string;
+  updatedAt: Date;
+}
 
 interface Props {}
 
@@ -84,6 +53,10 @@ const GradeReviewPost: React.FC<Props> = () => {
   const { courseId } = useParams();
   const { reviewId } = useParams();
   const [isViewerOpen, setIsViewerOpen] = useState(false);
+  const [review, setReview] = useState<IGradeReviewResponseKZ>(null);
+
+  const [finalResult, setFinalResult] = useState<IGradeReviewFinal>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const openImageViewer = useCallback(() => {
     setIsViewerOpen(true);
   }, []);
@@ -93,19 +66,66 @@ const GradeReviewPost: React.FC<Props> = () => {
   const navigate = useNavigate();
 
   const { isTeacher } = useContext(RoleContext);
-  const [commentData, setCommentData] = useState(commentsList);
+  const [commentData, setCommentData] = useState<IGradeReviewComment[]>([]);
+  const lastCommentRef = useRef(null);
 
-  console.log(commentData);
-
-  const updateData = (newComment: Comment) => {
+  const updateData = (newComment: IGradeReviewComment) => {
     setCommentData([...commentData, newComment]);
+  };
+  const rollbackData = (newComment: IGradeReviewComment) => {
+    setCommentData(
+      commentData.filter((comment) => comment.id !== newComment.id)
+    );
   };
 
   const handleBackClick = () => {
     navigate(`/course/${courseId}/grade-review`, { replace: true });
   };
+  const scrollToLastesComment = () => {
+    if (lastCommentRef.current) {
+      lastCommentRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
-  const account = commentsList[0].account;
+  useEffect(() => {
+    const fetcher = async () => {
+      const { data: response } = await customAxios.get(
+        "grade-review/get/" + reviewId,
+        {}
+      );
+      console.log(response.data);
+      setReview(response.data);
+      setCommentData(response.data.comments);
+
+      if (
+        Array.isArray(response.data.final) &&
+        response.data.final.length > 0
+      ) {
+        setFinalResult(response.data.final[0]);
+      }
+
+      setIsLoading(false);
+      return response.data;
+    };
+    fetcher();
+
+    socket.emit("joinPost", { postId: reviewId });
+    socket.on("onReceiveNewComment", (data) => {
+      setCommentData((prevCommentData) => [...prevCommentData, data]);
+      setTimeout(() => {
+        scrollToLastesComment();
+      }, 100);
+    });
+    socket.on("joinedPost", (data) => {
+      console.log(data);
+    });
+
+    return () => {
+      socket.off("joinPost");
+      socket.off("onReceiveNewComment");
+      socket.off("joinedPost");
+    };
+  }, []);
 
   return (
     <Card
@@ -117,143 +137,238 @@ const GradeReviewPost: React.FC<Props> = () => {
       }}
       variant="outlined"
     >
-      <IconButton aria-label="settings">
-        <ArrowBackIcon onClick={handleBackClick} />
-        <Typography variant="body1">Xem danh sách</Typography>
-      </IconButton>
+      {!isLoading && (
+        <>
+          <IconButton aria-label="settings">
+            <ArrowBackIcon onClick={handleBackClick} />
+            <Typography variant="body1">Xem danh sách</Typography>
+          </IconButton>
 
-      <CardHeader
-        sx={{ paddingBottom: "0" }}
-        avatar={<AvatarHelper sx={{}} user={account} />}
-        action={
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Button variant="outlined">Đang chờ</Button>
-            {/* {isTeacher && <Button variant="contained">Sửa điểm</Button>} */}
-
-            <IconButton aria-label="settings">
-              <MoreVertIcon />
-            </IconButton>
-          </Box>
-        }
-        title={
-          <Typography variant="body2" sx={{ fontWeight: 500 }}>
-            Khầy Khan
-          </Typography>
-        }
-        subheader="December 12, 2023"
-        content="Thầy ơi phúc khảo nhẹ tay."
-      />
-      <CardContent sx={{ borderBottom: "0.0625rem solid #dadce0" }}>
-        <Grid container sx={{ my: 1 }}>
-          <Grid xs={6} container rowSpacing={1}>
-            <Grid xs={12}>
-              <Card elevation={0}>
-                <CardHeader
-                  title={
-                    <Typography variant="h6">
-                      {`Phúc khảo điểm BTVN môn toán`}
-                    </Typography>
-                  }
-                />
-              </Card>
-              <Divider />
-            </Grid>
-            <Grid container xs={12}>
-              <Grid xs={6}>
-                <Card elevation={0}>
-                  <CardContent>
-                    <Typography variant="body1" color="text.main">
-                      Điểm hiện tại: 10
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-              <Grid xs={6}>
-                <Card elevation={0}>
-                  <CardContent>
-                    <Typography variant="body1" color="text.main">
-                      Điểm mong muốn: 10
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            </Grid>
-
-            <Grid xs={12}>
-              <Card elevation={0}>
-                <CardHeader
-                  title={<Typography variant="body1">{`Lý do`}</Typography>}
-                  sx={{ maxHeight: 5 }}
-                />
-                <Divider />
-                <CardContent>
-                  <Typography variant="body1" color="text.main">
-                    {`Vì thích thế`}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          </Grid>
-          <Grid xs={1}></Grid>
-          <Grid xs={4}>
-            <Card sx={{ height: "95%" }} elevation={0}>
-              <CardHeader
-                title={<Typography variant="h6">{`Minh chứng`}</Typography>}
-              />
-              <Divider />
-              <CardContent
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <img
-                  src={
-                    "https://th.bing.com/th/id/R.2b67507bc688b741fee318af9506d5ec?rik=ZX7wqbJJAtPTyw&riu=http%3a%2f%2fclipart-library.com%2fimg%2f952237.png&ehk=ABOxpusyEfjVw9LgAkVmMBT7t%2bhAIMRbNh2LavXmn3E%3d&risl=&pid=ImgRaw&r=0"
-                  }
-                  alt={"Minh chứng"}
-                  width={"auto"}
-                  height={250}
-                  style={{ objectFit: "contain", cursor: "pointer" }}
-                  onClick={() => openImageViewer()}
-                />
-                {isViewerOpen && (
-                  <ImgsViewer
-                    imgs={[
-                      {
-                        src: "https://th.bing.com/th/id/R.2b67507bc688b741fee318af9506d5ec?rik=ZX7wqbJJAtPTyw&riu=http%3a%2f%2fclipart-library.com%2fimg%2f952237.png&ehk=ABOxpusyEfjVw9LgAkVmMBT7t%2bhAIMRbNh2LavXmn3E%3d&risl=&pid=ImgRaw&r=0",
-                      },
-                    ]}
-                    isOpen={isViewerOpen}
-                    onClose={closeImageViewer}
-                  />
-                )}
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-      </CardContent>
-      <Box>
-        <Divider />
-        <Card>
           <CardHeader
-            title={
-              <Box>
-                <Typography variant="body1">Điểm cuối cùng: 10</Typography>
-                <Typography>Thời gian phúc khảo: 2:01</Typography>
-                <Typography>Giáo viên: Khầy Khan</Typography>
-                <Typography variant="body1">{`Minh chứng`}</Typography>
+            sx={{ paddingBottom: "0" }}
+            avatar={<AvatarHelper sx={{}} user={review.user} />}
+            action={
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Button
+                  variant="outlined"
+                  color={
+                    review?.status === "pending"
+                      ? "warning"
+                      : review?.status === "approved"
+                      ? "success"
+                      : "error"
+                  }
+                >
+                  {GradeReviewStatusDict[review?.status]}
+                </Button>
+                {/* {isTeacher && <Button variant="contained">Sửa điểm</Button>} */}
+
+                <IconButton aria-label="settings">
+                  <MoreVertIcon />
+                </IconButton>
               </Box>
             }
-          ></CardHeader>
-        </Card>
-      </Box>
-      {commentData &&
-        commentData.map((comment) => {
-          return <CommentComponent comment={comment} />;
-        })}
-      <CommentInputComponent updateData={updateData} />
-      <CardActions disableSpacing></CardActions>
+            title={
+              <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                {review.user.name}
+              </Typography>
+            }
+            subheader={review.createdAt}
+          />
+          <CardContent sx={{ borderBottom: "0.0625rem solid #dadce0" }}>
+            <Grid container sx={{ my: 1 }}>
+              <Grid xs={6} container rowSpacing={1}>
+                <Grid xs={12}>
+                  <Card elevation={0}>
+                    <CardHeader
+                      title={
+                        <Typography variant="h6">
+                          {`Phúc khảo điểm ${review.gradeName}`}
+                        </Typography>
+                      }
+                    />
+                  </Card>
+                  <Divider />
+                </Grid>
+                <Grid container xs={12}>
+                  <Grid xs={6}>
+                    <Card elevation={0}>
+                      <CardContent>
+                        <Typography variant="body1" color="text.main">
+                          Điểm hiện tại: {review.currentGrade}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                  <Grid xs={6}>
+                    <Card elevation={0}>
+                      <CardContent>
+                        <Typography variant="body1" color="text.main">
+                          Điểm mong muốn: {review.expectedGrade}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                </Grid>
+
+                <Grid xs={12}>
+                  <Card elevation={0}>
+                    <CardHeader
+                      title={<Typography variant="body1">{`Lý do`}</Typography>}
+                      sx={{ maxHeight: 5 }}
+                    />
+                    <Divider />
+                    <CardContent>
+                      <Typography variant="body1" color="text.main">
+                        {`${review.explaination}`}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              </Grid>
+              <Grid xs={1}></Grid>
+              <Grid xs={4}>
+                <Card sx={{ height: "95%" }} elevation={0}>
+                  <CardHeader
+                    title={<Typography variant="h6">{`Minh chứng`}</Typography>}
+                  />
+                  <Divider />
+                  <CardContent
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <img
+                      src={review.imgURL}
+                      alt={"Minh chứng"}
+                      width={"auto"}
+                      height={250}
+                      style={{ objectFit: "contain", cursor: "pointer" }}
+                      onClick={() => openImageViewer()}
+                    />
+                    {isViewerOpen && (
+                      <ImgsViewer
+                        imgs={[
+                          {
+                            src: review.imgURL,
+                          },
+                        ]}
+                        isOpen={isViewerOpen}
+                        onClose={closeImageViewer}
+                      />
+                    )}
+                  </CardContent>
+                </Card>
+              </Grid>
+            </Grid>
+          </CardContent>
+          {finalResult && review && (
+            <Box>
+              <Divider />
+              <Card
+                sx={{
+                  backgroundColor:
+                    review.status === GradeReviewStatus.APPROVED
+                      ? "#5975af"
+                      : "#a25757",
+                }}
+              >
+                <CardHeader
+                  sx={{ color: "white" }}
+                  title={
+                    <>
+                      <Grid container>
+                        <Grid xs={6}>
+                          <Grid xs={12} sx={{ display: "flex" }}>
+                            <BookmarkIcon></BookmarkIcon>
+                            <Typography variant="body1">
+                              Điểm cuối cùng: {finalResult?.finalGrade}
+                            </Typography>
+                          </Grid>
+                          <Grid xs={12}>
+                            <Typography
+                              sx={{ fontSize: "0.8rem", marginLeft: "1.8rem" }}
+                            >
+                              2:01 31-22-2023
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                        <Grid
+                          xs={6}
+                          container
+                          sx={{
+                            backgroundColor:
+                              review.status === GradeReviewStatus.APPROVED
+                                ? "#3b4570"
+                                : "#763535",
+                            padding: 2,
+                            borderRadius: 2,
+                          }}
+                        >
+                          <Grid xs={12}>
+                            <Typography>
+                              Giáo viên: {finalResult?.reviewer?.name}
+                            </Typography>
+                          </Grid>
+                          <Grid xs={12}>
+                            <Typography>
+                              Email: {finalResult?.reviewer?.email}
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    </>
+                  }
+                ></CardHeader>
+              </Card>
+            </Box>
+          )}
+
+          <Box sx={{ display: "flex", justifyContent: "right" }}>
+            <Typography
+              onClick={scrollToLastesComment}
+              sx={{
+                ":hover": {
+                  cursor: "pointer",
+                  textDecoration: "underline",
+                },
+                padding: "0.5rem",
+                color: "rgb(67, 138, 237)",
+              }}
+              variant="subtitle1"
+            >
+              Xem bình luận mới nhất
+            </Typography>
+          </Box>
+          <Box sx={{ overflowY: "auto", maxHeight: "400px", flexGrow: 1 }}>
+            {commentData &&
+              commentData.map((comment, index) => {
+                const isLastComment = index === commentData.length - 1;
+                return (
+                  <div key={index} ref={isLastComment ? lastCommentRef : null}>
+                    <CommentComponent
+                      comment={comment}
+                      _bgColor={isLastComment ? "#cfe2fa52" : undefined}
+                    />
+                  </div>
+                );
+              })}
+          </Box>
+
+          <Box sx={{ position: "sticky", bottom: 0 }}>
+            <CommentInputComponent
+              updateData={updateData}
+              rollbackData={rollbackData}
+              courseId={review.courseId}
+              ownerId={review.studentId}
+              gradeReviewId={review.id}
+            />
+          </Box>
+
+          <CardActions disableSpacing></CardActions>
+        </>
+      )}
     </Card>
   );
 };

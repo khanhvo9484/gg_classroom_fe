@@ -28,6 +28,22 @@ export interface IGradeReviewInfor {
   status?: GradeReviewStatus;
   courseId?: string;
 }
+// interface IReviewListResponse{
+//   id:string,
+//   studentId:string,
+//   courseId:string,
+//   gradeId:string,
+//   gradeName:string,
+//   percentage:string,
+//   currentGrade:string,
+//   expectedGrade:string,
+//   explaination:string,
+//   createdAt:string,
+//   updatedAt:string,
+//   deletedAt:string,
+//   imgURL:string,
+//   status:string,
+// }
 
 export interface IGradeReviewRequest {
   studentId: string;
