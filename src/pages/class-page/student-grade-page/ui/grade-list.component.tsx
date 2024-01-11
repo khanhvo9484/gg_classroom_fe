@@ -143,6 +143,7 @@ const GradeList: React.FC<Props> = ({ grade, gradeStudent }) => {
         onClose={() => {
           setIsGradeReviewDialogOpen(false);
         }}
+        infoGrade={inforGradeReview}
         // infoGrade={}
       />
     </>

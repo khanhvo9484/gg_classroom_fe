@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 import AvatarDropdown from "../components/avatar.dropdown.menu.component";
 import logo from "@/assets/icons/k3_logo.png";
 import { styled, Theme, CSSObject } from "@mui/material/styles";
-import {LinearProgress } from "@mui/material";
+import { LinearProgress } from "@mui/material";
 import MuiDrawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
@@ -99,8 +99,7 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
 }));
 
 function AdminLayout() {
-
-  const { isLoading} = useContext(LoadingContext);
+  const { isLoading } = useContext(LoadingContext);
   const [sidebarState, setSidebarState] = useState(true);
   const [sidebarStateHover, setSidebarStateHover] = useState(false);
 
@@ -252,7 +251,17 @@ function AdminLayout() {
           </Box>
         </Main>
       </Box>
-      <Toaster position="top-right" reverseOrder={false} />
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+        toastOptions={{
+          style: {
+            background: "#363636",
+            color: "#fff",
+            fontFamily: "Roboto",
+          },
+        }}
+      />
     </>
   );
 }

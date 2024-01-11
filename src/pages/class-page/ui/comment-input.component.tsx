@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import Divider from "@mui/material/Divider";
 import { useParams } from "react-router-dom";
-import SendIcon from '@mui/icons-material/Send';
+import SendIcon from "@mui/icons-material/Send";
 import UserModel from "@/models/user.model";
 import AvatarHelper from "@/utils/avatar-helper/avatar.helper";
 import { useSelector } from "react-redux";
@@ -26,110 +26,115 @@ const animate = {
 };
 
 export interface CommentProps {
-    updateData: (newComment) => void
+  updateData: (newComment) => void;
 }
 
 export interface Comment {
-    account: UserModel,
-    comment: string,
-    createdTime: string,
+  account: UserModel;
+  comment: string;
+  createdTime: string;
 }
 
-const CommentInputComponent: React.FC<CommentProps> = ({
-    updateData,
-}) => {
+const CommentInputComponent: React.FC<CommentProps> = ({ updateData }) => {
+  const userProfile = useSelector(selectUser);
 
-    const userProfile = useSelector(selectUser);
+  const CommentSchema = Yup.object().shape({
+    comment: Yup.string().required("Bạn cần nhập câu trả lời của bạn!"),
+  });
 
-    const CommentSchema = Yup.object().shape({
-        comment: Yup.string().required("Bạn cần nhập câu trả lời của bạn!")
-    });
-
-    const formik = useFormik({
-        initialValues: {
-            comment: ""
-        },
-        validationSchema: CommentSchema,
-        onSubmit: async (values) => {
-        try {
-            const payload = {
-                comment: values.comment
-            };
-            const newComment: Comment = {
-                comment: values.comment,
-                account: userProfile,
-                createdTime: (new Date()).toDateString()
-            }
-            updateData(newComment);
-            const response = true;
-            if (response) {
-                toast.success("Trả lời thành công.");
-            } else {
-                toast.error("Trả lờithất bại.");
-            }
-        } catch (error) {
-            console.log(error);
-            toast.error("Trả lời thất bại.");
+  const formik = useFormik({
+    initialValues: {
+      comment: "",
+    },
+    validationSchema: CommentSchema,
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        const payload = {
+          comment: values.comment,
+        };
+        const newComment: Comment = {
+          comment: values.comment,
+          account: userProfile,
+          createdTime: new Date().toDateString(),
+        };
+        updateData(newComment);
+        const response = true;
+        if (response) {
+          toast.success("Trả lời thành công.");
+        } else {
+          toast.error("Trả lờithất bại.");
         }
-        },
-    });
+        resetForm();
+      } catch (error) {
+        console.log(error);
+        toast.error("Trả lời thất bại.");
+      }
+    },
+  });
 
-    const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
+  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } =
+    formik;
 
-    return (
-        <CardContent>
-            <FormikProvider value={formik}>
-                <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-                    <Box
-                        component={motion.div}
-                        animate={{
-                            transition: {
-                            staggerChildren: 0.55,
-                            },
-                        }}
-                    >
-                        <Box
-                            sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: 3,
-                            }}
-                            component={motion.div}
-                            initial={{ opacity: 0, y: 40 }}
-                            animate={animate}
-                        >
-                            <Stack direction="row">
-                                <AvatarHelper
-                                    sx={{ width: 32, height: 32 , mr: 4, ml:2}}
-                                    user={userProfile}
-                                />
-                                <TextField
-                                    fullWidth
-                                    required
-                                    autoComplete="Câu trả lời"
-                                    placeholder="Nhập câu trả lời của bạn"
-                                    {...getFieldProps("comment")}
-                                    error={Boolean(touched.comment && errors.comment)}
-                                    helperText={touched.comment && errors.comment}
-                                    multiline
-                                    sx={{mt: -1}}
-                                />
-                                <LoadingButton
-                                    type="submit"
-                                    loading={isSubmitting}
-                                    disabled={Boolean(errors.comment || !touched.comment)}
-                                    sx={{mt:-1}}
-                                >
-                                    {isSubmitting ? "Đang gửi..." : (<SendIcon/>)}
-                                </LoadingButton>
-                            </Stack>
-                        </Box>
-                    </Box>
-                </Form>
-            </FormikProvider>
-            <Divider sx={{mt: 1}}/>
-        </CardContent>
-    );
-}
+  return (
+    <CardContent>
+      <FormikProvider value={formik}>
+        <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+          <Box
+            component={motion.div}
+            animate={{
+              transition: {
+                staggerChildren: 0.55,
+              },
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 3,
+              }}
+              component={motion.div}
+              initial={{ opacity: 0, y: 40 }}
+              animate={animate}
+            >
+              <Stack direction="row">
+                <AvatarHelper
+                  sx={{ width: 32, height: 32, mr: 4, ml: 2 }}
+                  user={userProfile}
+                />
+                <TextField
+                  fullWidth
+                  required
+                  autoComplete="Câu trả lời"
+                  placeholder="Nhập câu trả lời của bạn"
+                  {...getFieldProps("comment")}
+                  error={Boolean(touched.comment && errors.comment)}
+                  helperText={touched.comment && errors.comment}
+                  multiline
+                  sx={{ mt: -1 }}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" && !event.shiftKey) {
+                      event.preventDefault();
+                      handleSubmit();
+                    }
+                  }}
+                />
+                <LoadingButton
+                  type="submit"
+                  loading={isSubmitting}
+                  disabled={Boolean(errors.comment || !touched.comment)}
+                  sx={{ mt: -1 }}
+                >
+                  {isSubmitting ? "Đang gửi..." : <SendIcon />}
+                </LoadingButton>
+              </Stack>
+            </Box>
+          </Box>
+        </Form>
+      </FormikProvider>
+      <Divider sx={{ mt: 1 }} />
+    </CardContent>
+  );
+};
 
-export default CommentInputComponent
+export default CommentInputComponent;

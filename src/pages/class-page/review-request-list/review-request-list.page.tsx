@@ -15,12 +15,14 @@ const ReviewRequestPage = () => {
     <Box sx={{ marginY: "2rem", minHeight: "600px" }}>
       <Container
         maxWidth={false}
-        sx={{
-          //   height: "500px",
-          maxWidth: "808px",
-        }}
+        sx={
+          {
+            //   height: "500px",
+            // maxWidth: "1200px",
+          }
+        }
       >
-        <ReviewRequestListComponent/>
+        <ReviewRequestListComponent />
       </Container>
     </Box>
   );

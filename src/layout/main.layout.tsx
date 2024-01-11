@@ -251,8 +251,9 @@ function Header() {
                     mr: 2,
                     mb: 0,
                     ":hover": {
-                      color: "#19aa77",
+                      color: "#a69bfd",
                       cursor: "pointer",
+                      backgroundColor: "#eeeeee5b",
                     },
                     color: "text.primary",
                   }}
@@ -551,7 +552,17 @@ function Header() {
           </Main>
         </Box>
       )}
-      <Toaster position="top-right" reverseOrder={false} />
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+        toastOptions={{
+          style: {
+            background: "#363636",
+            color: "#fff",
+            fontFamily: "Roboto",
+          },
+        }}
+      />
     </>
   );
 }

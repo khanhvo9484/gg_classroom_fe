@@ -7,7 +7,7 @@ import UserModel from "@/models/user.model";
 export const members: UserModel[] = [
   {
     phone_number: null,
-    isSuspensed: null,
+    isSuspended: null,
     isBlocked: null,
     studentOfficialId: null,
     email: null,
@@ -21,7 +21,7 @@ export const members: UserModel[] = [
   },
   {
     phone_number: null,
-    isSuspensed: null,
+    isSuspended: null,
     isBlocked: null,
     studentOfficialId: null,
     email: null,
@@ -35,7 +35,7 @@ export const members: UserModel[] = [
   },
   {
     phone_number: null,
-    isSuspensed: null,
+    isSuspended: null,
     isBlocked: null,
     studentOfficialId: null,
     email: null,

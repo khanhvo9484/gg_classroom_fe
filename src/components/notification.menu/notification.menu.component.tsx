@@ -1,4 +1,12 @@
-import { Badge, IconButton, Popper, Paper, Fade } from "@mui/material";
+import {
+  Badge,
+  IconButton,
+  Popper,
+  Paper,
+  Fade,
+  Card,
+  Typography,
+} from "@mui/material";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import React from "react";
 import Notification from "./notification.component";
@@ -9,6 +17,7 @@ import useNotification from "@/hooks/notification.hook";
 import socket from "@socket/socket";
 import { useState, useEffect } from "react";
 import { INotification } from "@/models/notification.model";
+
 export default function NotificationMenu() {
   const auth = useSelector(selectUser);
   const { notifications, notificationIsLoading, notificationError } =
@@ -92,7 +101,7 @@ export default function NotificationMenu() {
             sx={{
               border: "0.5px solid #6566660a",
               p: 1,
-              m:3,
+              m: 3,
               bgcolor: "background.paper",
               borderRadius: "12px",
               maxWidth: 320,
@@ -108,6 +117,16 @@ export default function NotificationMenu() {
                 ))}
               </>
             )}
+            {!notificationIsLoading &&
+              !notificationError &&
+              notifications.length === 0 && (
+                <Card
+                  elevation={0}
+                  sx={{ display: "flex", justifyContent: "center", margin: 2 }}
+                >
+                  <Typography>Không có thông báo nào</Typography>
+                </Card>
+              )}
           </Paper>
         </Fade>
       </Popper>
