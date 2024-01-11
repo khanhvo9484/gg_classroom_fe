@@ -14,18 +14,23 @@ import { useSelector } from "react-redux";
 import AvatarDropdown from "../../components/avatar.dropdown.menu.component";
 import logo from "@/assets/icons/k3_logo.png";
 import LinearProgress from "@mui/material/LinearProgress";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import LoadingContext from "@/context/loading.contenxt";
 import { selectUser } from "@/redux/auth.slice";
 
-const pages = [{ title: "Lớp học của tôi", link: "/home" }];
+// const pages = [{ title: "Lớp học của tôi", link: "/home" }];
 
 function Header() {
   const { isLoading } = useContext(LoadingContext);
   const userProfile = useSelector(selectUser);
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
-  console.log(userProfile);
+  useEffect(() => {
+    if (userProfile.role === "admin") {
+      setIsAdmin(true);
+    }
+  }, []);
 
   const location = useLocation();
 
@@ -93,17 +98,27 @@ function Header() {
           <Box
             sx={{ flexGrow: 1, display: { xs: "none", md: "flex" }, gap: 1 }}
           >
-            {pages.map((page) => (
+            {!isAdmin && (
               <Button
-                key={page.title}
                 sx={{ my: 2, color: "black", display: "block" }}
                 onClick={() => {
                   navigate("/home");
                 }}
               >
-                {page.title}
+                Lớp học của tôi
               </Button>
-            ))}
+            )}
+
+            {isAdmin && (
+              <Button
+                sx={{ my: 2, color: "black", display: "block" }}
+                onClick={() => {
+                  navigate("/admin/accounts");
+                }}
+              >
+                Quản lí hệ thống
+              </Button>
+            )}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>

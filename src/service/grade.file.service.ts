@@ -11,6 +11,7 @@ import {
 } from "@/api/api.constant";
 import FileSaver from "file-saver";
 import { customAxios } from "@/api/custom-axios";
+import { IStudentBoardGradeResponse } from "@/models/grade.model";
 
 export class GradeFileService {
   async getStudentGradeTemplate() {
@@ -94,21 +95,25 @@ export class GradeFileService {
     return;
   }
 
-  async uploadStudentList(file: File, courseId: string) {
+  async uploadStudentList(
+    file: File,
+    courseId: string
+  ): Promise<IStudentBoardGradeResponse> {
     const payload = {
       file: file,
       courseId: courseId,
     };
 
-    const response = await customAxios.post(
-      `${API_STUDENT_GRADE}${API_STUDENT_UPLOAD}`,
-      payload,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    const { data: response } =
+      await customAxios.post<IStudentBoardGradeResponse>(
+        `${API_STUDENT_GRADE}${API_STUDENT_UPLOAD}`,
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
     return response;
   }
