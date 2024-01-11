@@ -1,6 +1,6 @@
 import { Button, Grid, Typography } from "@mui/material";
-import React from "react";
 import { GradeReviewStatus } from "./review-list.component";
+import { convertUtcToVietnamTime } from "@/utils/common.util";
 
 const StudentGradeReviewItem = (params: {
   studentName: string;
@@ -57,7 +57,7 @@ const StudentGradeReviewItem = (params: {
       </Grid>
       <Grid xs={2}>
         <Typography variant="body1" sx={{ marginLeft: 3 }}>
-          {createdAt}
+          {convertUtcToVietnamTime(createdAt)}
         </Typography>
       </Grid>
     </Grid>

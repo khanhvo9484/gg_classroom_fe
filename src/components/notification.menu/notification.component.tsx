@@ -6,9 +6,8 @@ import {
   CardActionArea,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import React from "react";
 import { useParams } from "react-router-dom";
-import { INotification } from "@/models/notification.model";
+import { INotification, NotificationType } from "@/models/notification.model";
 import AvatarHelper from "@/utils/avatar-helper/avatar.helper";
 
 export default function Notification(props: { notification: INotification }) {
@@ -17,8 +16,24 @@ export default function Notification(props: { notification: INotification }) {
 
   const { courseId } = useParams();
   const navigate = useNavigate();
-  const handleNotificationClick = (targetId: string) => {
-    navigate(`/course/${courseId}/grade-review/${targetId}`, { replace: true });
+  const handleNotificationClick = () => {
+    switch (notification.type) {
+      case NotificationType.NEW_GRADE_FINALIZE:
+        navigate(`/course/${courseId}/student-view-grade`, { replace: true });
+        return;
+      case NotificationType.NEW_GRADE_REVIEW:
+        navigate(`/course/${courseId}/grade-review/${notification.targetId}`, {
+          replace: true,
+        });
+        return;
+      case NotificationType.NEW_GRADE_REVIEW_COMMENT:
+        navigate(`/course/${courseId}/grade-review/${notification.targetId}`, {
+          replace: true,
+        });
+        return;
+      case NotificationType.NEW_GRADE_STRUCTURE:
+        return;
+    }
   };
 
   return (
@@ -30,15 +45,15 @@ export default function Notification(props: { notification: INotification }) {
           backgroundColor: notification.isRead ? "" : "#dfeaf7cf",
         }}
       >
-        <CardActionArea onClick={() => handleNotificationClick("1")}>
+        <CardActionArea onClick={() => handleNotificationClick()}>
           <CardHeader
             sx={{ paddingBottom: "5px" }}
-            avatar={
-              <AvatarHelper user={notification.actor} sx={{}}/>
-            }
+            avatar={<AvatarHelper user={notification.actor} sx={{}} />}
             title={
               <Typography variant="body1" sx={{ fontSize: 15 }}>
-                <span style={{ fontWeight: 700 }}>{notification.actor.name}</span>{" "}
+                <span style={{ fontWeight: 700 }}>
+                  {notification.actor.name}
+                </span>{" "}
                 {notification.content}
               </Typography>
             }

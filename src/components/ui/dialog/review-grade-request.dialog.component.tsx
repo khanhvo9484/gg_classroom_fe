@@ -55,7 +55,6 @@ export default function GradeReviewRequestDialog(props: SimpleDialogProps) {
   const [inforGradeReview, setInfoGradeReview] =
     useState<IGradeReviewInfor>(infoGrade);
   const [currentFile, setCurrentFile] = useState(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     setInfoGradeReview(infoGrade);
@@ -94,14 +93,6 @@ export default function GradeReviewRequestDialog(props: SimpleDialogProps) {
         toast.success("Yêu cầu phúc khảo thành công.");
 
         onClose();
-
-        const reviewId = "12312";
-
-        setTimeout(() => {
-          navigate(`/course/${courseId}/grade-review/${reviewId}`, {
-            replace: true,
-          });
-        }, 500);
       } catch (error) {
         console.log(error);
         toast.error("Yêu cầu phúc khảo thất bại.");

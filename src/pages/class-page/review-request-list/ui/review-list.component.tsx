@@ -56,7 +56,7 @@ const ReviewRequestListComponent: React.FC<Props> = () => {
       const fetcher = async (): Promise<IGradeReviewResponseKZ[]> => {
         if (isTeacher) {
           const { data: response } = await customAxios.get(
-            API_GRADE_REVIEW_LIST.replace("{courseId}", "CSOrIVHScw").replace(
+            API_GRADE_REVIEW_LIST.replace("{courseId}", courseId).replace(
               "{roleInCourseInput}",
               "teacher"
             )
@@ -65,11 +65,12 @@ const ReviewRequestListComponent: React.FC<Props> = () => {
           return response.data;
         } else {
           const { data: response } = await customAxios.get(
-            API_GRADE_REVIEW_LIST.replace("{courseId}", "CSOrIVHScw").replace(
+            API_GRADE_REVIEW_LIST.replace("{courseId}", courseId).replace(
               "{roleInCourseInput}",
               "student"
             )
           );
+
           setReviews(response.data);
           return response.data;
         }
