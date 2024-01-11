@@ -6,9 +6,10 @@ import { useParams } from "react-router-dom";
 import { Grid, ListItemButton, Popover } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import StudentGradeReviewItem from "./review-item";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { customAxios } from "@/api/custom-axios";
 import UserModel from "@/models/user.model";
+import RoleContext from "@/context/role.context";
 export interface IGradeReviewFinal {
   gradeReviewId: string;
   gradeReviewerId: string;
@@ -49,18 +50,29 @@ const API_GRADE_REVIEW_LIST =
 const ReviewRequestListComponent: React.FC<Props> = () => {
   const { courseId } = useParams();
   const [reviews, setReviews] = useState([]);
+  const { isTeacher } = useContext(RoleContext);
   useEffect(() => {
     try {
       const fetcher = async (): Promise<IGradeReviewResponseKZ[]> => {
-        const { data: response } = await customAxios.get(
-          API_GRADE_REVIEW_LIST.replace("{courseId}", "CSOrIVHScw").replace(
-            "{roleInCourseInput}",
-            "teacher"
-          )
-        );
-        console.log(response.data);
-        setReviews(response.data);
-        return response.data;
+        if (isTeacher) {
+          const { data: response } = await customAxios.get(
+            API_GRADE_REVIEW_LIST.replace("{courseId}", "CSOrIVHScw").replace(
+              "{roleInCourseInput}",
+              "teacher"
+            )
+          );
+          setReviews(response.data);
+          return response.data;
+        } else {
+          const { data: response } = await customAxios.get(
+            API_GRADE_REVIEW_LIST.replace("{courseId}", "CSOrIVHScw").replace(
+              "{roleInCourseInput}",
+              "student"
+            )
+          );
+          setReviews(response.data);
+          return response.data;
+        }
       };
       fetcher();
     } catch (e) {

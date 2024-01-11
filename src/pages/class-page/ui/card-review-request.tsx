@@ -8,7 +8,7 @@ import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Typography from "@mui/material/Typography";
 import CommentComponent from "./comment.component";
-import { Button, Divider, Grid, Box } from "@mui/material";
+import { Button, Divider, Grid, Box, Menu, MenuItem } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCallback, useContext, useState, useEffect, useRef } from "react";
 import RoleContext from "@/context/role.context";
@@ -21,6 +21,8 @@ import { GradeReviewStatusDict } from "../review-request-list/ui/review-list.com
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import socket from "@/socket/socket";
 import { GradeReviewStatus } from "@/models/grade.review.model";
+import FinalizeGradeDialog from "@/components/ui/dialog/finalize-grade.dialog.component";
+
 export interface IGradeReviewComment {
   id: string;
   userId: string;
@@ -55,6 +57,17 @@ const GradeReviewPost: React.FC<Props> = () => {
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const [review, setReview] = useState<IGradeReviewResponseKZ>(null);
 
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const [isOpenFinalizeGradeDialog, setIsFinalizeGradeDialog] = useState(false);
+
   const [finalResult, setFinalResult] = useState<IGradeReviewFinal>(null);
   const [isLoading, setIsLoading] = useState(true);
   const openImageViewer = useCallback(() => {
@@ -81,6 +94,7 @@ const GradeReviewPost: React.FC<Props> = () => {
   const handleBackClick = () => {
     navigate(`/course/${courseId}/grade-review`, { replace: true });
   };
+
   const scrollToLastesComment = () => {
     if (lastCommentRef.current) {
       lastCommentRef.current.scrollIntoView({ behavior: "smooth" });
@@ -128,6 +142,7 @@ const GradeReviewPost: React.FC<Props> = () => {
   }, []);
 
   return (
+    <>
     <Card
       sx={{
         marginTop: "1rem",
@@ -139,8 +154,8 @@ const GradeReviewPost: React.FC<Props> = () => {
     >
       {!isLoading && (
         <>
-          <IconButton aria-label="settings">
-            <ArrowBackIcon onClick={handleBackClick} />
+          <IconButton aria-label="settings" onClick={handleBackClick} >
+            <ArrowBackIcon />
             <Typography variant="body1">Xem danh sách</Typography>
           </IconButton>
 
@@ -163,7 +178,7 @@ const GradeReviewPost: React.FC<Props> = () => {
                 </Button>
                 {/* {isTeacher && <Button variant="contained">Sửa điểm</Button>} */}
 
-                <IconButton aria-label="settings">
+                <IconButton aria-label="settings" onClick={handleMenuClick}>
                   <MoreVertIcon />
                 </IconButton>
               </Box>
@@ -175,10 +190,26 @@ const GradeReviewPost: React.FC<Props> = () => {
             }
             subheader={review.createdAt}
           />
+          <Menu
+            id="long-menu"
+            MenuListProps={{
+              'aria-labelledby': 'long-button',
+            }}
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleMenuClose}
+          >
+            <MenuItem key={"Chấp thuận phúc khảo"} onClick={() => {setIsFinalizeGradeDialog(true)}}>
+              {"Chấp thuận phúc khảo"}
+            </MenuItem>
+            <MenuItem key={"Từ chối phúc khảo"} onClick={() => {setIsFinalizeGradeDialog(true)}}>
+              {"Từ chối phúc khảo"}
+            </MenuItem>
+          </Menu>
           <CardContent sx={{ borderBottom: "0.0625rem solid #dadce0" }}>
             <Grid container sx={{ my: 1 }}>
-              <Grid xs={6} container rowSpacing={1}>
-                <Grid xs={12}>
+              <Grid xs={6} container rowSpacing={1} item>
+                <Grid xs={12} item>
                   <Card elevation={0}>
                     <CardHeader
                       title={
@@ -190,8 +221,8 @@ const GradeReviewPost: React.FC<Props> = () => {
                   </Card>
                   <Divider />
                 </Grid>
-                <Grid container xs={12}>
-                  <Grid xs={6}>
+                <Grid container xs={12} item>
+                  <Grid xs={6} item>
                     <Card elevation={0}>
                       <CardContent>
                         <Typography variant="body1" color="text.main">
@@ -200,7 +231,7 @@ const GradeReviewPost: React.FC<Props> = () => {
                       </CardContent>
                     </Card>
                   </Grid>
-                  <Grid xs={6}>
+                  <Grid xs={6} item>
                     <Card elevation={0}>
                       <CardContent>
                         <Typography variant="body1" color="text.main">
@@ -211,7 +242,7 @@ const GradeReviewPost: React.FC<Props> = () => {
                   </Grid>
                 </Grid>
 
-                <Grid xs={12}>
+                <Grid xs={12} item>
                   <Card elevation={0}>
                     <CardHeader
                       title={<Typography variant="body1">{`Lý do`}</Typography>}
@@ -226,8 +257,8 @@ const GradeReviewPost: React.FC<Props> = () => {
                   </Card>
                 </Grid>
               </Grid>
-              <Grid xs={1}></Grid>
-              <Grid xs={4}>
+              <Grid xs={1} item></Grid>
+              <Grid xs={4} item>
                 <Card sx={{ height: "95%" }} elevation={0}>
                   <CardHeader
                     title={<Typography variant="h6">{`Minh chứng`}</Typography>}
@@ -370,6 +401,17 @@ const GradeReviewPost: React.FC<Props> = () => {
         </>
       )}
     </Card>
+    <Box sx={{ display:"inline-flex", justifyContent:"center", ml: 200}}>
+      <FinalizeGradeDialog
+        open={isOpenFinalizeGradeDialog}
+        onClose={() => {
+          setIsFinalizeGradeDialog(false);
+        }}
+        infoGrade={review}
+        title={"Cập nhật điểm của học sinh"}
+      />
+    </Box>
+  </>
   );
 };
 

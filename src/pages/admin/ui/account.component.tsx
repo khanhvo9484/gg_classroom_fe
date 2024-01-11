@@ -11,7 +11,6 @@ import LoadingContext from "@/context/loading.contenxt";
 import { AdminService } from "@/service/admin.service";
 import { mutate } from "swr";
 import toast from "react-hot-toast";
-import useAllUser from "@/hooks/all-users.hook";
 
 function convertDob(dob: string){
     return (new Date(dob)).toDateString()
@@ -81,7 +80,7 @@ const AccountComponent: React.FC<Props> = ({
                             variant="body1"
                             sx={{ marginLeft: 2, fontSize:14 }}
                             >
-                            {account.phone_number}
+                            {account.phoneNumber}
                         </Typography>
                     </Grid>
                     <Grid xs={2} item>

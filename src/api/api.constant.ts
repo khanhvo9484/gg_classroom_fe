@@ -49,4 +49,4 @@ export const API_GET_NOTIFICATION = "/notification/get-notification/{userId}";
 
 export const API_ADMIN = "/admin";
 export const API_ADMIN_BLOCK_USER = "/block-user";
-export const API_ADMIN_UN_BLOCK_USER = "/unblock-user"
+export const API_ADMIN_UN_BLOCK_USER = "/unblock-user";

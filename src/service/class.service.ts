@@ -200,6 +200,8 @@ export class ClassService {
       updateStudentGradeRequest
     );
 
+    console.log(`linK ${API_STUDENT_GRADE}${API_UPDATE_STUDENT_GRADE}`)
+    console.log( `payload: ${updateStudentGradeRequest}`)
     return response;
   }
 

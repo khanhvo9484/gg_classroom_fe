@@ -14,8 +14,6 @@ export class AdminService {
         const response = await customAxios.post<IBaseResponse<response>>(
             `${API_ADMIN}${API_ADMIN_BLOCK_USER}`, {userId: userId}
         );
-        
-        console.log(response);
 
         return response.data;
     }

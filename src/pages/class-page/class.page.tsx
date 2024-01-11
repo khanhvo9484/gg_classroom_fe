@@ -45,7 +45,7 @@ const ClassPage = () => {
   const classes = useStyles();
   const { startLoading, stopLoading } = useContext(LoadingContext);
 
-  const [, setIsOpenSettingCourseDialog] = useState<boolean>(false);
+  // const [, setIsOpenSettingCourseDialog] = useState<boolean>(false);
 
   useEffect(() => {
     const str = getPartAfterCourseId();
@@ -121,8 +121,13 @@ const ClassPage = () => {
         navigate(`/course/${courseId}/members`, { replace: true });
         break;
       case "grades":
-        setValue(2);
-        navigate(`/course/${courseId}/grades`, { replace: true });
+        if (role === "teacher") {
+          setValue(2);
+          navigate(`/course/${courseId}/grades`, { replace: true });
+        } else {
+          setValue(3);
+          navigate(`/course/${courseId}/student-view-grade`, { replace: true });
+        }
         break;
       case "grade-structure":
         setValue(4);
@@ -133,7 +138,7 @@ const ClassPage = () => {
         navigate(`/course/${courseId}/grade-review`, { replace: true });
         break;
       default:
-        setValue(null);
+        setValue(5);
         navigate(`/course/${courseId}/${str}`, { replace: true });
         break;
     }
@@ -143,9 +148,9 @@ const ClassPage = () => {
     setValue(newValue);
   };
 
-  const handleOpenSettingCourse = () => {
-    setIsOpenSettingCourseDialog(true);
-  };
+  // const handleOpenSettingCourse = () => {
+  //   setIsOpenSettingCourseDialog(true);
+  // };
 
   return (
     <>
