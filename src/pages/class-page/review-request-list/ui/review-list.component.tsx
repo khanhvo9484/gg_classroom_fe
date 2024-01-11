@@ -6,11 +6,67 @@ import { useParams } from "react-router-dom";
 import { Grid, ListItemButton, Popover } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import StudentGradeReviewItem from "./review-item";
-
+import { useState, useEffect } from "react";
+import { customAxios } from "@/api/custom-axios";
+import UserModel from "@/models/user.model";
+export interface IGradeReviewFinal {
+  gradeReviewId: string;
+  gradeReviewerId: string;
+  finalGrade: number;
+  createdAt?: string;
+}
+export interface IGradeReviewResponseKZ {
+  id: string;
+  studentId: string;
+  courseId: string;
+  gradeId: string;
+  gradeName: string;
+  percentage: number;
+  currentGrade: number;
+  expectedGrade: number;
+  explaination: string;
+  createdAt?: string;
+  updatedAt?: string;
+  deletedAt?: string;
+  imgURL?: string;
+  status?: string;
+  user?: UserModel;
+  final?: IGradeReviewFinal;
+}
+export enum GradeReviewStatus {
+  PENDING = "Đang chờ",
+  APPROVED = "Đã chấp nhận",
+  REJECTED = "Đã từ chối",
+}
+export const GradeReviewStatusDict = {
+  pending: GradeReviewStatus.PENDING,
+  approved: GradeReviewStatus.APPROVED,
+  rejected: GradeReviewStatus.REJECTED,
+};
 interface Props {}
-
+const API_GRADE_REVIEW_LIST =
+  "/grade-review/all-grade-review/{courseId}?roleInCourse={roleInCourseInput}";
 const ReviewRequestListComponent: React.FC<Props> = () => {
   const { courseId } = useParams();
+  const [reviews, setReviews] = useState([]);
+  useEffect(() => {
+    try {
+      const fetcher = async (): Promise<IGradeReviewResponseKZ[]> => {
+        const { data: response } = await customAxios.get(
+          API_GRADE_REVIEW_LIST.replace("{courseId}", "CSOrIVHScw").replace(
+            "{roleInCourseInput}",
+            "teacher"
+          )
+        );
+        console.log(response.data);
+        setReviews(response.data);
+        return response.data;
+      };
+      fetcher();
+    } catch (e) {
+      console.log(e);
+    }
+  }, []);
 
   const navigate = useNavigate();
 
@@ -83,19 +139,30 @@ const ReviewRequestListComponent: React.FC<Props> = () => {
         </Grid>
       </Box>
       <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-        <ListItemButton
-          sx={{ borderRadius: 2 }}
-          onClick={() => handleRequestClick("1")}
-        >
-          <StudentGradeReviewItem
-            studentName="Khoa"
-            assignmentName="BTVN"
-            status="Đang chờ"
-            currentGrade="9"
-            expectedGrade="10"
-            createdAt="1222"
-          />
-        </ListItemButton>
+        {reviews.length > 0 &&
+          reviews.map((review: IGradeReviewResponseKZ) => {
+            return (
+              <ListItemButton
+                sx={{
+                  borderRadius: 2,
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+                onClick={() => handleRequestClick(review.id)}
+              >
+                <StudentGradeReviewItem
+                  key={review.id}
+                  studentName={review.user?.name}
+                  assignmentName={review.gradeName}
+                  status={GradeReviewStatusDict[review.status]}
+                  currentGrade={review.currentGrade.toString()}
+                  expectedGrade={review.expectedGrade.toString()}
+                  createdAt={review.createdAt}
+                />
+              </ListItemButton>
+            );
+          })}
+
         <Divider sx={{ marginTop: 1 }} variant="fullWidth" component="li" />
       </List>
     </Box>

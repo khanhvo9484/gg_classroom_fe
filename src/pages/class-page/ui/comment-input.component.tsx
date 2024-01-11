@@ -13,7 +13,8 @@ import UserModel from "@/models/user.model";
 import AvatarHelper from "@/utils/avatar-helper/avatar.helper";
 import { useSelector } from "react-redux";
 import { selectUser } from "@/redux/auth.slice";
-
+import { customAxios } from "@/api/custom-axios";
+import { useState } from "react";
 const easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {
   opacity: 1,
@@ -27,6 +28,10 @@ const animate = {
 
 export interface CommentProps {
   updateData: (newComment) => void;
+  rollbackData: (newComment) => void;
+  courseId: string;
+  ownerId: string;
+  gradeReviewId: string;
 }
 
 export interface Comment {
@@ -35,8 +40,24 @@ export interface Comment {
   createdTime: string;
 }
 
-const CommentInputComponent: React.FC<CommentProps> = ({ updateData }) => {
+export interface IGradeReviewComment {
+  user: UserModel;
+  userId: string;
+  gradeReviewId: string;
+  content: string;
+  ownerId: string;
+  courseId: string;
+}
+
+const CommentInputComponent: React.FC<CommentProps> = ({
+  updateData,
+  rollbackData,
+  courseId,
+  ownerId,
+  gradeReviewId,
+}) => {
   const userProfile = useSelector(selectUser);
+  const [isLoading, setIsLoading] = useState(false);
 
   const CommentSchema = Yup.object().shape({
     comment: Yup.string().required("Bạn cần nhập câu trả lời của bạn!"),
@@ -52,22 +73,29 @@ const CommentInputComponent: React.FC<CommentProps> = ({ updateData }) => {
         const payload = {
           comment: values.comment,
         };
-        const newComment: Comment = {
-          comment: values.comment,
-          account: userProfile,
-          createdTime: new Date().toDateString(),
+        const newComment: IGradeReviewComment = {
+          user: userProfile,
+          userId: userProfile.id,
+          gradeReviewId: gradeReviewId,
+          content: values.comment,
+          ownerId: ownerId,
+          courseId: courseId,
         };
         updateData(newComment);
-        const response = true;
-        if (response) {
-          toast.success("Trả lời thành công.");
+        const result = await customAxios.post(
+          "/grade-review/comment-on-grade-review",
+          { ...newComment, user: undefined }
+        );
+        if (result.status === 201 || result.status === 200) {
         } else {
+          rollbackData(newComment);
           toast.error("Trả lờithất bại.");
         }
-        resetForm();
       } catch (error) {
         console.log(error);
         toast.error("Trả lời thất bại.");
+      } finally {
+        resetForm();
       }
     },
   });

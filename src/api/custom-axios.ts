@@ -25,7 +25,7 @@ function createAxiosResponseInterceptor() {
     (response) => response,
     (error) => {
       // Reject promise if usual error
-      if (error.response.status !== 401) {
+      if (error?.response?.status !== 401) {
         return Promise.reject(error);
       }
       if (localStorage.getItem("access_token") === null) {

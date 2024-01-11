@@ -6,23 +6,18 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Divider, Typography, CardContent } from "@mui/material";
 import Box from "@mui/material/Box";
 import React from "react";
-
-export interface Comment {
-  account: UserModel;
-  comment: string;
-  createdTime: string;
-}
-
+import { IGradeReviewComment } from "./card-review-request";
 export interface CommentProps {
-  comment: Comment;
+  comment: IGradeReviewComment;
+  _bgColor?: string;
 }
 
-const CommentComponent: React.FC<CommentProps> = ({ comment }) => {
+const CommentComponent: React.FC<CommentProps> = ({ comment, _bgColor }) => {
   return (
-    <CardContent>
+    <CardContent sx={{ backgroundColor: _bgColor || "white" }}>
       <CardHeader
         sx={{}}
-        avatar={<AvatarHelper sx={{}} user={comment?.account} />}
+        avatar={<AvatarHelper sx={{}} user={comment?.user} />}
         action={
           <IconButton aria-label="settings">
             <MoreVertIcon />
@@ -32,14 +27,14 @@ const CommentComponent: React.FC<CommentProps> = ({ comment }) => {
           <Box sx={{ display: "flex", gap: 1 }}>
             {" "}
             <Typography variant="body2" sx={{ fontWeight: 500 }}>
-              {comment?.account.name}
+              {comment?.user?.name}
             </Typography>
-            <Typography variant="body2">{comment?.createdTime}</Typography>
+            <Typography variant="body2">{}</Typography>
           </Box>
         }
         subheader={
           <Typography mt={0.5} variant="body2">
-            {comment?.comment}
+            {comment?.content}
           </Typography>
         }
       />
