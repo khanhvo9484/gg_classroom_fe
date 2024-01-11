@@ -1,25 +1,68 @@
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { Grid, IconButton, Pagination, Stack, TextField } from "@mui/material";
+import { Grid, IconButton, MenuItem, Pagination, Select, Stack, TextField } from "@mui/material";
 import useAllCourses from "@/hooks/all-courses.hook";
 import CourseComponent from "./course.component";
 import { ChangeEvent, useState } from "react";
 import SortByAlphaIcon from '@mui/icons-material/SortByAlpha';
 import { inPlaceSort } from 'fast-sort';
+import { ICourse } from "@/models/class.model";
 
 interface Props {
 }
 
 const CourseListComponent: React.FC<Props> = () => {
 
-    const { courses, coursesMutate } = useAllCourses();
+    const { courses } = useAllCourses();
     const [currentPageNumber, setCurrentPageNumber] = useState(1);
-
-    const coursesPagination = courses?.slice((currentPageNumber - 1)*15, currentPageNumber*15)
+    const [ currentFilter, setCurrentFilter ] = useState("");
+    const [ currentFilterAttribute, setCurrentFilterAttribute ] = useState("1");
 
     const handlePageChange = (event: ChangeEvent<unknown>, pageNumber: number) => {
         setCurrentPageNumber(pageNumber);
+    }
+
+    const handleChangeAttribute = (target: HTMLSelectElement) => {
+        setCurrentFilterAttribute(target.value);
+        setCurrentFilter("");
+    }
+
+    const filterFunction = (element: ICourse) => {
+        switch (currentFilterAttribute) {
+            case "1":
+                if (element?.name.toUpperCase().indexOf(currentFilter.toUpperCase()) > -1) {
+                    return true;
+                }
+                break;
+            case "2":
+                if (element?.description.toUpperCase().indexOf(currentFilter.toUpperCase()) > -1) {
+                    return true;
+                }
+                break;
+            case "3":
+                if (element?.courseOwner.name.toUpperCase().indexOf(currentFilter.toUpperCase()) > -1) {
+                    return true;
+                }
+                break;
+            case "4":
+                if (element?.inviteCode.toUpperCase().indexOf(currentFilter.toUpperCase()) > -1) {
+                    return true;
+                }
+                break;
+            default:
+                break;
+        }
+        return false;
+    }
+
+    const coursesPagination = courses?.filter(filterFunction).length > 15 ?
+        courses?.filter(filterFunction)
+        .slice((currentPageNumber - 1)*15, currentPageNumber*15)
+        : courses?.filter(filterFunction);
+
+    const handleFilterChange = (event: ChangeEvent<unknown>) => {
+        setCurrentFilter((event.target as HTMLInputElement).value);
     }
 
     const [sortName, setSortName ] = useState(false);
@@ -87,7 +130,6 @@ const CourseListComponent: React.FC<Props> = () => {
                     break;
             }
         }
-        console.log(courses);
     }
 
     return (
@@ -99,9 +141,22 @@ const CourseListComponent: React.FC<Props> = () => {
                 id="filter-text-box"
                 label="Tìm kiếm"
                 type="search"
-                onInput={() => console.log("abc")}
+                value={currentFilter}
+                onInput={(event) => handleFilterChange(event)}
                 sx={{ width: "400px", mb: 2 }}
                 />
+                <Select
+                    sx={{mb: 2}}
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={currentFilterAttribute}
+                    onChange={(event) => handleChangeAttribute(event.target as HTMLSelectElement)}
+                >
+                    <MenuItem value={"1"}>Tên môn học</MenuItem>
+                    <MenuItem value={"2"}>Miêu tả</MenuItem>
+                    <MenuItem value={"3"}>Giảng viên</MenuItem>
+                    <MenuItem value={"4"}>Mã mời</MenuItem>
+                </Select>
             </Box>
             <Box
                 sx={{
@@ -178,7 +233,7 @@ const CourseListComponent: React.FC<Props> = () => {
             </List>
             {courses && (
                 <Stack alignItems="center">
-                    <Pagination count={Math.ceil(courses?.length/15)} color="primary"
+                    <Pagination count={Math.ceil(courses?.filter(filterFunction).length/15)} color="primary"
                     onChange={(event, pageNumber) => handlePageChange(event, pageNumber)}/>
                 </Stack>
             )}

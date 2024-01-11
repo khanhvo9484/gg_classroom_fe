@@ -2,10 +2,16 @@ import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
 import AvatarHelper from "@/utils/avatar-helper/avatar.helper";
 import Typography from "@mui/material/Typography";
-import {Grid, IconButton } from "@mui/material";
-import BlockIcon from '@mui/icons-material/Block';
+import {Grid, IconButton, Tooltip } from "@mui/material";
+import GppGoodIcon from '@mui/icons-material/GppGood';
 import GppBadIcon from '@mui/icons-material/GppBad';
 import UserModel from "@/models/user.model";
+import { useContext } from "react";
+import LoadingContext from "@/context/loading.contenxt";
+import { AdminService } from "@/service/admin.service";
+import { mutate } from "swr";
+import toast from "react-hot-toast";
+import useAllUser from "@/hooks/all-users.hook";
 
 function convertDob(dob: string){
     return (new Date(dob)).toDateString()
@@ -20,13 +26,29 @@ const AccountComponent: React.FC<Props> = ({
 }) => {
 
     const dob = convertDob(account.dob);
+    const {startLoading, stopLoading } = useContext(LoadingContext);
+    const adminService = new AdminService();
 
-    const HandleSuspendClick = () => {
-
-    }
-
-    const HandleBanClick = () => {
-
+    const HandleBanClick = async () => {
+        startLoading();
+        if (account.isBlocked) {
+            try {
+                await adminService.unblockUser(account.id);
+                await mutate("all-users", []);
+                toast.success("Mở khóa tài khoản người dùng thành công.");
+            } catch (error) {
+                toast.error("Mở khóa tài khoản người dùng thất bại.");
+            }
+        } else {
+            try {
+                await adminService.blockUser(account.id);
+                await mutate("all-users", []);
+                toast.success("Khóa tải khoản người dùng thành công.");
+            } catch (error) {
+                toast.error("Khóa tài khoản người dùng thất bại thất bại.");
+            }
+        }
+        stopLoading();
     }
 
     return (
@@ -70,17 +92,19 @@ const AccountComponent: React.FC<Props> = ({
                             {dob}
                         </Typography>
                     </Grid>
-                    <Grid xs={2} sx={{mt: -1}} item>
-                        <IconButton onClick={() => HandleSuspendClick()}>
-                            <GppBadIcon color={account.isBlocked ? "warning" : "action"}/>
-                        </IconButton>
-                        <IconButton onClick={() => HandleBanClick()}>
-                            <BlockIcon color={account.isBlocked ? "error" : "action"} />
+                    <Grid xs={2} sx={{mt: -1, display: "inline-flex", justifyContent: "center"}} item>
+                        <IconButton onClick={() => HandleBanClick()} sx={{ml: 2}}>
+                            <Tooltip title={account?.isBlocked ? "Tài khoản bị khóa, nhấn để mở khóa tài khoản."
+                            : "Tài khoản đang hoạt động, nhấn để khóa tài khoản."}>
+                                {account?.isBlocked ?
+                                (<GppBadIcon color={"warning"} />) :
+                                 <GppGoodIcon color={"success"} />}
+                            </Tooltip>
                         </IconButton>
                     </Grid>
                 </Grid>
             </ListItem>
-            <Divider component={"li"}/>
+            <Divider component={"li"} key={convertDob(account.dob)}/>
         </>
     );
 };

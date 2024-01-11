@@ -65,6 +65,14 @@ const AccountListComponent: React.FC<Props> = () => {
                             {`Ngày sinh`}
                         </Typography>
                     </Grid>
+                    <Grid xs={2} item>
+                        <Typography
+                            variant="h6"
+                            sx={{ marginLeft: 2, color: "rgb(25,103,210)" }}
+                            >
+                            {`Tình trạng`}
+                        </Typography>
+                    </Grid>
                 </Grid>
             </Box>
             <List sx={{ width: "100%", bgcolor: "background.paper" }}>

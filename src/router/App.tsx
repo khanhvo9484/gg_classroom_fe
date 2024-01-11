@@ -35,6 +35,7 @@ import JoinedClassReviewRequestPage from "@/pages/joinedclass.review.page";
 import RequiredAdmin from "@/layout/required-admin.layout";
 import AdminAcountsPage from "@/pages/admin/admin.accounts.page";
 import AdminCoursesPage from "@/pages/admin/admin.courses.page";
+import RequiredUser from "@/layout/required-user.layout";
 
 function App() {
   return (
@@ -59,50 +60,51 @@ function App() {
         </Route>
       </Route>
 
-      <Route path="admin" element={<RequiredAdmin />}>
-        <Route element={<AdminLayout />}>
-          <Route path="home" element={"home"} />
-          <Route path="accounts" element={<AdminAcountsPage />} />
-          <Route path="courses" element={<AdminCoursesPage />} />
-          <Route path="student-id" element={"student-id"} />
-        </Route>
-      </Route>
-
       <Route element={<RequiredAuth />}>
-        <Route element={<MainLayout />}>
-          <Route path="home" element={<HomePage />} />
-          <Route path="archived" element={<ArchivedCoursesPage />} />
-          <Route path="profile" element={<ProfilePage />} />
-          <Route path="calendar" element={<HomePage />} />
-          <Route path="own-class-review" element={<AllReviewRequestPage />} />
-          <Route
-            path="joined-class-review"
-            element={<JoinedClassReviewRequestPage />}
-          />
-          <Route path="archived" element={<HomePage />} />
-          <Route path="setting" element={<HomePage />} />
-          <Route
-            path="course/:courseId"
-            element={
-              <RoleProvider>
-                <ClassPage />
-              </RoleProvider>
-            }
-          >
-            <Route path="news" element={<NewsClassPage />} />
-            <Route path="members" element={<MembersPage />} />
-            <Route path="grades" element={<GradesPage />} />
+        <Route path="admin" element={<RequiredAdmin />}>
+          <Route element={<AdminLayout />}>
+            <Route path="home" element={"home"} />
+            <Route path="accounts" element={<AdminAcountsPage />} />
+            <Route path="courses" element={<AdminCoursesPage />} />
+            <Route path="student-id" element={"student-id"} />
+          </Route>
+        </Route>
+        <Route element={<RequiredUser />}>
+          <Route element={<MainLayout />}>
+            <Route path="home" element={<HomePage />} />
+            <Route path="archived" element={<ArchivedCoursesPage />} />
+            <Route path="profile" element={<ProfilePage />} />
+            <Route path="calendar" element={<HomePage />} />
+            <Route path="own-class-review" element={<AllReviewRequestPage />} />
             <Route
-              path="student-view-grade"
-              element={<StudentViewGradePage />}
+              path="joined-class-review"
+              element={<JoinedClassReviewRequestPage />}
             />
-            <Route path="grade-review/" element={<ReviewRequestPage />} />
+            <Route path="archived" element={<HomePage />} />
+            <Route path="setting" element={<HomePage />} />
             <Route
-              path="grade-review/:reviewId"
-              element={<GradeReviewPost />}
-            />
-            <Route path="grade-structure" element={<GradeStructurePage />} />
-            {/* <Route path="student-grades" element={<StudentGradePage />} /> */}
+              path="course/:courseId"
+              element={
+                <RoleProvider>
+                  <ClassPage />
+                </RoleProvider>
+              }
+            >
+              <Route path="news" element={<NewsClassPage />} />
+              <Route path="members" element={<MembersPage />} />
+              <Route path="grades" element={<GradesPage />} />
+              <Route
+                path="student-view-grade"
+                element={<StudentViewGradePage />}
+              />
+              <Route path="grade-review/" element={<ReviewRequestPage />} />
+              <Route
+                path="grade-review/:reviewId"
+                element={<GradeReviewPost />}
+              />
+              <Route path="grade-structure" element={<GradeStructurePage />} />
+              {/* <Route path="student-grades" element={<StudentGradePage />} /> */}
+            </Route>
           </Route>
         </Route>
         <Route path="invite-course" element={<VerifyTokenInvitePage />} />
