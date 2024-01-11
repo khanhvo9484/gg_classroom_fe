@@ -8,18 +8,16 @@ import StarIcon from "@mui/icons-material/Star";
 import StarBorder from "@mui/icons-material/StarBorder";
 import { useSelector } from "react-redux";
 import { selectUser } from "@/redux/auth.slice";
-import { useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import GradeReviewRequestDialog from "@/components/ui/dialog/review-grade-request.dialog.component";
-import { GradeService } from "@/service/grade.service";
 import {
   IGradeItem,
   IGradeItemComponent,
   IGradeStructure,
   IStudentGrade,
 } from "@/models/grade.model";
-import { IGradeReview, IGradeReviewInfor } from "@/models/grade.review.model";
+import { IGradeReviewInfor } from "@/models/grade.review.model";
 
 const itemStyle = {
   borderRadius: 2,
@@ -31,9 +29,9 @@ interface Props {
 }
 
 const GradeList: React.FC<Props> = ({ grade, gradeStudent }) => {
-  const [selectedIndex, setSelectedIndex] = useState(-1);
   const [isGradeReviewDialogOpen, setIsGradeReviewDialogOpen] = useState(false);
-  const [inforGradeReview, setInforGradeReview] = useState<IGradeReview>();
+  const [inforGradeReview, setInforGradeReview] = useState<IGradeReviewInfor>();
+  const auth = useSelector(selectUser);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function isIGradeItemComponent(item: any): item is IGradeItemComponent {
@@ -50,11 +48,8 @@ const GradeList: React.FC<Props> = ({ grade, gradeStudent }) => {
         return;
       }
 
-      // Thuc hien request
-      console.log("THUC HIEN REQUEST");
       createGradeReview(item);
     } else {
-      console.log("DAY LA IGRADEITEM ");
       createGradeReview(item);
     }
   };
@@ -64,12 +59,15 @@ const GradeList: React.FC<Props> = ({ grade, gradeStudent }) => {
     setIsGradeReviewDialogOpen(true);
 
     const inforGradeReview: IGradeReviewInfor = {
-      studentId: gradeStudent.studentOfficialId,
+      studentId: auth.id,
       gradeId: item.id,
       currentGrade: isIGradeItemComponent(item)
         ? +item.totalGrade
         : +item.grade,
+      name: item.name,
     };
+
+    setInforGradeReview(inforGradeReview);
 
     console.log("INFOR: ", inforGradeReview);
   };
@@ -82,11 +80,10 @@ const GradeList: React.FC<Props> = ({ grade, gradeStudent }) => {
         aria-labelledby="nested-list-subheader"
       >
         {grade &&
-          grade.gradeComponent.map((gradeItem, index) => {
+          grade.gradeComponent.map((gradeItem) => {
             return (
               <>
                 <ListItemButton
-                  selected={selectedIndex === index}
                   onClick={(event) => {
                     handleListItemClick(event, gradeItem);
                   }}
@@ -138,13 +135,13 @@ const GradeList: React.FC<Props> = ({ grade, gradeStudent }) => {
             );
           })}
       </List>
+
       <GradeReviewRequestDialog
         open={isGradeReviewDialogOpen}
         onClose={() => {
           setIsGradeReviewDialogOpen(false);
         }}
         infoGrade={inforGradeReview}
-        // infoGrade={}
       />
     </>
   );

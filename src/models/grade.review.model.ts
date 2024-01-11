@@ -10,6 +10,7 @@ export interface IGradeReview extends IBase {
   studentId: string;
   gradeId: string;
   currentGrade: number;
+  courseId: string;
   expectedGrade?: number;
   explaination?: string;
   imgURL?: string;
@@ -20,10 +21,23 @@ export interface IGradeReviewInfor {
   studentId: string;
   gradeId: string;
   currentGrade: number;
+  name: string;
   expectedGrade?: number;
   explaination?: string;
   imgURL?: string;
   status?: GradeReviewStatus;
+  courseId?: string;
+}
+
+export interface IGradeReviewRequest {
+  studentId: string;
+  gradeId: string;
+  courseId: string;
+  gradeName: string;
+  currentGrade: number;
+  expectedGrade: number;
+  explaination?: string;
+  file?: File;
 }
 
 export interface IGradeReviewsRespone extends IBaseResponse<IGradeReview[]> {}

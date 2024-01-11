@@ -55,7 +55,7 @@ const ClassPage = () => {
   useEffect(() => {
     const abortController = new AbortController();
     const { signal } = abortController;
-    signal;
+    // signal
     startLoading();
     const getCourseById = async (courseId: string) => {
       try {
