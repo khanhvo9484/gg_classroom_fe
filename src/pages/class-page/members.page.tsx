@@ -9,6 +9,7 @@ import { IInvitationCourse } from "@/models/class.model";
 import LinearProgress from "@mui/material/LinearProgress";
 
 const MembersPage = () => {
+  document.title = "Thành viên";
   const classService = new ClassService();
   const { courseId } = useParams();
   const [isLoading, setIsLoading] = useState(true);

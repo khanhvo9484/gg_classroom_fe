@@ -29,9 +29,6 @@ const StudentViewGradePage = () => {
 
         setGradeStudent(response.data);
         setGrade(response.data.grade);
-
-        console.log("RESPOSEN grade student: ", response.data);
-        console.log("RESPOSEN grade : ", response.data.grade);
       } catch (error) {
         console.log(error);
         throw error;

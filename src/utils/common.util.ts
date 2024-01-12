@@ -15,17 +15,21 @@ export const formatDate_YYYY_MM_DD = (rawDateStr: string) => {
 };
 
 export function convertUtcToVietnamTime(utcTimeString: string): string {
-  const utcTime = new Date(utcTimeString);
+  try {
+    const utcTime = new Date(utcTimeString);
 
-  const vnTime = utcTime.toLocaleString("en-US", {
-    timeZone: "Asia/Ho_Chi_Minh",
-    hour12: false,
-    hour: "2-digit",
-    minute: "2-digit",
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
+    const vnTime = utcTime.toLocaleString("en-US", {
+      timeZone: "Asia/Ho_Chi_Minh",
+      hour12: false,
+      hour: "2-digit",
+      minute: "2-digit",
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
 
-  return vnTime;
+    return vnTime;
+  } catch (e) {
+    return utcTimeString;
+  }
 }

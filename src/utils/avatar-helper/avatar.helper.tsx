@@ -23,32 +23,42 @@ function stringToColor(string: string) {
 }
 
 function stringAvatar(user: UserModel, sx: SxProps) {
-  const nameParts = user?.name.split(" ");
-  let displayName = "";
+  try {
+    const nameParts = user?.name.split(" ");
+    let displayName = "";
 
-  if (nameParts?.length > 1) {
-    displayName = user.name.split(" ")[0][0] + user.name.split(" ")[1][0];
-  } else {
-    displayName = user?.name.split(" ")[0][0];
+    if (nameParts?.length > 1) {
+      displayName = user.name.split(" ")[0][0] + user.name.split(" ")[1][0];
+    } else {
+      displayName = user?.name.split(" ")[0][0];
+    }
+
+    return {
+      sx: {
+        ...sx,
+        bgcolor: stringToColor(user?.name),
+      },
+      children: displayName,
+    };
+  } catch (err) {
+    return {
+      // sx: {
+      //   ...sx,
+      //   bgcolor: stringToColor(""),
+      // },
+      // children: "",
+    };
   }
-
-  return {
-    sx: {
-      ...sx,
-      bgcolor: stringToColor(user?.name),
-    },
-    children: displayName,
-  };
 }
 
 interface Props {
   user: UserModel;
-  sx: SxProps
+  sx: SxProps;
 }
 
 const AvatarHelper: React.FC<Props> = ({ user, sx }) => {
   if (user?.avatar) {
-    return <Avatar src={user.avatar} sx={sx}/>;
+    return <Avatar src={user.avatar} sx={sx} />;
   } else {
     return <Avatar {...stringAvatar(user, sx)} />;
   }

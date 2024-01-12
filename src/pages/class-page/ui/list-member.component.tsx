@@ -126,9 +126,39 @@ const MemberListComponent: React.FC<Props> = ({
                     <AvatarHelper sx={{}} user={member} />
                   </ListItemAvatar>
                   <ListItemText
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
                     primary={
-                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                        {member.name}
+                      <>
+                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                          {member.name}
+                        </Typography>
+                        {
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              fontWeight: 500,
+                              color: "#3c4043",
+                              opacity: "0.54",
+                            }}
+                          >
+                            {member.email}
+                          </Typography>
+                        }
+                      </>
+                    }
+                    secondary={
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontWeight: 500,
+                          color: "#3c4043",
+                          opacity: "0.54",
+                        }}
+                      >
+                        {!isTeacherList && member.studentOfficialId}
                       </Typography>
                     }
                   />

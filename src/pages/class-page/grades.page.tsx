@@ -89,8 +89,6 @@ function convertToRowDataWithStudentInfo(student) {
     fullName: student.fullName,
   };
 
-  console.log("row value temp: ", rowValues);
-
   function processComponent(component) {
     if (component.gradeSubComponent && component.gradeSubComponent.length > 0) {
       component.gradeSubComponent.forEach((subComponent) => {
@@ -109,7 +107,7 @@ function convertToRowDataWithStudentInfo(student) {
   student.grade.gradeComponent.forEach((component) =>
     processComponent(component)
   );
-  console.log("Row value: ", rowValues);
+
   return rowValues;
 }
 
@@ -135,6 +133,7 @@ const defaultHeader: (ColDef | ColGroupDef)[] = [
 ];
 
 const GradesPage = () => {
+  document.title = "Bảng điểm";
   const classService = new ClassService();
   const { courseId } = useParams();
   const gridRef = useRef<AgGridReact>(null);
@@ -189,9 +188,6 @@ const GradesPage = () => {
             handleMakeFinallize
           );
 
-          console.log("column Map: ", columnMap);
-
-          console.log("response : ", responseStudentGrade.data);
           const rowValuesList = responseStudentGrade.data.map((student) =>
             convertToRowDataWithStudentInfo(student)
           );

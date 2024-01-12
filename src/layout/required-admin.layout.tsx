@@ -4,14 +4,12 @@ import { useSelector } from "react-redux/es/hooks/useSelector";
 import { selectUser } from "@/redux/auth.slice";
 
 const RequiredAdmin = () => {
-    const user = useSelector(selectUser);
-    if (
-        user.role !== "admin"
-    ) {
-        return <Navigate to={`/home`}></Navigate>;
-    }
+  const user = useSelector(selectUser);
+  if (user.role !== "admin") {
+    return <Navigate to={`/unauthorized`}></Navigate>;
+  }
 
-    return <Outlet />;
+  return <Outlet />;
 };
 
 export default RequiredAdmin;

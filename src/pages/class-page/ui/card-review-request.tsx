@@ -16,21 +16,29 @@ import {
   Menu,
   MenuItem,
   Container,
+  Tooltip,
+  LinearProgress,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import { useCallback, useState, useEffect, useRef } from "react";
+import { useCallback, useState, useEffect, useRef, useContext } from "react";
 import CommentInputComponent from "./comment-input.component";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ImgsViewer from "react-images-viewer";
 import { customAxios } from "@/api/custom-axios";
 import { IGradeReviewResponseKZ } from "../review-request-list/ui/review-list.component";
 import { GradeReviewStatusDict } from "../review-request-list/ui/review-list.component";
-import BookmarkIcon from "@mui/icons-material/Bookmark";
+import {
+  Bookmark as BookmarkIcon,
+  Notes as NotesIcon,
+} from "@mui/icons-material";
 import socket from "@/socket/socket";
 import { GradeReviewStatus } from "@/models/grade.review.model";
-import FinalizeGradeDialog from "@/components/ui/dialog/finalize-grade.dialog.component";
+import FinalizeGradeDialog from "@/components/ui/dialog/finalize-grade-accept.dialog.component";
+import FinalizeGradeRejectDialog from "@/components/ui/dialog/finalize-grade-reject.dialog.component";
 import { convertUtcToVietnamTime } from "@/utils/common.util";
-
+import RoleContext from "@/context/role.context";
+import { useSelector } from "react-redux";
+import { selectUser } from "@/redux/auth.slice";
 export interface IGradeReviewComment {
   id: string;
   userId: string;
@@ -64,7 +72,8 @@ const GradeReviewPost: React.FC<Props> = () => {
   const { reviewId } = useParams();
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const [review, setReview] = useState<IGradeReviewResponseKZ>(null);
-
+  const { isTeacher, setIsTeacher } = useContext(RoleContext);
+  const user = useSelector(selectUser);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -75,6 +84,8 @@ const GradeReviewPost: React.FC<Props> = () => {
   };
 
   const [isOpenFinalizeGradeDialog, setIsFinalizeGradeDialog] = useState(false);
+  const [isOpenFinalizeGradeRejectDialog, setIsFinalizeGradeRejectDialog] =
+    useState(false);
 
   const [finalResult, setFinalResult] = useState<IGradeReviewFinal>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -115,7 +126,7 @@ const GradeReviewPost: React.FC<Props> = () => {
         "grade-review/get/" + reviewId,
         {}
       );
-      console.log(response.data);
+
       setReview(response.data);
       setCommentData(response.data.comments);
 
@@ -133,14 +144,14 @@ const GradeReviewPost: React.FC<Props> = () => {
 
     socket.emit("joinPost", { postId: reviewId });
     socket.on("onReceiveNewComment", (data) => {
-      setCommentData((prevCommentData) => [...prevCommentData, data]);
-      setTimeout(() => {
-        scrollToLastesComment();
-      }, 100);
+      if (data?.user?.id !== user.id) {
+        setCommentData((prevCommentData) => [...prevCommentData, data]);
+        setTimeout(() => {
+          scrollToLastesComment();
+        }, 100);
+      }
     });
-    socket.on("joinedPost", (data) => {
-      console.log(data);
-    });
+    socket.on("joinedPost", (data) => {});
 
     return () => {
       socket.off("joinPost");
@@ -148,9 +159,13 @@ const GradeReviewPost: React.FC<Props> = () => {
       socket.off("joinedPost");
     };
   }, []);
+  useEffect(() => {
+    scrollToLastesComment();
+  }, [commentData]);
 
   return (
     <>
+      {isLoading && <LinearProgress sx={{ top: -5 }} />}
       <Container>
         <Card
           sx={{
@@ -162,14 +177,30 @@ const GradeReviewPost: React.FC<Props> = () => {
         >
           {!isLoading && (
             <>
-              <IconButton aria-label="settings" onClick={handleBackClick}>
-                <ArrowBackIcon />
-                <Typography variant="body1">Xem danh sách</Typography>
-              </IconButton>
-
               <CardHeader
                 sx={{ paddingBottom: "0" }}
-                avatar={<AvatarHelper sx={{}} user={review.user} />}
+                avatar={
+                  <>
+                    <Tooltip title={"Xem danh sách"}>
+                      <IconButton
+                        aria-label="settings"
+                        sx={{
+                          color: "#646464",
+                          ":hover": {
+                            backgroundColor: "transparent",
+                            color: "#3e8aed",
+                          },
+                          borderRadius: "10px",
+                        }}
+                        onClick={handleBackClick}
+                      >
+                        <ArrowBackIcon />
+                      </IconButton>
+                    </Tooltip>
+
+                    <AvatarHelper sx={{}} user={review.user} />
+                  </>
+                }
                 action={
                   <Box sx={{ display: "flex", alignItems: "center" }}>
                     <Button
@@ -186,9 +217,14 @@ const GradeReviewPost: React.FC<Props> = () => {
                     </Button>
                     {/* {isTeacher && <Button variant="contained">Sửa điểm</Button>} */}
 
-                    <IconButton aria-label="settings" onClick={handleMenuClick}>
-                      <MoreVertIcon />
-                    </IconButton>
+                    {isTeacher && (
+                      <IconButton
+                        aria-label="settings"
+                        onClick={handleMenuClick}
+                      >
+                        <MoreVertIcon />
+                      </IconButton>
+                    )}
                   </Box>
                 }
                 title={
@@ -198,6 +234,7 @@ const GradeReviewPost: React.FC<Props> = () => {
                 }
                 subheader={convertUtcToVietnamTime(review.createdAt)}
               />
+
               <Menu
                 id="long-menu"
                 MenuListProps={{
@@ -208,18 +245,20 @@ const GradeReviewPost: React.FC<Props> = () => {
                 onClose={handleMenuClose}
               >
                 <MenuItem
-                  key={"Chấp thuận phúc khảo"}
+                  key={"Đồng ý phúc khảo"}
                   onClick={() => {
                     setIsFinalizeGradeDialog(true);
                   }}
+                  disabled={review.status !== GradeReviewStatus.PENDING}
                 >
-                  {"Chấp thuận phúc khảo"}
+                  {"Đồng ý phúc khảo"}
                 </MenuItem>
                 <MenuItem
                   key={"Từ chối phúc khảo"}
                   onClick={() => {
-                    setIsFinalizeGradeDialog(true);
+                    setIsFinalizeGradeRejectDialog(true);
                   }}
+                  disabled={review.status !== GradeReviewStatus.PENDING}
                 >
                   {"Từ chối phúc khảo"}
                 </MenuItem>
@@ -279,40 +318,42 @@ const GradeReviewPost: React.FC<Props> = () => {
                   </Grid>
                   <Grid xs={1} item></Grid>
                   <Grid xs={4} item>
-                    <Card sx={{ height: "95%" }} elevation={0}>
-                      <CardHeader
-                        title={
-                          <Typography variant="h6">{`Minh chứng`}</Typography>
-                        }
-                      />
-                      <Divider />
-                      <CardContent
-                        sx={{
-                          display: "flex",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <img
-                          src={review.imgURL}
-                          alt={"Minh chứng"}
-                          width={"auto"}
-                          height={250}
-                          style={{ objectFit: "contain", cursor: "pointer" }}
-                          onClick={() => openImageViewer()}
+                    {review.imgURL && (
+                      <Card sx={{ height: "95%" }} elevation={0}>
+                        <CardHeader
+                          title={
+                            <Typography variant="h6">{`Minh chứng`}</Typography>
+                          }
                         />
-                        {isViewerOpen && (
-                          <ImgsViewer
-                            imgs={[
-                              {
-                                src: review.imgURL,
-                              },
-                            ]}
-                            isOpen={isViewerOpen}
-                            onClose={closeImageViewer}
+                        <Divider />
+                        <CardContent
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <img
+                            src={review.imgURL}
+                            alt={"Minh chứng"}
+                            width={"auto"}
+                            height={250}
+                            style={{ objectFit: "contain", cursor: "pointer" }}
+                            onClick={() => openImageViewer()}
                           />
-                        )}
-                      </CardContent>
-                    </Card>
+                          {isViewerOpen && (
+                            <ImgsViewer
+                              imgs={[
+                                {
+                                  src: review.imgURL,
+                                },
+                              ]}
+                              isOpen={isViewerOpen}
+                              onClose={closeImageViewer}
+                            />
+                          )}
+                        </CardContent>
+                      </Card>
+                    )}
                   </Grid>
                 </Grid>
               </CardContent>
@@ -337,6 +378,15 @@ const GradeReviewPost: React.FC<Props> = () => {
                                 <BookmarkIcon></BookmarkIcon>
                                 <Typography variant="body1">
                                   Điểm cuối cùng: {finalResult?.finalGrade}
+                                </Typography>
+                              </Grid>
+
+                              <Grid xs={12} sx={{ display: "flex" }}>
+                                <NotesIcon
+                                  sx={{ fontSize: "1.4rem" }}
+                                ></NotesIcon>
+                                <Typography sx={{ fontSize: "0.8rem" }}>
+                                  Chú thích: {finalResult?.explaination}
                                 </Typography>
                               </Grid>
                               <Grid xs={12}>
@@ -438,6 +488,14 @@ const GradeReviewPost: React.FC<Props> = () => {
         infoGrade={review}
         title={"Cập nhật điểm của học sinh"}
       />
+      <FinalizeGradeRejectDialog
+        open={isOpenFinalizeGradeRejectDialog}
+        onClose={() => {
+          setIsFinalizeGradeRejectDialog(false);
+        }}
+        infoGrade={review}
+        title={"Từ chối phúc khảo"}
+      ></FinalizeGradeRejectDialog>
     </>
   );
 };

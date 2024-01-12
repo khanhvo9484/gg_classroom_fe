@@ -69,33 +69,29 @@ const CommentInputComponent: React.FC<CommentProps> = ({
     },
     validationSchema: CommentSchema,
     onSubmit: async (values, { resetForm }) => {
+      const payload = {
+        comment: values.comment,
+      };
+      const newComment: IGradeReviewComment = {
+        user: userProfile,
+        userId: userProfile.id,
+        gradeReviewId: gradeReviewId,
+        content: values.comment,
+        ownerId: ownerId,
+        courseId: courseId,
+      };
       try {
-        const payload = {
-          comment: values.comment,
-        };
-        const newComment: IGradeReviewComment = {
-          user: userProfile,
-          userId: userProfile.id,
-          gradeReviewId: gradeReviewId,
-          content: values.comment,
-          ownerId: ownerId,
-          courseId: courseId,
-        };
         updateData(newComment);
+        resetForm();
         const result = await customAxios.post(
           "/grade-review/comment-on-grade-review",
           { ...newComment, user: undefined }
         );
-        if (result.status === 201 || result.status === 200) {
-        } else {
-          rollbackData(newComment);
-          toast.error("Trả lờithất bại.");
-        }
       } catch (error) {
         console.log(error);
+        rollbackData(newComment);
         toast.error("Trả lời thất bại.");
       } finally {
-        resetForm();
       }
     },
   });

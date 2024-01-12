@@ -20,6 +20,9 @@ import {
 import { useEffect, useState } from "react";
 import { ClassService } from "@/service/class.service";
 import { IGradeReviewResponseKZ } from "@/pages/class-page/review-request-list/ui/review-list.component";
+import { customAxios } from "@/api/custom-axios";
+import { useSelector } from "react-redux";
+import { selectUser } from "@/redux/auth.slice";
 
 const easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {
@@ -40,23 +43,25 @@ export interface SimpleDialogProps {
 }
 
 export interface updateGradeRequest {
-  courseId: string;
-  studentOfficialId: string;
-  gradeId: string;
-  grade: number;
+  reviewerId: string;
+  gradeReviewId: string;
+  finalGrade: number;
+  explaination?: string;
 }
 
-export default function FinalizeGradeDialog(props: SimpleDialogProps) {
+export default function FinalizeGradeAcceptDialog(props: SimpleDialogProps) {
   const { courseId } = useParams();
   const { onClose, open, infoGrade, title } = props;
   const gradeService = new ClassService();
+  const auth = useSelector(selectUser);
   const [inforGradeReview, setInfoGradeReview] =
     useState<IGradeReviewResponseKZ>(infoGrade);
 
   const navigate = useNavigate();
 
   const FinalizeGradeSchema = Yup.object().shape({
-    grade: Yup.number().required("Bạn cần nhập điểm mới!"),
+    grade: Yup.number().required("Bạn cần nhập điểm mới!").min(0).max(10),
+    note: Yup.string(),
   });
 
   useEffect(() => {
@@ -66,30 +71,27 @@ export default function FinalizeGradeDialog(props: SimpleDialogProps) {
   const formik = useFormik({
     initialValues: {
       grade: infoGrade?.currentGrade,
+      note: "",
     },
     validationSchema: FinalizeGradeSchema,
     onSubmit: async (values) => {
       try {
         const payload: updateGradeRequest = {
-          courseId: courseId,
-          studentOfficialId: inforGradeReview.user.studentOfficialId,
-          gradeId: inforGradeReview.gradeId,
-          grade: values.grade,
+          reviewerId: auth?.id,
+          gradeReviewId: inforGradeReview.id,
+          finalGrade: values.grade,
+          explaination: values.note,
         };
 
-        console.log(payload);
-
-        const response = await gradeService.updateStudentGrade(payload);
-
-        toast.success("Cập nhật điểm thành công.");
-
+        const result = await customAxios.post(
+          "/grade-review/accept-grade-review",
+          payload
+        );
+        if (result.status === 200 || result.status === 201) {
+          toast.success("Cập nhật điểm thành công.");
+          window.location.reload();
+        }
         onClose();
-
-        setTimeout(() => {
-          navigate(`/course/${courseId}/grades`, {
-            replace: true,
-          });
-        }, 500);
       } catch (error) {
         console.log(error);
         toast.error("Cập nhật điểm thất bại.");
@@ -167,6 +169,14 @@ export default function FinalizeGradeDialog(props: SimpleDialogProps) {
                       {...getFieldProps("grade")}
                       error={Boolean(touched.grade && errors.grade)}
                       helperText={touched.grade && errors.grade}
+                    />
+                    <TextField
+                      fullWidth
+                      autoComplete=""
+                      label="Chú thích"
+                      inputProps={{ min: 0, max: 10 }}
+                      type="text"
+                      {...getFieldProps("note")}
                     />
                   </Box>
 

@@ -36,6 +36,8 @@ import RequiredAdmin from "@/layout/required-admin.layout";
 import AdminAcountsPage from "@/pages/admin/admin.accounts.page";
 import AdminCoursesPage from "@/pages/admin/admin.courses.page";
 import RequiredUser from "@/layout/required-user.layout";
+import NotFoundPage from "@/pages/public/invalid-page/not-found.page";
+import UnauthorizedPage from "@/pages/public/invalid-page/unauthorized.page";
 
 function App() {
   return (
@@ -113,6 +115,8 @@ function App() {
       </Route>
 
       <Route path="success-page" element={<SuccessPage />} />
+      <Route path="unauthorized" element={<UnauthorizedPage />} />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 }

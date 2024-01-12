@@ -347,7 +347,27 @@ function Header() {
 
                 <Box sx={{ flexGrow: 0 }}>
                   {userProfile ? (
-                    <AvatarDropdown user={userProfile} />
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginLeft: "0.5rem",
+                      }}
+                    >
+                      <Box sx={{ maxWidth: "100px" }}>
+                        <Typography
+                          sx={{
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                            maxWidth: "100%",
+                          }}
+                        >
+                          {userProfile.name}
+                        </Typography>
+                      </Box>
+                      <AvatarDropdown user={userProfile} />
+                    </Box>
                   ) : path !== "/login" ? (
                     <Link href="/login">
                       <Button variant="outlined" size="large">

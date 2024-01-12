@@ -23,9 +23,9 @@ const SignOut = () => {
       // });
       dispatch(deleteUser());
       setIsLoading(false);
-      navigate("/", { replace: true, state: { from: "sign-out" } });
     }
     signOut();
+    navigate("/", { replace: true, state: { from: "sign-out" } });
     // return () => {
     //   abortController.abort();
     // };

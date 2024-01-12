@@ -18,18 +18,11 @@ import {
   IGradeReviewRequest,
 } from "@/models/grade.review.model";
 import { useEffect, useState } from "react";
-
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  whiteSpace: "nowrap",
-  width: 1,
-});
+import { ClassService } from "@/service/class.service";
+import { IGradeReviewResponseKZ } from "@/pages/class-page/review-request-list/ui/review-list.component";
+import { customAxios } from "@/api/custom-axios";
+import { useSelector } from "react-redux";
+import { selectUser } from "@/redux/auth.slice";
 
 const easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {
@@ -45,57 +38,60 @@ const animate = {
 export interface SimpleDialogProps {
   open: boolean;
   onClose: () => void;
-  infoGrade: IGradeReviewInfor;
+  infoGrade: IGradeReviewResponseKZ;
+  title: string;
 }
 
-export default function GradeReviewRequestDialog(props: SimpleDialogProps) {
+export interface updateGradeRequest {
+  reviewerId: string;
+  gradeReviewId: string;
+  explaination?: string;
+}
+
+export default function FinalizeGradeRejectDialog(props: SimpleDialogProps) {
   const { courseId } = useParams();
-  const { onClose, open, infoGrade } = props;
-  const gradeReviewService = new GradeReviewService();
+  const { onClose, open, infoGrade, title } = props;
+  const gradeService = new ClassService();
+  const auth = useSelector(selectUser);
   const [inforGradeReview, setInfoGradeReview] =
-    useState<IGradeReviewInfor>(infoGrade);
-  const [currentFile, setCurrentFile] = useState(null);
+    useState<IGradeReviewResponseKZ>(infoGrade);
+
+  const navigate = useNavigate();
+
+  const FinalizeGradeSchema = Yup.object().shape({
+    note: Yup.string().required("Bạn cần nhập lý do từ chối!"),
+  });
 
   useEffect(() => {
     setInfoGradeReview(infoGrade);
   }, [infoGrade]);
 
-  const RequestReviewSchema = Yup.object().shape({
-    expectedGrade: Yup.number().required("Bạn cần nhập điểm mình mong muốn!"),
-    explaination: Yup.string(),
-  });
-
   const formik = useFormik({
     initialValues: {
-      expectedGrade: 0,
-      explaination: "",
+      note: "",
     },
-    validationSchema: RequestReviewSchema,
+    validationSchema: FinalizeGradeSchema,
     onSubmit: async (values) => {
       try {
-        const payload: IGradeReviewRequest = {
-          expectedGrade: values.expectedGrade,
-          explaination: values.explaination,
-          courseId: courseId,
-          studentId: infoGrade.studentId,
-          gradeId: infoGrade.gradeId,
-          currentGrade: infoGrade.currentGrade,
-          gradeName: infoGrade.name,
-          file: currentFile,
+        const payload: updateGradeRequest = {
+          reviewerId: auth?.id,
+          gradeReviewId: inforGradeReview.id,
+          explaination: values.note,
         };
+        console.log(payload);
 
-        console.log("REQUEST: ", payload);
-
-        const response = await gradeReviewService.createGradeReview(payload);
-
-        console.log("response: ", response);
-
-        toast.success("Yêu cầu phúc khảo thành công.");
-
+        const result = await customAxios.post(
+          "/grade-review/reject-grade-review",
+          payload
+        );
+        if (result.status === 200 || result.status === 201) {
+          toast.success("Đã từ chối");
+          window.location.reload();
+        }
         onClose();
       } catch (error) {
         console.log(error);
-        toast.error("Yêu cầu phúc khảo thất bại.");
+        toast.error("Từ chối thất bại.");
       }
     },
   });
@@ -119,7 +115,7 @@ export default function GradeReviewRequestDialog(props: SimpleDialogProps) {
                 textAlign: "left",
               }}
             >
-              Phúc khảo điểm
+              {title}
             </Typography>
           </DialogTitle>
           <Box sx={{ display: "inline-flex", justifyContent: "center" }}>
@@ -154,66 +150,21 @@ export default function GradeReviewRequestDialog(props: SimpleDialogProps) {
                     <Box
                       sx={{ display: "flex", justifyContent: "space-between" }}
                     >
-                      <Typography>Tên: {infoGrade.name}</Typography>
+                      <Typography>Tên: {inforGradeReview.gradeName}</Typography>
                       <Typography>
-                        Điểm hiện tại: {infoGrade.currentGrade}
+                        Điểm hiện tại: {inforGradeReview.currentGrade}
                       </Typography>
                     </Box>
 
                     <TextField
                       fullWidth
                       required
-                      autoComplete="Điểm mong muốn"
-                      label="Điểm mong muốn"
+                      autoComplete=""
+                      label="Chú thích"
                       inputProps={{ min: 0, max: 10 }}
-                      type="number"
-                      {...getFieldProps("expectedGrade")}
-                      error={Boolean(
-                        touched.expectedGrade && errors.expectedGrade
-                      )}
-                      helperText={touched.expectedGrade && errors.expectedGrade}
+                      type="text"
+                      {...getFieldProps("note")}
                     />
-
-                    <TextField
-                      fullWidth
-                      autoComplete="Lý do cần phúc khảo"
-                      label="Lý do"
-                      {...getFieldProps("explaination")}
-                      error={Boolean(
-                        touched.explaination && errors.explaination
-                      )}
-                      helperText={touched.explaination && errors.explaination}
-                      multiline
-                      minRows={3}
-                    />
-
-                    <Stack direction="row">
-                      <Button
-                        component={"label"}
-                        sx={{ width: 2 }}
-                        startIcon={<AttachFileIcon />}
-                      >
-                        <VisuallyHiddenInput
-                          type="file"
-                          {...getFieldProps("file")}
-                          onInputCapture={(event) => {
-                            console.log(
-                              (event.target as HTMLInputElement).files[0]
-                            );
-                            setCurrentFile(
-                              (event.target as HTMLInputElement).files[0]
-                            );
-                          }}
-                        />
-                      </Button>
-                      {currentFile && (
-                        <img
-                          src={URL.createObjectURL(currentFile)}
-                          alt={"Minh chứng"}
-                          width={150}
-                        />
-                      )}
-                    </Stack>
                   </Box>
 
                   <Box
@@ -239,13 +190,9 @@ export default function GradeReviewRequestDialog(props: SimpleDialogProps) {
                         type="submit"
                         variant="text"
                         loading={isSubmitting}
-                        disabled={Boolean(
-                          errors.expectedGrade ||
-                            !touched.expectedGrade ||
-                            errors.explaination
-                        )}
+                        disabled={Boolean(errors.note || !touched.note)}
                       >
-                        {isSubmitting ? "loading..." : "Yêu cầu phúc khảo"}
+                        {isSubmitting ? "loading..." : "Từ chối"}
                       </LoadingButton>
                     </Stack>
                   </Box>

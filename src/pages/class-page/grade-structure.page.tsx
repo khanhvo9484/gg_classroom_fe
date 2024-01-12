@@ -127,6 +127,7 @@ const SortableStack = SortableContainer<SortableListProps>(
   )
 );
 const GradeStructurePage = () => {
+  document.title = "Cấu trúc điểm";
   const classService = new ClassService();
   const [listScoreType, setListScoreType] = useState<IGradeItemComponent[]>();
   const [isEditGradeStructure, setIsEditGradeStructure] =
@@ -151,7 +152,6 @@ const GradeStructurePage = () => {
     },
     mode: "onChange",
   });
-  console.log("ren der lai");
   const { append, remove } = useFieldArray({
     control,
     name: "grades",
@@ -239,7 +239,6 @@ const GradeStructurePage = () => {
       }
     }
 
-    console.log("Da xuong day");
     return true;
   };
 

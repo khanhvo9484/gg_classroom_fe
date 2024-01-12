@@ -115,7 +115,7 @@ export default function SheetMenu({ onExportCSV, onUploadStudentList }) {
             gradeFileService.getStudentGradeTemplate();
           }}
         >
-          {"Tải mẫu bảng học sinh"}
+          {"Tải mẫu DS học sinh"}
         </MenuItem>
         <MenuItem
           key={"Students Mapping Template"}
@@ -123,7 +123,7 @@ export default function SheetMenu({ onExportCSV, onUploadStudentList }) {
             gradeFileService.getStudentGradeMappingIdTemplate(courseId);
           }}
         >
-          {"Tải mẫu bảng đăng ký MSSV"}
+          {"Tải mẫu gán MSSV"}
         </MenuItem>
         <MenuItem
           key={"Grade Students CSV"}
@@ -158,7 +158,7 @@ export default function SheetMenu({ onExportCSV, onUploadStudentList }) {
         onClose={handleCloseUpload}
       >
         <MenuItem key={"Students Sheet"} component={"label"}>
-          {"Upload danh sách học sinh"}
+          {"Tải lên bảng điểm"}
           <VisuallyHiddenInput
             type="file"
             onInputCapture={(event) => {

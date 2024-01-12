@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import ClassCard from "../../../components/ui/card/class.card.component";
-import { Stack } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { useContext, useEffect } from "react";
 import { ClassService } from "@/service/class.service";
 import LoadingContext from "@/context/loading.contenxt";
@@ -11,7 +11,7 @@ import { selectCourses } from "@/redux/courses.slice";
 import { setCourses } from "@/redux/courses.slice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-
+import noCourseImg from "@/assets/images/empty-course-list/no-course.png";
 const HomePage = () => {
   document.title = "E-learning | Màn hình chính";
   const classService = new ClassService();
@@ -104,8 +104,39 @@ const HomePage = () => {
           useFlexGap
           flexWrap="wrap"
           spacing={{ xs: 1, sm: 2 }}
-          justifyContent={"space-around"}
+          sx={{
+            justifyContent: "space-around",
+            alignItems: "flex-start",
+          }}
         >
+          {courses && courses.length === 0 && (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "column",
+                height: "100%",
+                width: "100%",
+              }}
+            >
+              <Box
+                sx={{
+                  maxWidth: "500px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexDirection: "column",
+                }}
+                component={"img"}
+                src={noCourseImg}
+                alt="no course"
+              ></Box>
+              <Box sx={{ marginTop: "1rem" }}>
+                <Typography>Bạn chưa tham gia lớp học nào.</Typography>
+              </Box>
+            </Box>
+          )}
           {courses &&
             courses.map((course, index) => {
               return (

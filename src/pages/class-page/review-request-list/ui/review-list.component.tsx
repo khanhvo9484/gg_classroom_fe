@@ -56,7 +56,6 @@ const ReviewRequestListComponent: React.FC<Props> = () => {
   const { isTeacher } = useContext(RoleContext);
   useEffect(() => {
     try {
-      setIsLoading(true);
       const fetcher = async (): Promise<IGradeReviewResponseKZ[]> => {
         if (isTeacher) {
           const { data: response } = await customAxios.get(
@@ -66,6 +65,7 @@ const ReviewRequestListComponent: React.FC<Props> = () => {
             )
           );
           setReviews(response.data);
+          setIsLoading(false);
           return response.data;
         } else {
           const { data: response } = await customAxios.get(
@@ -76,13 +76,13 @@ const ReviewRequestListComponent: React.FC<Props> = () => {
           );
 
           setReviews(response.data);
+          setIsLoading(false);
           return response.data;
         }
       };
       fetcher();
     } catch (e) {
       console.log(e);
-    } finally {
       setIsLoading(false);
     }
   }, []);
@@ -161,6 +161,15 @@ const ReviewRequestListComponent: React.FC<Props> = () => {
             </Grid>
           </Box>
           <List sx={{ width: "100%", bgcolor: "background.paper" }}>
+            {reviews.length === 0 && (
+              <Typography
+                sx={{ margin: "2rem auto", textAlign: "center" }}
+                variant="body1"
+                gutterBottom
+              >
+                Hiện không có yêu cầu nào
+              </Typography>
+            )}
             {reviews.length > 0 &&
               reviews.map((review: IGradeReviewResponseKZ) => {
                 return (

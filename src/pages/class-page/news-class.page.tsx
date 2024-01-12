@@ -18,6 +18,7 @@ import { useParams } from "react-router-dom";
 import RoleContext from "@/context/role.context";
 
 const NewsClassPage = () => {
+  document.title = "Tin tức";
   const classService = new ClassService();
   const { isTeacher } = useContext(RoleContext);
 
