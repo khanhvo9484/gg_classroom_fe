@@ -45,9 +45,9 @@ export interface IGradeReviewComment {
   gradeReviewId: string;
   content: string;
 
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Date;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string;
   user: UserModel;
   gradeReview: IGradeReviewResponseKZ;
 }
@@ -68,6 +68,7 @@ export interface IGradeReviewFinal {
 interface Props {}
 
 const GradeReviewPost: React.FC<Props> = () => {
+  document.title = "Phúc khảo";
   const { courseId } = useParams();
   const { reviewId } = useParams();
   const [isViewerOpen, setIsViewerOpen] = useState(false);

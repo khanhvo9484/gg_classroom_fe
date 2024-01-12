@@ -7,6 +7,7 @@ import { Divider, Typography, CardContent } from "@mui/material";
 import Box from "@mui/material/Box";
 import React from "react";
 import { IGradeReviewComment } from "./card-review-request";
+import { convertUtcToVietnamTime } from "@/utils/common.util";
 export interface CommentProps {
   comment: IGradeReviewComment;
   _bgColor?: string;
@@ -24,12 +25,19 @@ const CommentComponent: React.FC<CommentProps> = ({ comment, _bgColor }) => {
           </IconButton>
         }
         title={
-          <Box sx={{ display: "flex", gap: 1 }}>
-            {" "}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
             <Typography variant="body2" sx={{ fontWeight: 500 }}>
               {comment?.user?.name}
             </Typography>
-            <Typography variant="body2">{}</Typography>
+            <Typography variant="body2">
+              {convertUtcToVietnamTime(comment?.createdAt)}
+            </Typography>
           </Box>
         }
         subheader={

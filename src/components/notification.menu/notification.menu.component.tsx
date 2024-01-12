@@ -26,7 +26,7 @@ export default function NotificationMenu() {
   const [notificationData, setNotificationData] = useState(
     Array.isArray(notifications) ? notifications : []
   );
-  const [notificationCount, setNotificationCount] = useState(null);
+  const [notificationCount, setNotificationCount] = useState<number>(null);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -70,13 +70,14 @@ export default function NotificationMenu() {
   useEffect(() => {
     socket.on("onReceiveNotification", (data) => {
       const objectData = JSON.parse(data);
+      console.log(data);
       setNotificationData((previous) => [objectData, ...previous]);
-      const count = notificationCount + 1;
-      setNotificationCount(count);
+      setNotificationCount((prev) => prev + 1);
     });
 
     return () => {
       socket.off("onReceiveNotification");
+      socket.off("onSetNotificationIsRead");
     };
   }, []);
 
@@ -110,9 +111,9 @@ export default function NotificationMenu() {
               overflowY: "auto", // Add scrollbar when content exceeds maxHeight
             }}
           >
-            {notifications && (
+            {notificationData && notificationData.length > 0 && (
               <>
-                {notifications.map((notification, index) => (
+                {notificationData.map((notification, index) => (
                   <Notification key={index} notification={notification} />
                 ))}
               </>

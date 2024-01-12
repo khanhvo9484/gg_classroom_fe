@@ -81,7 +81,7 @@ const CommentInputComponent: React.FC<CommentProps> = ({
         courseId: courseId,
       };
       try {
-        updateData(newComment);
+        updateData({ ...newComment, createdAt: new Date().toISOString() });
         resetForm();
         const result = await customAxios.post(
           "/grade-review/comment-on-grade-review",

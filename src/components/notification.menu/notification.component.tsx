@@ -62,18 +62,18 @@ export default function Notification(props: { notification: INotification }) {
         <CardActionArea onClick={() => handleNotificationClick()}>
           <CardHeader
             sx={{ paddingBottom: "5px" }}
-            avatar={<AvatarHelper user={notification.actor} sx={{}} />}
+            avatar={<AvatarHelper user={notification?.actor} sx={{}} />}
             title={
               <Typography variant="body1" sx={{ fontSize: 15 }}>
                 <span style={{ fontWeight: 700 }}>
-                  {notification.actor.name}
+                  {notification?.actor?.name}
                 </span>{" "}
-                {notification.content}
+                {notification?.content}
               </Typography>
             }
             subheader={
               <Typography sx={{ fontSize: 10 }}>
-                {convertUtcToVietnamTime(notification.createdAt)}
+                {convertUtcToVietnamTime(notification?.createdAt)}
               </Typography>
             }
           />
