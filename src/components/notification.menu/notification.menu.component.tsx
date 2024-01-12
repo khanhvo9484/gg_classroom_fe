@@ -70,7 +70,6 @@ export default function NotificationMenu() {
   useEffect(() => {
     socket.on("onReceiveNotification", (data) => {
       const objectData = JSON.parse(data);
-      console.log(data);
       setNotificationData((previous) => [objectData, ...previous]);
       setNotificationCount((prev) => prev + 1);
     });
