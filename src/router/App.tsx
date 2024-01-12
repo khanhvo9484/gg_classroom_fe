@@ -38,6 +38,7 @@ import AdminCoursesPage from "@/pages/admin/admin.courses.page";
 import RequiredUser from "@/layout/required-user.layout";
 import NotFoundPage from "@/pages/public/invalid-page/not-found.page";
 import UnauthorizedPage from "@/pages/public/invalid-page/unauthorized.page";
+import AdminHome from "@/pages/admin/admin.home.page";
 
 function App() {
   return (
@@ -65,7 +66,7 @@ function App() {
       <Route element={<RequiredAuth />}>
         <Route path="admin" element={<RequiredAdmin />}>
           <Route element={<AdminLayout />}>
-            <Route path="home" element={"home"} />
+            <Route path="home" element={<AdminHome />} />
             <Route path="accounts" element={<AdminAcountsPage />} />
             <Route path="courses" element={<AdminCoursesPage />} />
             <Route path="student-id" element={"student-id"} />

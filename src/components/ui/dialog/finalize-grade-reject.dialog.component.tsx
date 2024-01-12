@@ -1,24 +1,14 @@
 import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
-import { useNavigate } from "react-router-dom";
 import { Form, FormikProvider, useFormik } from "formik";
 import * as Yup from "yup";
 import { Box, TextField, Stack, Button } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
-import { GradeReviewService } from "@/service/grade.review.service";
 import { Typography } from "@mui/material";
-import { styled } from "@mui/material/styles";
-import AttachFileIcon from "@mui/icons-material/AttachFile";
 import Divider from "@mui/material/Divider";
-import { useParams } from "react-router-dom";
-import {
-  IGradeReviewInfor,
-  IGradeReviewRequest,
-} from "@/models/grade.review.model";
 import { useEffect, useState } from "react";
-import { ClassService } from "@/service/class.service";
 import { IGradeReviewResponseKZ } from "@/pages/class-page/review-request-list/ui/review-list.component";
 import { customAxios } from "@/api/custom-axios";
 import { useSelector } from "react-redux";
@@ -49,14 +39,10 @@ export interface updateGradeRequest {
 }
 
 export default function FinalizeGradeRejectDialog(props: SimpleDialogProps) {
-  const { courseId } = useParams();
   const { onClose, open, infoGrade, title } = props;
-  const gradeService = new ClassService();
   const auth = useSelector(selectUser);
   const [inforGradeReview, setInfoGradeReview] =
     useState<IGradeReviewResponseKZ>(infoGrade);
-
-  const navigate = useNavigate();
 
   const FinalizeGradeSchema = Yup.object().shape({
     note: Yup.string().required("Bạn cần nhập lý do từ chối!"),

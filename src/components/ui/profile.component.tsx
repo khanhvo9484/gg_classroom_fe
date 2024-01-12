@@ -1,5 +1,5 @@
 import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
-import { CardActions, CardHeader, IconButton } from "@mui/material";
+import { CardActions, CardHeader, IconButton, Tooltip } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Box from "@mui/material/Box";
@@ -10,6 +10,10 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import AvatarHelper from "@/utils/avatar-helper/avatar.helper";
+import VerifyEmailDialog from "./dialog/verify.email.dialog";
+import { useState } from "react";
+import { customAxios } from "@/api/custom-axios";
+import toast from "react-hot-toast";
 
 interface Props {
   member: UserModel;
@@ -17,8 +21,31 @@ interface Props {
 }
 
 const ProfileComponent: React.FC<Props> = ({ member, openEditForm }) => {
+  const [ isOpenDialog, setIsOpenDialog ] = useState(false);
+
+  const sendVerifyEmail = async () => {
+    try {
+      const { data: response } = await customAxios.post(
+        "/auth/send-verify-email",
+        {
+          email: member.email
+        }
+      );
+      console.log(response);
+      if (response.message == "Send verify email successfully") {
+        setIsOpenDialog(true);
+      } else {
+        toast.error("yêu cầu xác thực email thất bại, hãy thử lại sau.");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("yêu cầu xác thực email thất bại, hãy thử lại sau.");
+    }
+  }
+
   return (
     <Grid container spacing={2} sx={{ height: "400px" }}>
+      <VerifyEmailDialog open={isOpenDialog} onClose={() => setIsOpenDialog(false)}/>
       <Grid xs={4}>
         <Box sx={{ height: "100%" }}>
           <Card variant="outlined" sx={{ height: "100%" }}>
@@ -106,9 +133,17 @@ const ProfileComponent: React.FC<Props> = ({ member, openEditForm }) => {
                     {member.email}
                   </Typography>
                   {!member.isVerified && (
-                    <Typography variant="subtitle2" sx={{ color: "red" }}>
-                      *Email chưa được xác thực
-                    </Typography>
+                    <Tooltip title={"Nhấn để thực hiện xác thực tài khoản email"}>
+                      <Typography variant="subtitle2" sx={{ color: "red", fontSize:12, ml: -1,
+                      textTransform: "none",
+                      ":hover": {
+                        backgroundColor: "transparent",
+                        textDecorationLine: "underline"
+                      } }} component={Button}
+                      onClick={() => sendVerifyEmail()}>
+                        *Email chưa được xác thực
+                      </Typography>
+                    </Tooltip>
                   )}
                 </Grid>
                 <Grid xs={4}>
