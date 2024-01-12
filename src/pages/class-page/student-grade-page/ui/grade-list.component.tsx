@@ -2,7 +2,7 @@ import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import { Divider } from "@mui/material";
+import { Divider, Typography } from "@mui/material";
 import Collapse from "@mui/material/Collapse";
 import StarIcon from "@mui/icons-material/Star";
 import StarBorder from "@mui/icons-material/StarBorder";
@@ -18,6 +18,11 @@ import {
   IStudentGrade,
 } from "@/models/grade.model";
 import { IGradeReviewInfor } from "@/models/grade.review.model";
+import {
+  calculateAllGrade,
+  calculateGrade,
+  calculateSumSubGrade,
+} from "@/utils/common.util";
 
 const itemStyle = {
   borderRadius: 2,
@@ -44,7 +49,6 @@ const GradeList: React.FC<Props> = ({ grade, gradeStudent }) => {
   ) => {
     if (isIGradeItemComponent(item)) {
       if (item.gradeSubComponent.length) {
-        console.log("KHONG LAM GI");
         return;
       }
 
@@ -68,8 +72,18 @@ const GradeList: React.FC<Props> = ({ grade, gradeStudent }) => {
     };
 
     setInforGradeReview(inforGradeReview);
+  };
 
-    console.log("INFOR: ", inforGradeReview);
+  const getSumSubGrade = (subsGrade: IGradeItem[]) => {
+    const sumSubGrade = calculateSumSubGrade(subsGrade);
+
+    return sumSubGrade;
+  };
+
+  const getSumAllGrade = () => {
+    const sum = calculateAllGrade(grade);
+
+    return sum;
   };
 
   return (
@@ -94,10 +108,26 @@ const GradeList: React.FC<Props> = ({ grade, gradeStudent }) => {
                 </ListItemIcon>
                 <ListItemText primary={gradeItem.name} />
                 <Box sx={{ display: "flex", justifyContent: "end" }}>
-                  <ListItemText
-                    primary={`Điểm: ${gradeItem.totalGrade}`}
-                    secondary={`${gradeItem.percentage}%`}
-                  />
+                  {gradeItem.gradeSubComponent.length > 0 ? (
+                    <ListItemText
+                      primary={
+                        <Typography sx={{ pr: 3 }}>
+                          {`Điểm: ${getSumSubGrade(
+                            gradeItem.gradeSubComponent
+                          )}`}
+                        </Typography>
+                      }
+                      secondary={`${gradeItem.percentage}%`}
+                    />
+                  ) : (
+                    <ListItemText
+                      primary={`Điểm: ${gradeItem.totalGrade} (${calculateGrade(
+                        +gradeItem.totalGrade,
+                        +gradeItem.percentage
+                      )})`}
+                      secondary={`${gradeItem.percentage}%`}
+                    />
+                  )}
                 </Box>
               </ListItemButton>
               <Collapse in={true} timeout="auto" unmountOnExit>
@@ -106,7 +136,7 @@ const GradeList: React.FC<Props> = ({ grade, gradeStudent }) => {
                   {gradeItem.gradeSubComponent?.map((subGrade) => {
                     return (
                       <ListItemButton
-                        sx={{ ...itemStyle, pl: 6 }}
+                        sx={{ ...itemStyle, pl: 9 }}
                         key={subGrade._id}
                         onClick={(event) => {
                           handleListItemClick(event, subGrade);
@@ -118,7 +148,10 @@ const GradeList: React.FC<Props> = ({ grade, gradeStudent }) => {
                         <ListItemText primary={subGrade.name} />
                         <Box sx={{ display: "flex", justifyContent: "end" }}>
                           <ListItemText
-                            primary={`Điểm: ${subGrade.grade}`}
+                            primary={`Điểm: ${subGrade.grade} (${calculateGrade(
+                              +subGrade.grade,
+                              +subGrade.percentage
+                            )})`}
                             secondary={`${subGrade.percentage}%`}
                           />
                         </Box>
@@ -131,6 +164,13 @@ const GradeList: React.FC<Props> = ({ grade, gradeStudent }) => {
           );
         })}
       </List>
+      <Box sx={{ pt: 2 }}>
+        <Box sx={{ display: "flex", justifyContent: "end" }}>
+          <Typography sx={{ fontWeight: 600, pl: 2 }}>
+            Tổng điểm: {getSumAllGrade()}
+          </Typography>
+        </Box>
+      </Box>
 
       <GradeReviewRequestDialog
         open={isGradeReviewDialogOpen}

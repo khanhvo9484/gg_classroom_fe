@@ -1,3 +1,5 @@
+import { IGradeItem, IGradeStructure } from "@/models/grade.model";
+
 export const formatDate = (rawDateStr: string) => {
   const date = new Date(rawDateStr);
   const day = date.getDate().toString().padStart(2, "0");
@@ -32,4 +34,33 @@ export function convertUtcToVietnamTime(utcTimeString: string): string {
   } catch (e) {
     return utcTimeString;
   }
+}
+
+export function calculateGrade(grade: number, percentage: number) {
+  return (grade * percentage) / 100;
+}
+
+export function calculateSumSubGrade(subsGrade: IGradeItem[]) {
+  let sum = 0;
+
+  subsGrade.forEach((item) => {
+    sum += (+item.grade * +item.percentage) / 100;
+  });
+
+  return sum;
+}
+
+export function calculateAllGrade(grades: IGradeStructure) {
+  const gradeComponent = grades.gradeComponent;
+  let sum = 0;
+
+  gradeComponent.forEach((grade) => {
+    if (grade.gradeSubComponent.length > 0) {
+      sum += calculateSumSubGrade(grade.gradeSubComponent);
+    } else {
+      sum += calculateGrade(+grade.totalGrade, +grade.percentage);
+    }
+  });
+
+  return sum;
 }

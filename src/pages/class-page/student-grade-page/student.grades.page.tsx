@@ -51,7 +51,6 @@ const StudentViewGradePage = () => {
           <Container
             maxWidth={false}
             sx={{
-              //   height: "500px",
               maxWidth: "808px",
             }}
           >
