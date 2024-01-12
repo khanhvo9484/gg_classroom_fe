@@ -118,6 +118,7 @@ const HomePage = () => {
                 flexDirection: "column",
                 height: "100%",
                 width: "100%",
+                mt: 10,
               }}
             >
               <Box
@@ -133,7 +134,9 @@ const HomePage = () => {
                 alt="no course"
               ></Box>
               <Box sx={{ marginTop: "1rem" }}>
-                <Typography>Bạn chưa tham gia lớp học nào.</Typography>
+                <Typography variant="h6">
+                  Bạn chưa tham gia lớp học nào.
+                </Typography>
               </Box>
             </Box>
           )}

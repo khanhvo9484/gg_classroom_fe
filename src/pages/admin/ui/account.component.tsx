@@ -134,10 +134,10 @@ const AccountComponent: React.FC<Props> = ({ account }) => {
           </Grid>
           <Grid
             xs={2}
-            sx={{ mt: -1, display: "inline-flex", justifyContent: "center" }}
+            sx={{ display: "inline-flex", justifyContent: "center" }}
             item
           >
-            <IconButton onClick={() => HandleBanClick()} sx={{ ml: 2 }}>
+            <IconButton onClick={() => HandleBanClick()} sx={{}}>
               <Tooltip
                 title={
                   account?.isBlocked
