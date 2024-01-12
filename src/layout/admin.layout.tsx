@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 import AvatarDropdown from "../components/avatar.dropdown.menu.component";
 import logo from "@/assets/icons/k3_logo.png";
 import { styled, Theme, CSSObject } from "@mui/material/styles";
-import { LinearProgress } from "@mui/material";
+import { LinearProgress, Collapse } from "@mui/material";
 import MuiDrawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
@@ -22,11 +22,15 @@ import Typography from "@mui/material/Typography";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ListItemNavLink from "@/components/ui/list-item-button-navlink.component";
 import { Outlet } from "react-router-dom";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import LoadingContext from "@/context/loading.contenxt";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import NotificationMenu from "@/components/notification.menu/notification.menu.component";
 import { selectUser } from "@/redux/auth.slice";
+import ListItemAdmin from "@/components/ui/list-admin-account.component";
+import UploadFileRoundedIcon from "@mui/icons-material/UploadFileRounded";
+import CloudDownloadOutlinedIcon from "@mui/icons-material/CloudDownloadOutlined";
+import { AdminService } from "@/service/admin.service";
 const drawerWidth = 250;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -107,6 +111,46 @@ function AdminLayout() {
   const user: UserModel = useSelector(selectUser);
   const location = useLocation();
   const path = location.pathname;
+
+  const adminService = new AdminService();
+
+  const [ isAccountsPage, setIsAccountsPage] = useState(false);
+
+  const getCurrentPageFromURL = () => {
+    const elements = path.split("/");
+    if (elements[2] == "home") {
+      setIsAccountsPage(false);
+      setCurrentPage("Màn hình chính");
+    } else if (elements[2] == "courses") {
+      setIsAccountsPage(false);
+      setCurrentPage("Quản lý lớp học");
+    } else if (elements[2] == "accounts") {
+      setIsAccountsPage(true);
+      setCurrentPage("Quản lý tài khoản");
+    }
+    return;
+  };
+
+  const handleUploadStudentMapping = async (event) => {
+    try {
+      const response = await adminService.uploadStudentMapping(
+        event.target.files[0]
+      );
+      event.target.value = null;
+
+      if (response.status == 201) {
+        toast.success("Tải lên bảng đăng ký MSSV thành công.");
+      } else {
+        toast.error("Tải lên bảng đăng ký MSSV thất bại.");
+      }
+    } catch (error) {
+      toast.error("Tải lên bảng đăng ký MSSV thất bại.");
+    }
+  };
+
+  useEffect(() => {
+    getCurrentPageFromURL();
+  }, []);
   return (
     <>
       <Box sx={{ display: "flex" }}>
@@ -227,22 +271,42 @@ function AdminLayout() {
               link="/admin/accounts"
               text="Quản lý tài khoản"
               Icon={HomeIcon}
-              onClick={setCurrentPage}
+              onClick={(page: string) => {
+                setCurrentPage(page);
+                setIsAccountsPage(true);
+              }}
             />
             <ListItemNavLink
               link="/admin/courses"
               text="Quản lý lớp học"
               Icon={CalendarTodayIcon}
-              onClick={setCurrentPage}
-            />
-            <ListItemNavLink
-              link="/admin/student-id"
-              text="Quản lý MSSV học sinh"
-              Icon={CalendarTodayIcon}
-              onClick={setCurrentPage}
+              onClick={(page: string) => {
+                setCurrentPage(page);
+                setIsAccountsPage(false);
+              }}
             />
           </List>
           <Divider />
+          {isAccountsPage && (
+            <List>
+              <Collapse in={true} unmountOnExit>
+                <List>
+                    <ListItemAdmin
+                      text={"Tải mẫu gán MSSV"}
+                      Icon={CloudDownloadOutlinedIcon}
+                      onClick={() => {
+                        adminService.downloadStudentIdTemplate();
+                      }}
+                      isUpload={false}/>
+                    <ListItemAdmin
+                      text={"Tải lên bảng MSSV"}
+                      Icon={UploadFileRoundedIcon}
+                      onClick={(event: React.FormEvent<HTMLInputElement>) => handleUploadStudentMapping(event)}
+                      isUpload={true}/>
+                </List>
+              </Collapse>
+            </List>
+          )}
         </Drawer>
         <Main open={sidebarState || sidebarStateHover}>
           <DrawerHeader />

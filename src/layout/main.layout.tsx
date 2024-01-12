@@ -157,7 +157,23 @@ function Header() {
     setIsOpenFadeInJoin(false);
   }
 
+  const location = useLocation();
+  const path = location.pathname;
+  const courses = useSelector(selectCourses);
+
+  const getCurrentPageFromURL = () => {
+    const elements = path.split("/");
+    if (elements[1] == "home") {
+      setCurrentPage("Màn hình chính");
+    } else if (elements[1] == "course") {
+      const name = courses.find((course) => (course.id == elements[2]) ? course.name : false)?.name;
+      setCurrentPage(name);
+    }
+    return;
+  }
+
   useEffect(() => {
+    getCurrentPageFromURL();
     startLoading();
     const getAllCourse = async () => {
       try {
@@ -180,9 +196,7 @@ function Header() {
     stopLoading();
   }, []);
 
-  const courses = useSelector(selectCourses);
-  const location = useLocation();
-  const path = location.pathname;
+
   return (
     <>
       <Box sx={{ display: { xl: "none", xs: "block" } }}>

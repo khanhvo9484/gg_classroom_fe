@@ -53,7 +53,16 @@ const GradePageBodyComponent: React.FC<Props> = ({ grade, gradeStudent }) => {
           </ListItem>
         </List>
       </Box>
-      <GradeList grade={grade} gradeStudent={gradeStudent} />
+      {grade && (<GradeList grade={grade} gradeStudent={gradeStudent} />)}
+      {!grade && (
+        <Typography
+          sx={{ margin: "2rem auto", textAlign: "center" }}
+          variant="body1"
+          gutterBottom
+        >
+          Hiện giáo viên chưa công bố điểm chính thức nào của bạn.
+        </Typography>
+      )}
     </Box>
   );
 };
