@@ -22,13 +22,18 @@ const StudentViewGradePage = () => {
     const getGradeMemberById = async () => {
       try {
         setIsLoading(true);
-        const response = await gradeService.getGradeByStudentId(
-          user.studentOfficialId!,
-          courseId
-        );
+        if (user?.studentOfficialId){
+          const response = await gradeService.getGradeByStudentId(
+            user.studentOfficialId!,
+            courseId
+          );
 
-        setGradeStudent(response.data);
-        setGrade(response.data.grade);
+          setGradeStudent(response.data);
+          setGrade(response.data.grade);
+        } else {
+          setGradeStudent(null);
+          setGrade(null);
+        }
       } catch (error) {
         console.log(error);
         throw error;
