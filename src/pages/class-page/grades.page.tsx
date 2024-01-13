@@ -119,7 +119,7 @@ const defaultHeader: (ColDef | ColGroupDef)[] = [
     headerName: "ID",
     field: "studentOfficialId",
     pinned: "left",
-    width: 200,
+    width: 160,
     lockPosition: "left",
     editable: false,
     cellStyle: { fontWeight: "600" },
@@ -138,9 +138,7 @@ const defaultHeader: (ColDef | ColGroupDef)[] = [
 const summaryColumn: ColDef | ColGroupDef = {
   headerName: "Tổng điểm",
   field: "summary",
-  pinned: "left",
   width: 160,
-  lockPosition: "left",
   editable: false,
   cellStyle: { fontWeight: "600" },
 };
@@ -172,7 +170,7 @@ const GradesPage = () => {
       handleMakeFinallize
     );
 
-    const column = [...defaultHeader, summaryColumn, ...columnMap];
+    const column = [...defaultHeader, ...columnMap, summaryColumn];
 
     setColDefs(column);
     gridRef.current!.api.refreshHeader();
@@ -212,8 +210,8 @@ const GradesPage = () => {
           setRowData(rowValuesList);
           setColDefs((prevColDefs) => [
             ...prevColDefs,
-            summaryColumn,
             ...columnMap,
+            summaryColumn,
           ]);
         } else {
           setHaveGradeStructure(false);
