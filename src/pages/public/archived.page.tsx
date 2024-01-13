@@ -35,7 +35,19 @@ const ArchivedCoursesPage = () => {
             }
         };
 
+        const getAllCourse = async () => {
+            if (courseStillActivate.length ==0) {
+                const response = await classService.getAllCourse();
+                dispatch(
+                    setCourses({
+                    courses : response.data
+                    })
+                );
+            }
+        }
+
         getAllArchivedCourse();
+        getAllCourse();
         stopLoading();
     }, []);
 

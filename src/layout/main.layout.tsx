@@ -190,7 +190,7 @@ function Header() {
       }
     };
 
-    if (!courses) {
+    if (courses.length == 0) {
       getAllCourse();
     }
     stopLoading();
