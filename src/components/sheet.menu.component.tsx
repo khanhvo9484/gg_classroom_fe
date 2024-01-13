@@ -85,6 +85,25 @@ export default function SheetMenu({ onExportCSV, onUploadStudentList }) {
     }
   };
 
+  const handleUploadStudentList = async (event) => {
+    try {
+      const response = await gradeFileService.uploadStudentList(
+        event.target.files[0],
+        courseId
+      );
+      event.target.value = null;
+
+      if (response.status == 201) {
+        handleCloseUpload();
+        toast.success("Tải lên bảng đăng ký danh sách sinh viên thành công.");
+      } else {
+        toast.error("Tải lên bảng đăng ký danh sách sinh viên thất bại.");
+      }
+    } catch (error) {
+      toast.error("Tải lên bảng đăng ký danh sách sinh viên thất bại.");
+    }
+  };
+
   return (
     <Stack direction="row" sx={{ gap: 2 }}>
       <Tooltip title="Tải các bản mẫu">
@@ -172,6 +191,15 @@ export default function SheetMenu({ onExportCSV, onUploadStudentList }) {
             type="file"
             onInputCapture={(event) => {
               handleUploadStudentMapping(event);
+            }}
+          />
+        </MenuItem>
+        <MenuItem key={"Students Sheet"} component="label">
+          {"Bảng danh sách sinh viên"}
+          <VisuallyHiddenInput
+            type="file"
+            onInputCapture={(event) => {
+              handleUploadStudentList(event);
             }}
           />
         </MenuItem>
