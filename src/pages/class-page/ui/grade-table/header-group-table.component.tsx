@@ -104,6 +104,8 @@ const HeaderGroupTableComponent: React.FC<Props> = ({
   };
 
   const handleMarkFinalizeGrade = async () => {
+    handleClose();
+
     try {
       const response = await classService.markFinalizeGrade({
         courseId,
@@ -114,8 +116,6 @@ const HeaderGroupTableComponent: React.FC<Props> = ({
       handleMakeFinallize(response);
     } catch (error) {
       toast.error("Thất bại, đã có lỗi xảy ra!");
-    } finally {
-      handleClose();
     }
   };
   return (

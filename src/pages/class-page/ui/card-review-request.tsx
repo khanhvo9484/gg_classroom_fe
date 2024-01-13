@@ -145,8 +145,9 @@ const GradeReviewPost: React.FC<Props> = () => {
 
     socket.emit("joinPost", { postId: reviewId });
     socket.on("onReceiveNewComment", (data) => {
-      if (data?.user?.id !== user.id) {
-        setCommentData((prevCommentData) => [...prevCommentData, data]);
+      const objectData = JSON.parse(data);
+      if (objectData?.user?.id !== user.id) {
+        setCommentData((prevCommentData) => [...prevCommentData, objectData]);
         setTimeout(() => {
           scrollToLastesComment();
         }, 100);

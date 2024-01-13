@@ -112,6 +112,7 @@ export default function SheetMenu({ onExportCSV, onUploadStudentList }) {
         <MenuItem
           key={"Students Template"}
           onClick={() => {
+            handleCloseDownload();
             gradeFileService.getStudentGradeTemplate();
           }}
         >
@@ -120,6 +121,7 @@ export default function SheetMenu({ onExportCSV, onUploadStudentList }) {
         <MenuItem
           key={"Students Mapping Template"}
           onClick={() => {
+            handleCloseDownload();
             gradeFileService.getStudentGradeMappingIdTemplate(courseId);
           }}
         >

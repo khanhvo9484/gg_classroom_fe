@@ -1,6 +1,6 @@
 import { deleteUser } from "../redux/auth.slice";
-import { useDispatch, useSelector } from "react-redux";
-import { customAxios } from "../api/custom-axios";
+import { deleteCourses } from "@/redux/courses.slice";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Box, CircularProgress } from "@mui/material";
 import socket from "@socket/socket";
@@ -22,6 +22,7 @@ const SignOut = () => {
       //   // signal,
       // });
       dispatch(deleteUser());
+      dispatch(deleteCourses());
       setIsLoading(false);
     }
     signOut();
