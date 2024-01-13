@@ -22,7 +22,11 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-export default function SheetMenu({ onExportCSV, onUploadStudentList }) {
+export default function SheetMenu({
+  onExportCSV,
+  onUploadStudentList,
+  onLoading,
+}) {
   const { courseId } = useParams();
 
   const [anchorElUpload, setAnchorElUpload] =
@@ -50,6 +54,8 @@ export default function SheetMenu({ onExportCSV, onUploadStudentList }) {
   };
 
   const handleUploadStudent = async (event) => {
+    onLoading(true);
+    handleCloseUpload();
     try {
       const response = await gradeFileService.uploadStudentList(
         event.target.files[0],
@@ -57,33 +63,33 @@ export default function SheetMenu({ onExportCSV, onUploadStudentList }) {
       );
 
       onUploadStudentList(response.data);
-      handleCloseUpload();
       toast.success("Tải lên bảng học sinh thành công.");
       event.target.value = null;
     } catch (error) {
       toast.error("Tải lên bảng học sinh thất bại.");
       event.target.value = null;
       console.log(error);
+    } finally {
+      onLoading(false);
     }
   };
 
   const handleUploadStudentMapping = async (event) => {
+    onLoading(true);
+    handleCloseUpload();
+
     try {
-      const response = await gradeFileService.uploadStudentMappingList(
+      await gradeFileService.uploadStudentMappingList(
         event.target.files[0],
         courseId
       );
 
-      if (response.status == 201) {
-        handleCloseUpload();
-        toast.success("Tải lên bảng đăng ký MSSV thành công.");
-      } else {
-        toast.error("Tải lên bảng đăng ký MSSV thất bại.");
-      }
-      event.target.value = null;
+      toast.success("Tải lên bảng đăng ký MSSV thành công.");
     } catch (error) {
       event.target.value = null;
       toast.error("Tải lên bảng đăng ký MSSV thất bại.");
+    } finally {
+      onLoading(false);
     }
   };
 
