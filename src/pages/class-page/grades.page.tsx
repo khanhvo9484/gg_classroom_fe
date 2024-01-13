@@ -18,6 +18,7 @@ import HeaderGroupTableComponent from "./ui/grade-table/header-group-table.compo
 import NoDocumentImg from "@/assets/images/NoDocuments.png";
 import AddIcon from "@mui/icons-material/Add";
 import { IGradeStructureResponse, IStudentGrade } from "@/models/grade.model";
+import { calculateAllGrade } from "@/utils/common.util";
 
 function createGridHeaderConfig(
   data: any,
@@ -108,6 +109,8 @@ function convertToRowDataWithStudentInfo(student) {
     processComponent(component)
   );
 
+  rowValues["summary"] = calculateAllGrade(student.grade);
+
   return rowValues;
 }
 
@@ -116,7 +119,7 @@ const defaultHeader: (ColDef | ColGroupDef)[] = [
     headerName: "ID",
     field: "studentOfficialId",
     pinned: "left",
-    width: 160,
+    width: 200,
     lockPosition: "left",
     editable: false,
     cellStyle: { fontWeight: "600" },
@@ -131,6 +134,16 @@ const defaultHeader: (ColDef | ColGroupDef)[] = [
     cellStyle: { fontWeight: "600" },
   },
 ];
+
+const summaryColumn: ColDef | ColGroupDef = {
+  headerName: "Tổng điểm",
+  field: "summary",
+  pinned: "left",
+  width: 160,
+  lockPosition: "left",
+  editable: false,
+  cellStyle: { fontWeight: "600" },
+};
 
 const GradesPage = () => {
   document.title = "Bảng điểm";
@@ -159,7 +172,7 @@ const GradesPage = () => {
       handleMakeFinallize
     );
 
-    const column = [...defaultHeader, ...columnMap];
+    const column = [...defaultHeader, summaryColumn, ...columnMap];
 
     setColDefs(column);
     gridRef.current!.api.refreshHeader();
@@ -167,6 +180,10 @@ const GradesPage = () => {
 
   const handleMakeFinallize = (gradeStruct: IGradeStructureResponse) => {
     updateHeaderBoard(gradeStruct.data.gradeComponent);
+  };
+
+  const onLoading = (flag: boolean) => {
+    setIsLoading(flag);
   };
 
   useEffect(() => {
@@ -193,7 +210,11 @@ const GradesPage = () => {
           );
 
           setRowData(rowValuesList);
-          setColDefs((prevColDefs) => [...prevColDefs, ...columnMap]);
+          setColDefs((prevColDefs) => [
+            ...prevColDefs,
+            summaryColumn,
+            ...columnMap,
+          ]);
         } else {
           setHaveGradeStructure(false);
         }
@@ -256,6 +277,7 @@ const GradesPage = () => {
               <SheetMenu
                 onExportCSV={onExportCSV}
                 onUploadStudentList={onUploadStudentList}
+                onLoading={onLoading}
               />
             </Box>
             <GradeTableComponent
