@@ -55,13 +55,14 @@ export default function SheetMenu({ onExportCSV, onUploadStudentList }) {
         event.target.files[0],
         courseId
       );
-      event.target.value = null;
 
       onUploadStudentList(response.data);
       handleCloseUpload();
       toast.success("Tải lên bảng học sinh thành công.");
+      event.target.value = null;
     } catch (error) {
       toast.error("Tải lên bảng học sinh thất bại.");
+      event.target.value = null;
       console.log(error);
     }
   };
@@ -72,7 +73,6 @@ export default function SheetMenu({ onExportCSV, onUploadStudentList }) {
         event.target.files[0],
         courseId
       );
-      event.target.value = null;
 
       if (response.status == 201) {
         handleCloseUpload();
@@ -80,7 +80,9 @@ export default function SheetMenu({ onExportCSV, onUploadStudentList }) {
       } else {
         toast.error("Tải lên bảng đăng ký MSSV thất bại.");
       }
+      event.target.value = null;
     } catch (error) {
+      event.target.value = null;
       toast.error("Tải lên bảng đăng ký MSSV thất bại.");
     }
   };
