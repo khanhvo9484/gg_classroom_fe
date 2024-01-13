@@ -31,7 +31,7 @@ const CourseComponent: React.FC<Props> = ({ course }) => {
       }
     } else {
       try {
-        await classService.archivedCourseById(course.id);
+        await classService.archivedCourse(course);
         await mutate("all-courses", []);
         toast.success("Ngừng hoạt động lớp học thành công.");
       } catch (error) {
@@ -57,7 +57,7 @@ const CourseComponent: React.FC<Props> = ({ course }) => {
           </Grid>
           <Grid xs={3} item>
             <Typography variant="body1" sx={{ marginLeft: 2, fontSize: 14 }}>
-              {course.courseOwner.email}
+              {course.courseOwner.name}
             </Typography>
           </Grid>
           <Grid xs={2} item>

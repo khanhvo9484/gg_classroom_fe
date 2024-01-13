@@ -107,7 +107,7 @@ const CourseListComponent: React.FC<Props> = () => {
           setSortDescription(true);
           break;
         case "courseOwner":
-          inPlaceSort(courses).asc([(course) => course.courseOwner]);
+          inPlaceSort(courses).asc([(course) => course.courseOwner.name]);
           setSortCourseOwner(true);
           break;
         case "inviteCode":
@@ -128,7 +128,7 @@ const CourseListComponent: React.FC<Props> = () => {
           setSortDescription(false);
           break;
         case "courseOwner":
-          inPlaceSort(courses).desc([(course) => course.courseOwner]);
+          inPlaceSort(courses).desc([(course) => course.courseOwner.name]);
           setSortCourseOwner(false);
           break;
         case "inviteCode":

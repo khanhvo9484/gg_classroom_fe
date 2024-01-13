@@ -12,12 +12,14 @@ import { setCourses } from "@/redux/courses.slice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import noCourseImg from "@/assets/images/empty-course-list/no-course.png";
+import { ICourse } from "@/models/class.model";
 const HomePage = () => {
   document.title = "E-learning | Màn hình chính";
   const classService = new ClassService();
   const { startLoading, stopLoading } = useContext(LoadingContext);
   const courses = useSelector(selectCourses);
   const dispatch = useDispatch();
+
 
   useEffect(() => {
     startLoading();
@@ -66,17 +68,15 @@ const HomePage = () => {
     }
   }
 
-  async function archiveCourse(courseId) {
+  async function archiveCourse(course: ICourse) {
     try {
-      const response = await customAxios.post(
-        `/courses/delete-course/${courseId}`
-      );
+      const response = await classService.archivedCourse(course);
 
       if (response) {
         toast.success("Lưu trữ lớp học thành công.");
         dispatch(
           setCourses({
-            courses: courses.filter((course) => course.id !== courseId),
+            courses: courses.filter((courseE) => courseE.id !== course.id),
           })
         );
       } else {

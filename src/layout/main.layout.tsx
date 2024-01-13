@@ -181,7 +181,7 @@ function Header() {
 
         dispatch(
           setCourses({
-            courses: response.data,
+            courses: response.data.filter((course) => !course.isDeleted),
           })
         );
       } catch (error) {

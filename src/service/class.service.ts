@@ -90,6 +90,21 @@ export class ClassService {
     return response;
   }
 
+  async archivedCourse(course: ICourse): Promise<ICourseRespone> {
+    const payload = {
+      description: course.description,
+      name: course.name,
+      isDeleted: true,
+      id: course.id,
+    };
+    const { data: response } = await customAxios.put(
+      "/courses/update-course",
+      payload
+    );
+
+    return response;
+  }
+
   async reviveCourse(course: ICourse): Promise<ICourseRespone> {
     const payload = {
       description: course.description,
