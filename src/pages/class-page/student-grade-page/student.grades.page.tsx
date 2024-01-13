@@ -7,7 +7,9 @@ import { useSelector } from "react-redux";
 import { selectUser } from "@/redux/auth.slice";
 import { IGradeStructure, IStudentGrade } from "@/models/grade.model";
 import { GradeService } from "@/service/grade.service";
-import { LinearProgress } from "@mui/material";
+import { LinearProgress, Typography } from "@mui/material";
+import { Button, Link, Stack } from "@mui/material";
+import noCourseImg from "@/assets/images/empty-course-list/no-course.png";
 
 const StudentViewGradePage = () => {
   const gradeService = new GradeService();
@@ -59,7 +61,37 @@ const StudentViewGradePage = () => {
               maxWidth: "808px",
             }}
           >
-            <GradePageBodyComponent grade={grade} gradeStudent={gradeStudent} />
+            {user?.studentOfficialId ?
+              <GradePageBodyComponent grade={grade} gradeStudent={gradeStudent} /> :
+              (
+                <Stack
+                  direction="column"
+                  alignItems="center"
+                  justifyContent="center"
+                  sx={{ my: 2 }}
+                >
+                  <Box
+                    sx={{
+                      width: "50%",
+                      height: "50%",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                    component="img"
+                    src={noCourseImg}
+                  ></Box>
+                  <Typography sx={{mb: 2, mt:1}}>
+                  Hiện bạn chưa có MSSV, bạn có thể cập nhật ở trang cá nhân, hoặc yêu cầu giáo viên của bạn thiết lập.
+                  </Typography>
+                  <Link href="/profile">
+                      <Button variant="outlined" size="large">
+                          Đến trang cá nhân
+                      </Button>
+                  </Link>
+                </Stack>
+              )
+            }
           </Container>
         </Box>
       )}

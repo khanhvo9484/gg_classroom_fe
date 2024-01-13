@@ -9,8 +9,6 @@ import { useSelector } from "react-redux";
 import { selectUser } from "@/redux/auth.slice";
 import GradeList from "@/pages/class-page/student-grade-page/ui/grade-list.component";
 import { IGradeStructure, IStudentGrade } from "@/models/grade.model";
-import { Button, Link, Stack } from "@mui/material";
-import noCourseImg from "@/assets/images/empty-course-list/no-course.png";
 
 interface Props {
   grade: IGradeStructure;
@@ -62,37 +60,7 @@ const GradePageBodyComponent: React.FC<Props> = ({ grade, gradeStudent }) => {
           variant="body1"
           gutterBottom
         >
-          {user?.studentOfficialId ?
-            "Hiện giáo viên chưa công bố điểm chính thức nào của bạn." :
-            (
-              <Stack
-                direction="column"
-                alignItems="center"
-                justifyContent="center"
-                sx={{ my: 2 }}
-              >
-                <Box
-                  sx={{
-                    width: "50%",
-                    height: "50%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                  component="img"
-                  src={noCourseImg}
-                ></Box>
-                <Typography sx={{mb: 2, mt:1}}>
-                Hiện bạn chưa có MSSV, bạn có thể cập nhật ở trang cá nhân, hoặc yêu cầu giáo viên của bạn thiết lập.
-                </Typography>
-                <Link href="/profile">
-                    <Button variant="outlined" size="large">
-                        Đến trang cá nhân
-                    </Button>
-                </Link>
-              </Stack>
-            )
-          }
+          "Hiện giáo viên chưa công bố điểm chính thức nào của bạn."
         </Typography>
       )}
     </Box>
