@@ -59,6 +59,7 @@ export default function EditCourseDialog(props: SimpleDialogProps) {
           name: values.name,
           description: values.description,
           id: course.id,
+          isDeleted: course.isDeleted
         };
         // 👇️ const data: CreateUserResponse
         const response = await customAxios.put(

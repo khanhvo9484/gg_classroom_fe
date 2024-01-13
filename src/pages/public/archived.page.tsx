@@ -71,6 +71,8 @@ const ArchivedCoursesPage = () => {
                 payload
             );
 
+            console.log(response);
+
             if (response) {
                 toast.success("Khôi phục lớp học thành công.");
                 setArchivedCourses(courses.filter((courseFilter) => courseFilter.id !== course.id));

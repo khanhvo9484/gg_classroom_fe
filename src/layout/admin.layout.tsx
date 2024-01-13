@@ -31,6 +31,7 @@ import ListItemAdmin from "@/components/ui/list-admin-account.component";
 import UploadFileRoundedIcon from "@mui/icons-material/UploadFileRounded";
 import CloudDownloadOutlinedIcon from "@mui/icons-material/CloudDownloadOutlined";
 import { AdminService } from "@/service/admin.service";
+import useAllUser from "@/hooks/all-users.hook";
 const drawerWidth = 250;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -115,6 +116,7 @@ function AdminLayout() {
   const adminService = new AdminService();
 
   const [ isAccountsPage, setIsAccountsPage] = useState(false);
+  const {usersMutate}= useAllUser()
 
   const getCurrentPageFromURL = () => {
     const elements = path.split("/");
@@ -139,6 +141,7 @@ function AdminLayout() {
       event.target.value = null;
 
       if (response.status == 201) {
+        usersMutate([]);
         toast.success("Tải lên bảng đăng ký MSSV thành công.");
       } else {
         toast.error("Tải lên bảng đăng ký MSSV thất bại.");
