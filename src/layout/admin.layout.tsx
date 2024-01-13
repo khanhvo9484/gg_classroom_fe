@@ -138,7 +138,6 @@ function AdminLayout() {
       const response = await adminService.uploadStudentMapping(
         event.target.files[0]
       );
-      event.target.value = null;
 
       if (response.status == 201) {
         usersMutate([]);
@@ -146,8 +145,10 @@ function AdminLayout() {
       } else {
         toast.error("Tải lên bảng đăng ký MSSV thất bại.");
       }
+      event.target.value = null;
     } catch (error) {
       toast.error("Tải lên bảng đăng ký MSSV thất bại.");
+      event.target.value = null;
     }
   };
 
