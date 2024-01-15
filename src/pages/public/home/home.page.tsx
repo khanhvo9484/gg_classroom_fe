@@ -45,7 +45,7 @@ const HomePage = () => {
 
       if (response) {
         toast.success("Rời lớp học thành công.");
-        coursesMutate([]);
+        coursesMutate(courses);
       } else {
         toast.error("Rời lớp học không thành công. Lỗi dữ liệu nhận về.");
       }
@@ -63,7 +63,7 @@ const HomePage = () => {
 
       if (response) {
         toast.success("Lưu trữ lớp học thành công.");
-        coursesMutate([]);
+        coursesMutate(courses);
       } else {
         toast.error("Lưu trữ lớp học không thành công.");
       }

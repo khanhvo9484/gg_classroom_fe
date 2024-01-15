@@ -34,7 +34,7 @@ export default function AddCourseDialog(props: SimpleDialogProps) {
   const { onClose, open, updateCourses } = props;
   const [signUpError, setSignUpError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const { coursesMutate } = useHomeCourses();
+  const { courses, coursesMutate } = useHomeCourses();
   const CreateCourseSchema = Yup.object().shape({
     name: Yup.string().required("Bạn cần nhập tên lớp học của mình"),
     description: Yup.string(),
@@ -57,7 +57,7 @@ export default function AddCourseDialog(props: SimpleDialogProps) {
         // 👇️ const data: CreateUserResponse
         const response = await customAxios.post("/courses/create", payload);
         if (response.status) {
-          coursesMutate([]);
+          coursesMutate(courses);
           toast.success("Tạo lớp học mới thành công");
           updateCourses(response.data.data.id);
           onClose();

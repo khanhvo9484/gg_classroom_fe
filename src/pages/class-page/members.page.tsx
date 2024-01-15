@@ -48,14 +48,14 @@ const MembersPage = () => {
 
       console.log(newList);
       setListTeacherInvite(newList);
-      membersMutate();
+      membersMutate(members);
     } else {
       const newList = [...studentsInvite, member];
 
       console.log(newList);
 
       setListStudentInvite(newList);
-      membersMutate();
+      membersMutate(members);
     }
   };
 

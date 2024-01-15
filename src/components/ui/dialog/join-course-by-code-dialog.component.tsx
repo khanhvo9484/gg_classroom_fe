@@ -47,7 +47,7 @@ const JoinCodeByCodeDialog: React.FC<SimpleDialogProps> = ({
   const user = useSelector(selectUser);
   const codeValueSubject = new Subject();
   const navigate = useNavigate();
-  const { coursesMutate } = useHomeCourses();
+  const { courses, coursesMutate } = useHomeCourses();
 
   useEffect(() => {
     codeValueSubject.pipe(debounceTime(700)).subscribe((value: string) => {
@@ -72,7 +72,7 @@ const JoinCodeByCodeDialog: React.FC<SimpleDialogProps> = ({
         inviteCode: code,
       });
 
-      coursesMutate([]);
+      coursesMutate(courses);
 
       onClose();
       setTimeout(() => {

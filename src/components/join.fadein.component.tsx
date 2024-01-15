@@ -28,7 +28,7 @@ import { selectUser } from "@/redux/auth.slice";
 const FadeInJoin = ({ onFadeClose }) => {
   const { stopLoading, startLoading } = useContext(LoadingContext);
   const user: UserModel = useSelector(selectUser);
-  const { coursesMutate } = useHomeCourses();
+  const { courses, coursesMutate } = useHomeCourses();
 
   const LoginSchema = Yup.object().shape({
     inviteCode: Yup.string().required("Bạn cần nhập mã mời của lớp học"),
@@ -52,7 +52,7 @@ const FadeInJoin = ({ onFadeClose }) => {
 
         if (response.status) {
           toast.success("Tham gia vào lớp học thành công");
-          coursesMutate([]);
+          coursesMutate(courses);
           onFadeClose();
         } else {
           toast.error("Có lỗi trong quá trình tham gia lớp. Thử lại sau.");

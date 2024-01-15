@@ -175,7 +175,7 @@ function Header() {
     startLoading();
     const getAllCourse = async () => {
       try {
-        coursesMutate([]);
+        coursesMutate(courses);
       } catch (error) {
         console.log(error);
         // throw error;

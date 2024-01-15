@@ -15,8 +15,8 @@ const ArchivedCoursesPage = () => {
     document.title = "E-learning | Trang lưu trữ lớp học";
     const classService = new ClassService();
     const { startLoading, stopLoading } = useContext(LoadingContext);
-    const { courses, coursesArchivedMutate } = useArchivedCourses();
-    const { coursesMutate } = useHomeCourses();
+    const { coursesArchived, coursesArchivedMutate } = useArchivedCourses();
+    const { courses, coursesMutate } = useHomeCourses();
 
 
     useEffect(() => {
@@ -24,7 +24,7 @@ const ArchivedCoursesPage = () => {
 
         const getAllArchivedCourse = async () => {
             try {
-                coursesArchivedMutate([]);
+                coursesArchivedMutate(coursesArchived);
             } catch (error) {
                 console.log(error);
                 // throw error;
@@ -50,8 +50,8 @@ const ArchivedCoursesPage = () => {
 
         if (response) {
             toast.success("Xóa lớp học thành công.");
-            coursesArchivedMutate([]);
-            coursesMutate([]);
+            coursesArchivedMutate(coursesArchived);
+            coursesMutate(courses);
         } else {
             toast.error("Xóa lớp học không thành công. Lỗi dữ liệu nhận về.");
         }
@@ -80,8 +80,8 @@ const ArchivedCoursesPage = () => {
 
             if (response) {
                 toast.success("Khôi phục lớp học thành công.");
-                coursesArchivedMutate([]);
-                coursesMutate([]);
+                coursesArchivedMutate(coursesArchived);
+                coursesMutate(courses);
             } else {
                 toast.error("Khôi phục lớp học không thành công.");
             }

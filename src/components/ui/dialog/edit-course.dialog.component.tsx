@@ -35,7 +35,7 @@ export default function EditCourseDialog(props: SimpleDialogProps) {
   const { onClose, open, updateCourses, course } = props;
   const [signUpError, setSignUpError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const { coursesMutate } = useHomeCourses();
+  const { courses, coursesMutate } = useHomeCourses();
   const { stopLoading, startLoading } = useContext(LoadingContext);
 
 
@@ -65,7 +65,7 @@ export default function EditCourseDialog(props: SimpleDialogProps) {
           payload
         );
         if (response) {
-          coursesMutate([]);
+          coursesMutate(courses);
           toast.success("Chỉnh sửa thông tin lớp thành công");
           onClose();
           updateCourses();

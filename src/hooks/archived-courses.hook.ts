@@ -13,7 +13,7 @@ function useArchivedCourses() {
     const { data, error, isLoading, mutate } = useSWR("archived-courses", fetcher)
 
     return {
-      courses: data,
+      coursesArchived: data,
       coursesIsLoading: isLoading,
       coursesError: error,
       coursesArchivedMutate: mutate

@@ -30,7 +30,7 @@ const CreateClassForm = () => {
 
     const [signUpError, setSignUpError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
-    const { coursesMutate } = useHomeCourses();
+    const { courses, coursesMutate } = useHomeCourses();
     const { stopLoading, startLoading } = useContext(LoadingContext);
 
     const CreateClassSchema = Yup.object().shape({
@@ -55,7 +55,7 @@ const CreateClassForm = () => {
                 // 👇️ const data: CreateUserResponse
                 const response = await customAxios.post("/courses/create", payload);
                 if (response) {
-                    coursesMutate([]);
+                    coursesMutate(courses);
                     toast.success("Tạo lớp học thành công");
                 } else {
                     toast.error("Tạo lớp học thất bại.");
