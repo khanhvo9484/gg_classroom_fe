@@ -20,10 +20,15 @@ import { Form, FormikProvider, useFormik } from "formik";
 import { LoadingButton } from "@mui/lab";
 import toast from "react-hot-toast";
 import AvatarHelper from "@/utils/avatar-helper/avatar.helper";
+import { useContext } from "react";
+import LoadingContext from "@/context/loading.contenxt";
+import useHomeCourses from "@/hooks/home-courses.hook";
+import { selectUser } from "@/redux/auth.slice";
 
 const FadeInJoin = ({ onFadeClose }) => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const user: UserModel = useSelector((state: any) => state.auth.user);
+  const { stopLoading, startLoading } = useContext(LoadingContext);
+  const user: UserModel = useSelector(selectUser);
+  const { coursesMutate } = useHomeCourses();
 
   const LoginSchema = Yup.object().shape({
     inviteCode: Yup.string().required("Bạn cần nhập mã mời của lớp học"),
@@ -34,6 +39,7 @@ const FadeInJoin = ({ onFadeClose }) => {
     },
     validationSchema: LoginSchema,
     onSubmit: async (values) => {
+      startLoading();
       try {
         const payload = {
           inviteCode: values.inviteCode,
@@ -46,6 +52,7 @@ const FadeInJoin = ({ onFadeClose }) => {
 
         if (response.status) {
           toast.success("Tham gia vào lớp học thành công");
+          coursesMutate([]);
           onFadeClose();
         } else {
           toast.error("Có lỗi trong quá trình tham gia lớp. Thử lại sau.");
@@ -55,6 +62,7 @@ const FadeInJoin = ({ onFadeClose }) => {
         toast.error(error.response.data.message);
         console.log(error);
       }
+      stopLoading();
     },
   });
 

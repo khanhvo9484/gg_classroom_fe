@@ -10,13 +10,10 @@ import { FormHelperText } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { motion } from "framer-motion";
 import { customAxios } from "../../../api/custom-axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import toast from "react-hot-toast";
-import { useSelector } from "react-redux";
-import { selectUser } from "@/redux/auth.slice";
-import { useDispatch } from "react-redux";
-import { selectCourses } from "@/redux/courses.slice";
-import { setCourses } from "@/redux/courses.slice";
+import useHomeCourses from "@/hooks/home-courses.hook";
+import LoadingContext from "@/context/loading.contenxt";
 
 const easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {
@@ -33,9 +30,8 @@ const CreateClassForm = () => {
 
     const [signUpError, setSignUpError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
-    const dispatch = useDispatch();
-    const user = useSelector(selectUser);
-    const courses = useSelector(selectCourses);
+    const { coursesMutate } = useHomeCourses();
+    const { stopLoading, startLoading } = useContext(LoadingContext);
 
     const CreateClassSchema = Yup.object().shape({
         name: Yup.string()
@@ -50,6 +46,7 @@ const CreateClassForm = () => {
         },
         validationSchema: CreateClassSchema,
         onSubmit: async (values) => {
+            startLoading();
             try {
                 const payload = {
                     name: values.name,
@@ -57,19 +54,8 @@ const CreateClassForm = () => {
                 };
                 // 👇️ const data: CreateUserResponse
                 const response = await customAxios.post("/courses/create", payload);
-                console.log(response.data.data);
                 if (response) {
-                    console.log(response.data.data);
-                    const newCourse = Object.assign({}, response.data.data, {
-                        courseOwner: user
-                    });
-                    const newCourses = [...courses, newCourse];
-                    console.log(newCourse);
-                    dispatch(
-                        setCourses({
-                            courses : newCourses
-                        })
-                    );
+                    coursesMutate([]);
                     toast.success("Tạo lớp học thành công");
                 } else {
                     toast.error("Tạo lớp học thất bại.");
@@ -82,10 +68,11 @@ const CreateClassForm = () => {
                 setSignUpError(true);
                 setErrorMessage(error.response.data.message);
             }
+            stopLoading();
         },
     });
 
-    const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } =
+    const { errors, touched, isSubmitting, handleSubmit, getFieldProps } =
         formik;
 
     return (

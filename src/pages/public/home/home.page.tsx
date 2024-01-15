@@ -7,44 +7,35 @@ import { ClassService } from "@/service/class.service";
 import LoadingContext from "@/context/loading.contenxt";
 import toast from "react-hot-toast";
 import { customAxios } from "@/api/custom-axios";
-import { selectCourses } from "@/redux/courses.slice";
-import { setCourses } from "@/redux/courses.slice";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
 import noCourseImg from "@/assets/images/empty-course-list/no-course.png";
+import useHomeCourses from "@/hooks/home-courses.hook";
 import { ICourse } from "@/models/class.model";
+
 const HomePage = () => {
   document.title = "E-learning | Màn hình chính";
   const classService = new ClassService();
   const { startLoading, stopLoading } = useContext(LoadingContext);
-  const courses = useSelector(selectCourses);
-  const dispatch = useDispatch();
-
+  const { courses, coursesMutate } = useHomeCourses();
 
   useEffect(() => {
     startLoading();
     const getAllCourse = async () => {
       try {
-        const response = await classService.getAllCourse();
-
-        dispatch(
-          setCourses({
-            courses: response.data,
-          })
-        );
+        coursesMutate([]);
       } catch (error) {
         console.log(error);
         // throw error;
       }
     };
 
-    if (!courses) {
+    if (!courses || courses?.length == 0) {
       getAllCourse();
     }
     stopLoading();
   }, []);
 
   async function leaveCourse(courseId: string) {
+    startLoading();
     try {
       const payload = {
         courseId: courseId,
@@ -54,11 +45,7 @@ const HomePage = () => {
 
       if (response) {
         toast.success("Rời lớp học thành công.");
-        dispatch(
-          setCourses({
-            courses: courses.filter((course) => course.id !== courseId),
-          })
-        );
+        coursesMutate([]);
       } else {
         toast.error("Rời lớp học không thành công. Lỗi dữ liệu nhận về.");
       }
@@ -66,19 +53,17 @@ const HomePage = () => {
       console.log(error);
       toast.error("Rời lớp học không thành công.");
     }
+    stopLoading();
   }
 
   async function archiveCourse(course: ICourse) {
+    startLoading();
     try {
       const response = await classService.archivedCourse(course);
 
       if (response) {
         toast.success("Lưu trữ lớp học thành công.");
-        dispatch(
-          setCourses({
-            courses: courses.filter((courseE) => courseE.id !== course.id),
-          })
-        );
+        coursesMutate([]);
       } else {
         toast.error("Lưu trữ lớp học không thành công.");
       }
@@ -86,6 +71,7 @@ const HomePage = () => {
       console.log(error);
       toast.error("Lưu trữ lớp học không thành công.");
     }
+    stopLoading();
   }
 
   return (
@@ -147,7 +133,7 @@ const HomePage = () => {
                   key={index}
                   course={course}
                   archiveCourse={() => {
-                    archiveCourse(course.id);
+                    archiveCourse(course);
                   }}
                   leaveCourse={() => {
                     leaveCourse(course.id);

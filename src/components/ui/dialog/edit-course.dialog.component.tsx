@@ -1,7 +1,5 @@
-import * as React from "react";
 import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
-
 import { Form, FormikProvider, useFormik } from "formik";
 import * as Yup from "yup";
 import { Box, TextField, Stack, Button } from "@mui/material";
@@ -9,13 +7,11 @@ import { FormHelperText } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { motion } from "framer-motion";
 import { customAxios } from "../../../api/custom-axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import toast from "react-hot-toast";
 import { ICourse } from "@/models/class.model";
-import { useDispatch } from "react-redux";
-import { selectCourses } from "@/redux/courses.slice";
-import { setCourses } from "@/redux/courses.slice";
-import { useSelector } from "react-redux";
+import useHomeCourses from "@/hooks/home-courses.hook";
+import LoadingContext from "@/context/loading.contenxt";
 
 const easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {
@@ -39,8 +35,9 @@ export default function EditCourseDialog(props: SimpleDialogProps) {
   const { onClose, open, updateCourses, course } = props;
   const [signUpError, setSignUpError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const courses = useSelector(selectCourses);
-  const dispatch = useDispatch();
+  const { coursesMutate } = useHomeCourses();
+  const { stopLoading, startLoading } = useContext(LoadingContext);
+
 
   const EditCourseSchema = Yup.object().shape({
     name: Yup.string().required("Bạn cần nhập tên lớp học của mình"),
@@ -54,6 +51,7 @@ export default function EditCourseDialog(props: SimpleDialogProps) {
     },
     validationSchema: EditCourseSchema,
     onSubmit: async (values) => {
+      startLoading();
       try {
         const payload = {
           name: values.name,
@@ -67,22 +65,7 @@ export default function EditCourseDialog(props: SimpleDialogProps) {
           payload
         );
         if (response) {
-          const newCourses = courses.map((course) => {
-            if (course.id !== response.data.data.id) {
-              return course;
-            } else {
-              const newCourse = {
-                description: response.data.data.description,
-                name: response.data.data.name,
-              };
-              return Object.assign({}, course, newCourse);
-            }
-          });
-          dispatch(
-            setCourses({
-              courses: newCourses,
-            })
-          );
+          coursesMutate([]);
           toast.success("Chỉnh sửa thông tin lớp thành công");
           onClose();
           updateCourses();
@@ -96,6 +79,7 @@ export default function EditCourseDialog(props: SimpleDialogProps) {
         setSignUpError(true);
         setErrorMessage(error.response.data && error.response.data.message);
       }
+      stopLoading();
     },
   });
 

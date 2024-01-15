@@ -29,7 +29,6 @@ import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
-import { ClassService } from "@/service/class.service";
 import Typography from "@mui/material/Typography";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ListItemNavLink from "@/components/ui/list-item-button-navlink.component";
@@ -45,10 +44,8 @@ import { useContext, useEffect, useState } from "react";
 import JoinCodeByCodeDialog from "@/components/ui/dialog/join-course-by-code-dialog.component";
 import Menu from "@mui/material/Menu";
 import { selectUser } from "@/redux/auth.slice";
-import { useDispatch } from "react-redux";
-import { selectCourses } from "@/redux/courses.slice";
-import { setCourses } from "@/redux/courses.slice";
 import NotificationMenu from "@/components/notification.menu/notification.menu.component";
+import useHomeCourses from "@/hooks/home-courses.hook";
 const drawerWidth = 280;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -121,7 +118,6 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
 }));
 
 function Header() {
-  const classService = new ClassService();
   const { isLoading, stopLoading, startLoading } = useContext(LoadingContext);
   const [sidebarState, setSidebarState] = useState(true);
   const [sidebarStateHover, setSidebarStateHover] = useState(false);
@@ -133,7 +129,6 @@ function Header() {
     useState(false);
   const [isOpenFadeInJoin, setIsOpenFadeInJoin] = useState(false);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState("");
   const userProfile = useSelector(selectUser);
 
@@ -159,10 +154,11 @@ function Header() {
 
   const location = useLocation();
   const path = location.pathname;
-  const courses = useSelector(selectCourses);
+  const { courses, coursesMutate } = useHomeCourses();
 
   const getCurrentPageFromURL = () => {
     const elements = path.split("/");
+    console.log(elements[1]);
     if (elements[1] == "home") {
       setCurrentPage("Màn hình chính");
     } else if (elements[1] == "course") {
@@ -177,20 +173,14 @@ function Header() {
     startLoading();
     const getAllCourse = async () => {
       try {
-        const response = await classService.getAllCourse();
-
-        dispatch(
-          setCourses({
-            courses: response.data.filter((course) => !course.isDeleted),
-          })
-        );
+        coursesMutate([]);
       } catch (error) {
         console.log(error);
         // throw error;
       }
     };
 
-    if (courses.length == 0) {
+    if (courses?.length == 0 || !courses) {
       getAllCourse();
     }
     stopLoading();

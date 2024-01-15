@@ -17,8 +17,7 @@ import { useSelector } from "react-redux";
 import { selectUser } from "@/redux/auth.slice";
 import { useNavigate } from "react-router-dom";
 import NotifyModalComponent from "../modals/notify-modal.component";
-import { useDispatch } from "react-redux";
-import { setCourses } from "@/redux/courses.slice";
+import useHomeCourses from "@/hooks/home-courses.hook";
 
 const Transition = forwardRef(function Transition(
   props: TransitionProps & {
@@ -48,7 +47,7 @@ const JoinCodeByCodeDialog: React.FC<SimpleDialogProps> = ({
   const user = useSelector(selectUser);
   const codeValueSubject = new Subject();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const { coursesMutate } = useHomeCourses();
 
   useEffect(() => {
     codeValueSubject.pipe(debounceTime(1000)).subscribe((value: string) => {
@@ -73,13 +72,7 @@ const JoinCodeByCodeDialog: React.FC<SimpleDialogProps> = ({
         inviteCode: code,
       });
 
-      const {data: newCourses} = await classService.getAllCourse();
-
-      dispatch(
-        setCourses({
-          courses: newCourses,
-        })
-      );
+      coursesMutate([]);
 
       onClose();
       setTimeout(() => {

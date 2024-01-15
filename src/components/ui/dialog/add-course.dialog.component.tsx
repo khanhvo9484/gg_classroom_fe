@@ -1,7 +1,6 @@
 import * as React from "react";
 import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
-
 import { Form, FormikProvider, useFormik } from "formik";
 import * as Yup from "yup";
 import { Box, TextField, Stack, Button } from "@mui/material";
@@ -9,13 +8,10 @@ import { FormHelperText } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { motion } from "framer-motion";
 import { customAxios } from "../../../api/custom-axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import toast from "react-hot-toast";
-import { useSelector } from "react-redux";
-import { selectUser } from "@/redux/auth.slice";
-import { useDispatch } from "react-redux";
-import { selectCourses } from "@/redux/courses.slice";
-import { setCourses } from "@/redux/courses.slice";
+import useHomeCourses from "@/hooks/home-courses.hook";
+import LoadingContext from "@/context/loading.contenxt";
 
 const easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {
@@ -38,14 +34,12 @@ export default function AddCourseDialog(props: SimpleDialogProps) {
   const { onClose, open, updateCourses } = props;
   const [signUpError, setSignUpError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const dispatch = useDispatch();
-  const user = useSelector(selectUser);
-  const courses = useSelector(selectCourses);
-
+  const { coursesMutate } = useHomeCourses();
   const CreateCourseSchema = Yup.object().shape({
     name: Yup.string().required("Bạn cần nhập tên lớp học của mình"),
     description: Yup.string(),
   });
+  const { stopLoading, startLoading } = useContext(LoadingContext);
 
   const formik = useFormik({
     initialValues: {
@@ -54,6 +48,7 @@ export default function AddCourseDialog(props: SimpleDialogProps) {
     },
     validationSchema: CreateCourseSchema,
     onSubmit: async (values) => {
+      startLoading();
       try {
         const payload = {
           name: values.name,
@@ -61,16 +56,8 @@ export default function AddCourseDialog(props: SimpleDialogProps) {
         };
         // 👇️ const data: CreateUserResponse
         const response = await customAxios.post("/courses/create", payload);
-        if (response) {
-          const newCourse = Object.assign({}, response.data.data, {
-              courseOwner: user
-          });
-          const newCourses = [...courses, newCourse];
-          dispatch(
-              setCourses({
-                  courses : newCourses
-              })
-          );
+        if (response.status) {
+          coursesMutate([]);
           toast.success("Tạo lớp học mới thành công");
           updateCourses(response.data.data.id);
           onClose();
@@ -82,6 +69,7 @@ export default function AddCourseDialog(props: SimpleDialogProps) {
         setSignUpError(true);
         setErrorMessage(error.response.data.message);
       }
+      stopLoading();
     },
   });
 
