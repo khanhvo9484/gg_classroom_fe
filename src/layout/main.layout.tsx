@@ -162,7 +162,7 @@ function Header() {
     if (elements[1] == "home") {
       setCurrentPage("Màn hình chính");
     } else if (elements[1] == "course") {
-      const name = courses.find((course) =>
+      const name = courses?.find((course) =>
         course.id == elements[2] ? course.name : false
       )?.name;
       setCurrentPage(name);

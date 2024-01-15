@@ -7,10 +7,12 @@ import { Grid, ListItemButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import StudentGradeReviewItem from "./review-item";
 import { useState, useEffect, useContext } from "react";
-import { customAxios } from "@/api/custom-axios";
+// import { customAxios } from "@/api/custom-axios";
 import UserModel from "@/models/user.model";
 import RoleContext from "@/context/role.context";
 import LinearProgress from "@mui/material/LinearProgress";
+import useReviews from "@/hooks/all-reviews.hook";
+import LoadingContext from "@/context/loading.contenxt";
 
 export interface IGradeReviewFinal {
   gradeReviewId: string;
@@ -47,44 +49,51 @@ export const GradeReviewStatusDict = {
   rejected: GradeReviewStatus.REJECTED,
 };
 interface Props {}
-const API_GRADE_REVIEW_LIST =
-  "/grade-review/all-grade-review/{courseId}?roleInCourse={roleInCourseInput}";
+// const API_GRADE_REVIEW_LIST =
+//   "/grade-review/all-grade-review/{courseId}?roleInCourse={roleInCourseInput}";
 const ReviewRequestListComponent: React.FC<Props> = () => {
   const { courseId } = useParams();
-  const [reviews, setReviews] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  // const [reviews, setReviews] = useState([]);
+  // const [isLoading, setIsLoading] = useState(true);
   const { isTeacher } = useContext(RoleContext);
+  const { reviews, reviewsMutate } = useReviews(courseId, isTeacher);
+  const { isLoading, startLoading, stopLoading } = useContext(LoadingContext)
+
   useEffect(() => {
     try {
-      const fetcher = async (): Promise<IGradeReviewResponseKZ[]> => {
-        if (isTeacher) {
-          const { data: response } = await customAxios.get(
-            API_GRADE_REVIEW_LIST.replace("{courseId}", courseId).replace(
-              "{roleInCourseInput}",
-              "teacher"
-            )
-          );
-          setReviews(response.data);
-          setIsLoading(false);
-          return response.data;
-        } else {
-          const { data: response } = await customAxios.get(
-            API_GRADE_REVIEW_LIST.replace("{courseId}", courseId).replace(
-              "{roleInCourseInput}",
-              "student"
-            )
-          );
+      // const fetcher = async (): Promise<IGradeReviewResponseKZ[]> => {
+      //   if (isTeacher) {
+      //     const { data: response } = await customAxios.get(
+      //       API_GRADE_REVIEW_LIST.replace("{courseId}", courseId).replace(
+      //         "{roleInCourseInput}",
+      //         "teacher"
+      //       )
+      //     );
+      //     setReviews(response.data);
+      //     setIsLoading(false);
+      //     return response.data;
+      //   } else {
+      //     const { data: response } = await customAxios.get(
+      //       API_GRADE_REVIEW_LIST.replace("{courseId}", courseId).replace(
+      //         "{roleInCourseInput}",
+      //         "student"
+      //       )
+      //     );
 
-          setReviews(response.data);
-          setIsLoading(false);
-          return response.data;
-        }
-      };
-      fetcher();
+      //     setReviews(response.data);
+      //     setIsLoading(false);
+      //     return response.data;
+      //   }
+      // };
+      // fetcher();
+      // setIsLoading(true);
+      startLoading();
+      reviewsMutate([]);
     } catch (e) {
       console.log(e);
-      setIsLoading(false);
     }
+    // setIsLoading(false);
+    stopLoading();
   }, []);
 
   const navigate = useNavigate();
@@ -97,8 +106,8 @@ const ReviewRequestListComponent: React.FC<Props> = () => {
 
   return (
     <>
-      {isLoading && <LinearProgress sx={{ top: -36 }} />}
-      {!isLoading && (
+      {(isLoading || !reviews) && <LinearProgress sx={{ top: -36 }} />}
+      {!isLoading && reviews && (
         <Box sx={{ marginBottom: 10 }}>
           <Box
             sx={{
@@ -110,7 +119,7 @@ const ReviewRequestListComponent: React.FC<Props> = () => {
             }}
           >
             <Grid container>
-              <Grid xs={2}>
+              <Grid xs={2} item>
                 <Typography
                   variant="h6"
                   sx={{ marginLeft: 2, color: "rgb(25,103,210)" }}
@@ -118,7 +127,7 @@ const ReviewRequestListComponent: React.FC<Props> = () => {
                   {`Tên sinh viên`}
                 </Typography>
               </Grid>
-              <Grid xs={2}>
+              <Grid xs={2} item>
                 <Typography
                   variant="h6"
                   sx={{ marginLeft: 2, color: "rgb(25,103,210)" }}
@@ -126,7 +135,7 @@ const ReviewRequestListComponent: React.FC<Props> = () => {
                   {`Tên bài tập`}
                 </Typography>
               </Grid>
-              <Grid xs={2}>
+              <Grid xs={2} item>
                 <Typography
                   variant="h6"
                   sx={{ marginLeft: 2, color: "rgb(25,103,210)" }}
@@ -134,7 +143,7 @@ const ReviewRequestListComponent: React.FC<Props> = () => {
                   {`Điểm hiện tại`}
                 </Typography>
               </Grid>
-              <Grid xs={2}>
+              <Grid xs={2} item>
                 <Typography
                   variant="h6"
                   sx={{ marginLeft: 2, color: "rgb(25,103,210)" }}
@@ -142,7 +151,7 @@ const ReviewRequestListComponent: React.FC<Props> = () => {
                   {`Điểm mong muốn`}
                 </Typography>
               </Grid>
-              <Grid xs={2}>
+              <Grid xs={2} item>
                 <Typography
                   variant="h6"
                   sx={{ marginLeft: 2, color: "rgb(25,103,210)" }}
@@ -150,7 +159,7 @@ const ReviewRequestListComponent: React.FC<Props> = () => {
                   {`Trạng thái`}
                 </Typography>
               </Grid>
-              <Grid xs={2}>
+              <Grid xs={2} item>
                 <Typography
                   variant="h6"
                   sx={{ marginLeft: 2, color: "rgb(25,103,210)" }}
@@ -161,7 +170,7 @@ const ReviewRequestListComponent: React.FC<Props> = () => {
             </Grid>
           </Box>
           <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-            {reviews.length === 0 && (
+            {!isLoading && reviews?.length === 0 && (
               <Typography
                 sx={{ margin: "2rem auto", textAlign: "center" }}
                 variant="body1"
@@ -170,7 +179,7 @@ const ReviewRequestListComponent: React.FC<Props> = () => {
                 Hiện không có yêu cầu nào
               </Typography>
             )}
-            {reviews.length > 0 &&
+            {reviews?.length > 0 &&
               reviews.map((review: IGradeReviewResponseKZ) => {
                 return (
                   <ListItemButton

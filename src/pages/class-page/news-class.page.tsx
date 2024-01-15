@@ -53,7 +53,7 @@ const NewsClassPage = () => {
 
   return (
     <>
-      {isLoading && <LinearProgress sx={{ top: -5 }} />}
+      { (isLoading || !course)  && <LinearProgress sx={{ top: -5 }} />}
 
       <Box sx={{ marginY: "2rem", minHeight: "600px" }}>
         {course && (

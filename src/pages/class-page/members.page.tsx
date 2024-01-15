@@ -1,20 +1,22 @@
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import MemberListComponent from "./ui/list-member.component";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 // import { ClassService } from "@/service/class.service";
 import { useParams } from "react-router-dom";
 import UserModel from "@/models/user.model";
 import { IInvitationCourse } from "@/models/class.model";
 import LinearProgress from "@mui/material/LinearProgress";
 import useAllMembers from "@/hooks/all-members.hook";
+import LoadingContext from "@/context/loading.contenxt";
 
 const MembersPage = () => {
   document.title = "Thành viên";
   // const classService = new ClassService();
   const { courseId } = useParams();
   const { members, membersMutate } = useAllMembers(courseId);
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
+  const { isLoading, startLoading, stopLoading } = useContext(LoadingContext)
   const [students, setListStudent] = useState<UserModel[]>();
   const [teachers, setListTeacher] = useState<UserModel[]>();
 
@@ -26,10 +28,10 @@ const MembersPage = () => {
   );
 
   const filterMemberInvite = (invitationList: IInvitationCourse[]) => {
-    const studentsInvite = invitationList.filter(
+    const studentsInvite = invitationList?.filter(
       (invitation) => invitation.roleInCourse !== "teacher"
     );
-    const teachersInvite = invitationList.filter(
+    const teachersInvite = invitationList?.filter(
       (invitation) => invitation.roleInCourse === "teacher"
     );
 
@@ -46,20 +48,22 @@ const MembersPage = () => {
 
       console.log(newList);
       setListTeacherInvite(newList);
+      membersMutate();
     } else {
       const newList = [...studentsInvite, member];
 
       console.log(newList);
 
       setListStudentInvite(newList);
+      membersMutate();
     }
   };
 
   useEffect(() => {
     const getAllMemberInCourse = async () => {
       try {
-        setIsLoading(true);
-        // startLoading();
+        // setIsLoading(true);
+        startLoading();
         // const response = await classService.getAllMemberInCourse(courseId);
 
         // setListTeacher(response.data.memberList.teachers);
@@ -68,29 +72,32 @@ const MembersPage = () => {
         // filterMemberInvite(response.data.invitationList);
 
         membersMutate();
-        setListTeacher(members.memberList.teachers);
-        setListStudent(members.memberList.students);
+        setListTeacher(members?.memberList.teachers);
+        setListStudent(members?.memberList.students);
 
-        filterMemberInvite(members.invitationList);
+        filterMemberInvite(members?.invitationList);
       } catch (error) {
         console.log(error);
         throw error;
       } finally {
-        setIsLoading(false);
-        // stopLoading();
+        // setIsLoading(false);
+        stopLoading();
       }
     };
 
-    if (courseId) {
+    if (courseId || !members ||
+        members?.memberList.students.length == 0 ||
+        members?.memberList.teachers.length == 0 ||
+        members?.invitationList.length == 0) {
       getAllMemberInCourse();
     }
-  }, []);
+  }, [courseId]);
 
   return (
     <>
-      {isLoading && <LinearProgress sx={{ top: -5 }} />}
+      {(isLoading || !members) && <LinearProgress sx={{ top: -5 }} />}
       <Box sx={{ marginY: "2rem", minHeight: "600px" }}>
-        {!isLoading && (
+        {!isLoading && members && (
           <Container
             maxWidth={false}
             sx={{
@@ -99,16 +106,23 @@ const MembersPage = () => {
             }}
           >
             <MemberListComponent
-              members={teachers}
-              membersInvite={teachersInvite}
+              members={members?.memberList.teachers}
+              membersInvite={
+                members?.invitationList.filter(
+                (invitation) => invitation.roleInCourse === "teacher"
+              )}
               handleAddMemberInvite={handleAddMemberInvite}
               key={1}
               isTeacherList={true}
               title="Giáo viên"
             />
             <MemberListComponent
-              members={students}
-              membersInvite={studentsInvite}
+              members={members?.memberList.students}
+              membersInvite={
+                members?.invitationList.filter(
+                  (invitation) => invitation.roleInCourse !== "teacher"
+                )
+              }
               handleAddMemberInvite={handleAddMemberInvite}
               key={2}
               isTeacherList={false}

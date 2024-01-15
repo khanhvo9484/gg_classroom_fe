@@ -97,7 +97,6 @@ const ClassPage = () => {
 
   const navigateToDefaultTab = (role: string) => {
     const str = getPartAfterCourseId();
-    console.log(str);
     switch (str) {
       case "student-view-grade":
         if (role === "teacher") {
