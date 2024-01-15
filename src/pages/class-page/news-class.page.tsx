@@ -12,29 +12,32 @@ import Grid from "@mui/material/Unstable_Grid2";
 import ClassCodeComponent from "./ui/class-code.component";
 import PostComponent from "./ui/card-post.component";
 import { useContext, useEffect, useState } from "react";
-import { ICourse } from "@/models/class.model";
-import { ClassService } from "@/service/class.service";
+// import { ICourse } from "@/models/class.model";
+// import { ClassService } from "@/service/class.service";
 import { useParams } from "react-router-dom";
 import RoleContext from "@/context/role.context";
+import useCourse from "@/hooks/courseById.hook";
 
 const NewsClassPage = () => {
   document.title = "Tin tức";
-  const classService = new ClassService();
+  // const classService = new ClassService();
   const { isTeacher } = useContext(RoleContext);
 
   const [isLoading, setIsLoading] = useState(true);
 
-  const [course, setCourse] = useState<ICourse>(null);
+  // const [course, setCourse] = useState<ICourse>(null);
   const { courseId } = useParams();
+  const { course, courseMutate } = useCourse(courseId);
 
   useEffect(() => {
-    const getCourseById = async (courseId: string) => {
+    const getCourseById = async () => {
       try {
         setIsLoading(true);
 
-        const response = await classService.getCourseById(courseId);
+        // const response = await classService.getCourseById(courseId);
 
-        setCourse(response.data);
+        // setCourse(response.data);
+        courseMutate();
       } catch (error) {
         console.log(error);
         // throw error;
@@ -44,7 +47,7 @@ const NewsClassPage = () => {
     };
 
     if (courseId) {
-      getCourseById(courseId);
+      getCourseById();
     }
   }, [courseId]);
 

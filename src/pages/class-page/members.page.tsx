@@ -2,16 +2,18 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import MemberListComponent from "./ui/list-member.component";
 import { useEffect, useState } from "react";
-import { ClassService } from "@/service/class.service";
+// import { ClassService } from "@/service/class.service";
 import { useParams } from "react-router-dom";
 import UserModel from "@/models/user.model";
 import { IInvitationCourse } from "@/models/class.model";
 import LinearProgress from "@mui/material/LinearProgress";
+import useAllMembers from "@/hooks/all-members.hook";
 
 const MembersPage = () => {
   document.title = "Thành viên";
-  const classService = new ClassService();
+  // const classService = new ClassService();
   const { courseId } = useParams();
+  const { members, membersMutate } = useAllMembers(courseId);
   const [isLoading, setIsLoading] = useState(true);
   const [students, setListStudent] = useState<UserModel[]>();
   const [teachers, setListTeacher] = useState<UserModel[]>();
@@ -54,16 +56,22 @@ const MembersPage = () => {
   };
 
   useEffect(() => {
-    const getAllMemberInCourse = async (courseId: string) => {
+    const getAllMemberInCourse = async () => {
       try {
         setIsLoading(true);
         // startLoading();
-        const response = await classService.getAllMemberInCourse(courseId);
+        // const response = await classService.getAllMemberInCourse(courseId);
 
-        setListTeacher(response.data.memberList.teachers);
-        setListStudent(response.data.memberList.students);
+        // setListTeacher(response.data.memberList.teachers);
+        // setListStudent(response.data.memberList.students);
 
-        filterMemberInvite(response.data.invitationList);
+        // filterMemberInvite(response.data.invitationList);
+
+        membersMutate();
+        setListTeacher(members.memberList.teachers);
+        setListStudent(members.memberList.students);
+
+        filterMemberInvite(members.invitationList);
       } catch (error) {
         console.log(error);
         throw error;
@@ -74,7 +82,7 @@ const MembersPage = () => {
     };
 
     if (courseId) {
-      getAllMemberInCourse(courseId);
+      getAllMemberInCourse();
     }
   }, []);
 
