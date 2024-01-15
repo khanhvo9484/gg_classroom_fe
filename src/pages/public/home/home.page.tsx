@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import ClassCard from "../../../components/ui/card/class.card.component";
-import { Stack, Typography } from "@mui/material";
+import { LinearProgress, Stack, Typography } from "@mui/material";
 import { useContext, useEffect } from "react";
 import { ClassService } from "@/service/class.service";
 import LoadingContext from "@/context/loading.contenxt";
@@ -15,13 +15,13 @@ const HomePage = () => {
   document.title = "E-learning | Màn hình chính";
   const classService = new ClassService();
   const { startLoading, stopLoading } = useContext(LoadingContext);
-  const { courses, coursesMutate } = useHomeCourses();
+  const { coursesIsLoading, courses, coursesMutate } = useHomeCourses();
 
   useEffect(() => {
     startLoading();
     const getAllCourse = async () => {
       try {
-        coursesMutate([]);
+        coursesMutate(courses);
       } catch (error) {
         console.log(error);
         // throw error;
@@ -85,6 +85,7 @@ const HomePage = () => {
           borderBottom: "0.5px solid #ccc",
         }}
       >
+        {(coursesIsLoading || !courses) && <LinearProgress sx={{ top: -36 }} />}
         <Stack
           direction="row"
           useFlexGap
@@ -95,7 +96,7 @@ const HomePage = () => {
             alignItems: "flex-start",
           }}
         >
-          {courses && courses.length === 0 && (
+          {!coursesIsLoading && courses && courses.length === 0 && (
             <Box
               sx={{
                 display: "flex",
