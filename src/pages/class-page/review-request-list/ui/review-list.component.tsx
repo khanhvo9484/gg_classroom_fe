@@ -88,7 +88,7 @@ const ReviewRequestListComponent: React.FC<Props> = () => {
       // fetcher();
       // setIsLoading(true);
       startLoading();
-      reviewsMutate([]);
+      reviewsMutate(reviews);
     } catch (e) {
       console.log(e);
     }
@@ -103,8 +103,6 @@ const ReviewRequestListComponent: React.FC<Props> = () => {
       replace: true,
     });
   };
-
-  console.log(reviews);
 
   return (
     <>
