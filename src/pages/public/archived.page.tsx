@@ -110,8 +110,8 @@ const ArchivedCoursesPage = () => {
                 spacing={{ xs: 1, sm: 2 }}
                 justifyContent={"space-around"}
                 >
-                {courses &&
-                    courses.map((course, index) => {
+                {coursesArchived &&
+                    coursesArchived.map((course, index) => {
                     return (
                         <ClassCard
                             key={index}
