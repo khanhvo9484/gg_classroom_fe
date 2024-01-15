@@ -68,26 +68,25 @@ const ClassPage = () => {
     setIsJoinCourseByLink(false);
 
     if (codeInvite) {
-      if (courses && !coursesIsLoading) {
-        if (courses.length > 0) {
-          const item_course = courses.find(
-            (item) => item.inviteCode === codeInvite
-          );
+      if (courses && courses?.length > 0 && !coursesIsLoading) {
+        console.log(courses);
+        const item_course = courses.find(
+          (item) => item.inviteCode === codeInvite
+        );
 
-          if (item_course) {
-            setIsJoinCourseByLink(false);
-            navigate(`/course/${courseId}/news`);
-          } else {
-            console.log("Da vao day");
-            setIsJoinCourseByLink(true);
-          }
+        if (item_course) {
+          setIsJoinCourseByLink(false);
+          navigate(`/course/${courseId}/news`);
         } else {
           console.log("Da vao day");
           setIsJoinCourseByLink(true);
         }
+      } else {
+        console.log("Da vao day");
+        setIsJoinCourseByLink(true);
       }
     }
-  }, [courses]);
+  }, [coursesIsLoading]);
 
   useEffect(() => {
     const str = getPartAfterCourseId();
@@ -207,11 +206,11 @@ const ClassPage = () => {
 
       console.log("Is join course: ", isJoinCodeByLink);
 
-      setIsJoinCourseByLink(false);
-
-      console.log("Work: ", isJoinCodeByLink);
-
-      toast.success("Tham gia lớp học thành công");
+      if (response.statusCode) {
+        setIsJoinCourseByLink(false);
+        console.log("Work: ", isJoinCodeByLink);
+        toast.success("Tham gia lớp học thành công");
+      }
 
       // setTimeout(() => {
       //   navigate(`/course/${response.data.courseId}/news`);
@@ -228,7 +227,7 @@ const ClassPage = () => {
   return (
     <>
       <Box>
-        {isJoinCodeByLink && (
+        {!coursesIsLoading && isJoinCodeByLink && (
           <Box
             sx={{
               display: "flex",

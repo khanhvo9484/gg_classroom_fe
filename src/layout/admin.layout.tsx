@@ -116,7 +116,7 @@ function AdminLayout() {
   const adminService = new AdminService();
 
   const [isAccountsPage, setIsAccountsPage] = useState(false);
-  const { usersMutate } = useAllUser();
+  const { users, usersMutate } = useAllUser();
 
   const getCurrentPageFromURL = () => {
     const elements = path.split("/");
@@ -140,7 +140,7 @@ function AdminLayout() {
       );
 
       if (response.status == 201) {
-        usersMutate([]);
+        await usersMutate(users);
         toast.success("Tải lên bảng đăng ký MSSV thành công.");
       } else {
         toast.error("Tải lên bảng đăng ký MSSV thất bại.");

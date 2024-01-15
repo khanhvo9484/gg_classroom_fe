@@ -6,10 +6,10 @@ import { ICourse } from "@/models/class.model";
 import SpeakerNotesOffIcon from "@mui/icons-material/SpeakerNotesOff";
 import SpeakerNotesIcon from "@mui/icons-material/SpeakerNotes";
 import { ClassService } from "@/service/class.service";
-import { mutate } from "swr";
 import LoadingContext from "@/context/loading.contenxt";
 import { useContext } from "react";
 import toast from "react-hot-toast";
+import useAllCourses from "@/hooks/all-courses.hook";
 
 interface Props {
   course: ICourse;
@@ -18,13 +18,14 @@ interface Props {
 const CourseComponent: React.FC<Props> = ({ course }) => {
   const classService = new ClassService();
   const { startLoading, stopLoading } = useContext(LoadingContext);
+  const { courses, coursesMutate } = useAllCourses();
 
   const handleActiveClick = async (course: ICourse) => {
     startLoading();
     if (course.isDeleted) {
       try {
         await classService.reviveCourse(course);
-        await mutate("all-courses", []);
+        await coursesMutate(courses);
         toast.success("Tái khởi động lớp học thành công.");
       } catch (error) {
         toast.error("Tái khởi động lớp học thất bại.");
@@ -32,7 +33,7 @@ const CourseComponent: React.FC<Props> = ({ course }) => {
     } else {
       try {
         await classService.archivedCourse(course);
-        await mutate("all-courses", []);
+        await coursesMutate(courses);
         toast.success("Ngừng hoạt động lớp học thành công.");
       } catch (error) {
         toast.error("Ngừng hoạt động lớp học thất bại.");

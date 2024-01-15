@@ -9,9 +9,9 @@ import UserModel from "@/models/user.model";
 import { useContext, useState } from "react";
 import LoadingContext from "@/context/loading.contenxt";
 import { AdminService } from "@/service/admin.service";
-import { mutate } from "swr";
 import { Edit as EditIcon, Save as SaveIcon } from "@mui/icons-material";
 import toast from "react-hot-toast";
+import useAllUser from "@/hooks/all-users.hook";
 
 function convertDob(dob: string) {
   return new Date(dob).toDateString();
@@ -29,6 +29,7 @@ const AccountComponent: React.FC<Props> = ({ account }) => {
     account.studentOfficialId || "Chưa cập nhật"
   ); // [1
   const adminService = new AdminService();
+  const { users, usersMutate } = useAllUser();
 
   const handleMssvEditable = () => {
     setIsMSSVEditable(true);
@@ -44,7 +45,7 @@ const AccountComponent: React.FC<Props> = ({ account }) => {
 
     try {
       await adminService.updateOfficialId(account.id, MSSV);
-      await mutate("all-accounts", []);
+      await usersMutate(users);
       toast.success("Cập nhật MSSV thành công.");
     } catch (error) {
       toast.error("Cập nhật MSSV thất bại.");
@@ -57,7 +58,7 @@ const AccountComponent: React.FC<Props> = ({ account }) => {
     if (account.isBlocked) {
       try {
         await adminService.unblockUser(account.id);
-        await mutate("all-users", []);
+        await usersMutate(users);
         toast.success("Mở khóa tài khoản người dùng thành công.");
       } catch (error) {
         toast.error("Mở khóa tài khoản người dùng thất bại.");
@@ -65,7 +66,7 @@ const AccountComponent: React.FC<Props> = ({ account }) => {
     } else {
       try {
         await adminService.blockUser(account.id);
-        await mutate("all-users", []);
+        await usersMutate(users);
         toast.success("Khóa tải khoản người dùng thành công.");
       } catch (error) {
         toast.error("Khóa tài khoản người dùng thất bại thất bại.");
