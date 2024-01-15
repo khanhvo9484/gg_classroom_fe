@@ -14,7 +14,17 @@ const DefaultLayout = () => {
         <Outlet />
       </div>
       <Footer />
-      <Toaster position="top-right" reverseOrder={false} />
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+        toastOptions={{
+          style: {
+            background: "#363636",
+            color: "#fff",
+            fontFamily: '"Google Sans", Roboto, Arial, sans-serif',
+          },
+        }}
+      />
     </>
   );
 };

@@ -50,7 +50,7 @@ const JoinCodeByCodeDialog: React.FC<SimpleDialogProps> = ({
   const { coursesMutate } = useHomeCourses();
 
   useEffect(() => {
-    codeValueSubject.pipe(debounceTime(1000)).subscribe((value: string) => {
+    codeValueSubject.pipe(debounceTime(700)).subscribe((value: string) => {
       if (value == "") {
         setIsCodeValid(true);
       } else {

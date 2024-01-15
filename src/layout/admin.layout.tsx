@@ -115,8 +115,8 @@ function AdminLayout() {
 
   const adminService = new AdminService();
 
-  const [ isAccountsPage, setIsAccountsPage] = useState(false);
-  const {usersMutate}= useAllUser()
+  const [isAccountsPage, setIsAccountsPage] = useState(false);
+  const { usersMutate } = useAllUser();
 
   const getCurrentPageFromURL = () => {
     const elements = path.split("/");
@@ -295,18 +295,22 @@ function AdminLayout() {
             <List>
               <Collapse in={true} unmountOnExit>
                 <List>
-                    <ListItemAdmin
-                      text={"Tải mẫu gán MSSV"}
-                      Icon={CloudDownloadOutlinedIcon}
-                      onClick={() => {
-                        adminService.downloadStudentIdTemplate();
-                      }}
-                      isUpload={false}/>
-                    <ListItemAdmin
-                      text={"Tải lên bảng MSSV"}
-                      Icon={UploadFileRoundedIcon}
-                      onClick={(event: React.FormEvent<HTMLInputElement>) => handleUploadStudentMapping(event)}
-                      isUpload={true}/>
+                  <ListItemAdmin
+                    text={"Tải mẫu gán MSSV"}
+                    Icon={CloudDownloadOutlinedIcon}
+                    onClick={() => {
+                      adminService.downloadStudentIdTemplate();
+                    }}
+                    isUpload={false}
+                  />
+                  <ListItemAdmin
+                    text={"Tải lên bảng MSSV"}
+                    Icon={UploadFileRoundedIcon}
+                    onClick={(event: React.FormEvent<HTMLInputElement>) =>
+                      handleUploadStudentMapping(event)
+                    }
+                    isUpload={true}
+                  />
                 </List>
               </Collapse>
             </List>
@@ -326,7 +330,7 @@ function AdminLayout() {
           style: {
             background: "#363636",
             color: "#fff",
-            fontFamily: "Roboto",
+            fontFamily: '"Google Sans", Roboto, Arial, sans-serif',
           },
         }}
       />

@@ -12,12 +12,11 @@ import InsertLinkIcon from "@mui/icons-material/InsertLink";
 import ContentCopy from "@mui/icons-material/ContentCopy";
 import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 import ContentCut from "@mui/icons-material/ContentCut";
+import toast from "react-hot-toast";
 
 const options = [
   "Sao chép đường liên kết mời tham gia lớp học",
   "Sao chép mã lớp",
-  "Đặt lại mã lớp",
-  "Tắt",
 ];
 
 const iconMapping = {
@@ -33,7 +32,6 @@ interface Props {
 
 const ClassCodeComponent: React.FC<Props> = ({ code }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedIndex, setSelectedIndex] = useState(null);
 
   const open = Boolean(anchorEl);
 
@@ -42,8 +40,33 @@ const ClassCodeComponent: React.FC<Props> = ({ code }) => {
   };
 
   const handleMenuItemClick = (event: MouseEvent, index: number) => {
-    console.log(event, index);
-    setSelectedIndex(index);
+    handleClose();
+
+    switch (index) {
+      case 0:
+        handleCopyInviteLinkJoinCourse();
+        return;
+
+      case 1:
+        handleCopyCode();
+        return;
+    }
+  };
+
+  const handleCopyInviteLinkJoinCourse = () => {
+    console.log("Invite code: ", code);
+    navigator.clipboard.writeText(code.trim());
+    toast.success("Đã sao chép đường liên kết", {
+      position: "bottom-left",
+    });
+  };
+
+  const handleCopyCode = () => {
+    console.log("Copy code: ", code);
+    navigator.clipboard.writeText(code.trim());
+    toast.success("Đã sao chép mã lớp", {
+      position: "bottom-left",
+    });
   };
 
   const handleOpenMore = (event: MouseEvent<HTMLElement>) => {
@@ -83,7 +106,6 @@ const ClassCodeComponent: React.FC<Props> = ({ code }) => {
         {options.map((option, index) => (
           <MenuItem
             key={option}
-            selected={index === selectedIndex}
             onClick={(event) => handleMenuItemClick(event, index)}
           >
             <ListItemIcon>{iconMapping[index]}</ListItemIcon>
