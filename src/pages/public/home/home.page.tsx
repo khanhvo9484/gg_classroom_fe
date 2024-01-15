@@ -75,78 +75,79 @@ const HomePage = () => {
   }
 
   return (
-    <Box sx={{ m: 5, minHeight: "600px" }}>
-      <Container
-        maxWidth="lg"
-        sx={{
-          height: "100%",
-          pb: 2,
-          mb: 2,
-          borderBottom: "0.5px solid #ccc",
-        }}
-      >
-        {(coursesIsLoading || !courses) && <LinearProgress sx={{ top: -36 }} />}
-        <Stack
-          direction="row"
-          useFlexGap
-          flexWrap="wrap"
-          spacing={{ xs: 1, sm: 2 }}
+    <>
+      {(coursesIsLoading || !courses) && <LinearProgress sx={{ top: -16 }} />}
+      <Box sx={{ m: 5, minHeight: "600px" }}>
+        <Container
+          maxWidth="lg"
           sx={{
-            justifyContent: "space-around",
-            alignItems: "flex-start",
+            height: "100%",
+            pb: 2,
+            mb: 2,
           }}
         >
-          {!coursesIsLoading && courses && courses.length === 0 && (
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "column",
-                height: "100%",
-                width: "100%",
-                mt: 10,
-              }}
-            >
+          <Stack
+            direction="row"
+            useFlexGap
+            flexWrap="wrap"
+            spacing={{ xs: 1, sm: 2 }}
+            sx={{
+              justifyContent: "space-around",
+              alignItems: "flex-start",
+            }}
+          >
+            {!coursesIsLoading && courses && courses.length === 0 && (
               <Box
                 sx={{
-                  maxWidth: "500px",
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
                   flexDirection: "column",
+                  height: "100%",
+                  width: "100%",
+                  mt: 10,
                 }}
-                component={"img"}
-                src={noCourseImg}
-                alt="no course"
-              ></Box>
-              <Box sx={{ marginTop: "1rem" }}>
-                <Typography variant="h6">
-                  Bạn chưa tham gia lớp học nào.
-                </Typography>
+              >
+                <Box
+                  sx={{
+                    maxWidth: "500px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flexDirection: "column",
+                  }}
+                  component={"img"}
+                  src={noCourseImg}
+                  alt="no course"
+                ></Box>
+                <Box sx={{ marginTop: "1rem" }}>
+                  <Typography variant="h6">
+                    Bạn chưa tham gia lớp học nào.
+                  </Typography>
+                </Box>
               </Box>
-            </Box>
-          )}
-          {courses &&
-            courses.map((course, index) => {
-              return (
-                <ClassCard
-                  key={index}
-                  course={course}
-                  archiveCourse={() => {
-                    archiveCourse(course);
-                  }}
-                  leaveCourse={() => {
-                    leaveCourse(course.id);
-                  }}
-                  deleteCourse={null}
-                  reviveCourse={null}
-                />
-              );
-            })}
-        </Stack>
-      </Container>
-    </Box>
+            )}
+            {courses &&
+              courses.map((course, index) => {
+                return (
+                  <ClassCard
+                    key={index}
+                    course={course}
+                    archiveCourse={() => {
+                      archiveCourse(course);
+                    }}
+                    leaveCourse={() => {
+                      leaveCourse(course.id);
+                    }}
+                    deleteCourse={null}
+                    reviveCourse={null}
+                  />
+                );
+              })}
+          </Stack>
+        </Container>
+      </Box>
+    </>
   );
 };
 
