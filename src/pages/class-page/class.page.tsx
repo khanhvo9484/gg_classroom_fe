@@ -9,11 +9,20 @@ import {
   useLocation,
   useNavigate,
   useParams,
+  useSearchParams,
 } from "react-router-dom";
 import Button from "@mui/material/Button";
 import RoleContext from "@/context/role.context";
 import { ClassService } from "@/service/class.service";
 import LoadingContext from "@/context/loading.contenxt";
+import { Card, CardContent, Typography } from "@mui/material";
+import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser } from "@/redux/auth.slice";
+import { selectCourses } from "@/redux/courses.slice";
+import toast from "react-hot-toast";
+import { LoadingButton } from "@mui/lab";
+import useHomeCourses from "@/hooks/home-courses.hook";
 
 const useStyles = makeStyles(() => ({
   style: {
@@ -39,13 +48,46 @@ const ClassPage = () => {
   const { isTeacher, setIsTeacher } = useContext(RoleContext);
   const location = useLocation();
   const { courseId } = useParams();
+  const [searchParams] = useSearchParams();
+  const [isJoinCodeByLink, setIsJoinCourseByLink] = useState<boolean>(false);
   const [stateCourse, setStateCourse] = useState("");
   const [value, setValue] = useState(0);
   const navigate = useNavigate();
   const classes = useStyles();
+  const user = useSelector(selectUser);
+  const course = useSelector(selectCourses);
   const { startLoading, stopLoading } = useContext(LoadingContext);
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
+  const { courses, coursesIsLoading } = useHomeCourses();
 
-  // const [, setIsOpenSettingCourseDialog] = useState<boolean>(false);
+  const codeInvite = searchParams.get("code");
+
+  console.log("is join course link:L ", isJoinCodeByLink);
+  useEffect(() => {
+    setIsJoinCourseByLink(false);
+
+    if (codeInvite) {
+      if (courses && !coursesIsLoading) {
+        if (courses.length > 0) {
+          const item_course = courses.find(
+            (item) => item.inviteCode === codeInvite
+          );
+
+          if (item_course) {
+            setIsJoinCourseByLink(false);
+            navigate(`/course/${courseId}/news`);
+          } else {
+            console.log("Da vao day");
+            setIsJoinCourseByLink(true);
+          }
+        } else {
+          console.log("Da vao day");
+          setIsJoinCourseByLink(true);
+        }
+      }
+    }
+  }, [courses]);
 
   useEffect(() => {
     const str = getPartAfterCourseId();
@@ -72,7 +114,7 @@ const ClassPage = () => {
       }
     };
 
-    if (courseId) {
+    if (courseId && !isJoinCodeByLink) {
       getCourseById(courseId);
     }
     stopLoading();
@@ -81,7 +123,7 @@ const ClassPage = () => {
       abortController.abort();
       // Additional cleanup logic if needed
     };
-  }, [stateCourse]);
+  }, [stateCourse, isJoinCodeByLink]);
 
   const getPartAfterCourseId = () => {
     const pathSegments = location.pathname.split("/");
@@ -147,132 +189,213 @@ const ClassPage = () => {
     setValue(newValue);
   };
 
-  // const handleOpenSettingCourse = () => {
-  //   setIsOpenSettingCourseDialog(true);
-  // };
+  const handleJoinClassByLink = async () => {
+    setIsLoading(true);
+    try {
+      const response = await classService.joinCourseByInviteCode({
+        userId: user.id,
+        inviteCode: codeInvite,
+      });
+
+      // const { data: newCourses } = await classService.getAllCourse();
+
+      // dispatch(
+      //   setCourses({
+      //     courses: newCourses,
+      //   })
+      // );
+
+      console.log("Is join course: ", isJoinCodeByLink);
+
+      setIsJoinCourseByLink(false);
+
+      console.log("Work: ", isJoinCodeByLink);
+
+      toast.success("Tham gia lớp học thành công");
+
+      // setTimeout(() => {
+      //   navigate(`/course/${response.data.courseId}/news`);
+      //   // navigate(`/course/CS4qxSp3EZ/news`);
+      // }, 500);
+    } catch (error) {
+      toast.success("Đã có lỗi xảy ra. Yêu cầu thất bại!");
+    } finally {
+      console.log("End");
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>
       <Box>
-        <Box
-          sx={{
-            borderBottom: 2,
-            borderColor: "divider",
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <Tabs sx={{ paddingLeft: 3 }} value={value} onChange={handleChange}>
-            <Tab
-              sx={{ textTransform: "none" }}
-              className={classes.style}
-              value={0}
-              component={(props) => (
-                <Button
-                  {...props}
-                  component={Link}
-                  to={`/course/${courseId}/news`}
-                  style={{
-                    textDecoration: "none",
-                    height: "100%",
-                    paddingX: 2,
+        {isJoinCodeByLink && (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Card sx={{ mt: "10rem", width: "35rem" }}>
+              <CardContent sx={{ textAlign: "center" }}>
+                <Typography variant="h6" component="div">
+                  Tham gia
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Lớp học giúp các lớp học giao tiếp, tiết kiệm thời gian và
+                  luôn có tổ chức.
+                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    flexDirection: "column",
+                    alignItems: "center",
                   }}
-                />
-              )}
-              label="Bảng tin"
-            />
-            <Tab
-              sx={{ textTransform: "none" }}
-              className={classes.style}
-              value={1}
-              component={(props) => (
-                <Button
-                  {...props}
-                  component={Link}
-                  to={`/course/${courseId}/members`}
-                  style={{
-                    textDecoration: "none",
-                    height: "100%",
-                  }}
-                />
-              )}
-              label="Mọi người"
-            />
+                >
+                  <SchoolOutlinedIcon
+                    color="secondary"
+                    sx={{
+                      fontSize: 130,
+                    }}
+                  />
+                  <Box sx={{ display: "flex", justifyContent: "center" }}>
+                    <LoadingButton
+                      disabled={isLoading}
+                      loading={isLoading}
+                      variant="contained"
+                      onClick={() => handleJoinClassByLink()}
+                    >
+                      Tham gia lớp học
+                    </LoadingButton>
+                  </Box>
+                </Box>
+              </CardContent>
+            </Card>
+          </Box>
+        )}
+        {!isJoinCodeByLink && (
+          <Box
+            sx={{
+              borderBottom: 2,
+              borderColor: "divider",
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <Tabs sx={{ paddingLeft: 3 }} value={value} onChange={handleChange}>
+              <Tab
+                sx={{ textTransform: "none" }}
+                className={classes.style}
+                value={0}
+                component={(props) => (
+                  <Button
+                    {...props}
+                    component={Link}
+                    to={`/course/${courseId}/news`}
+                    style={{
+                      textDecoration: "none",
+                      height: "100%",
+                      paddingX: 2,
+                    }}
+                  />
+                )}
+                label="Bảng tin"
+              />
+              <Tab
+                sx={{ textTransform: "none" }}
+                className={classes.style}
+                value={1}
+                component={(props) => (
+                  <Button
+                    {...props}
+                    component={Link}
+                    to={`/course/${courseId}/members`}
+                    style={{
+                      textDecoration: "none",
+                      height: "100%",
+                    }}
+                  />
+                )}
+                label="Mọi người"
+              />
 
-            {isTeacher && (
+              {isTeacher && (
+                <Tab
+                  sx={{ textTransform: "none" }}
+                  className={classes.style}
+                  value={2}
+                  component={(props) => (
+                    <Button
+                      {...props}
+                      component={Link}
+                      to={`/course/${courseId}/grades`}
+                      style={{
+                        textDecoration: "none",
+                        height: "100%",
+                      }}
+                    />
+                  )}
+                  label="Điểm"
+                />
+              )}
+              {!isTeacher && (
+                <Tab
+                  sx={{ textTransform: "none" }}
+                  className={classes.style}
+                  value={3}
+                  component={(props) => (
+                    <Button
+                      {...props}
+                      component={Link}
+                      to={`/course/${courseId}/student-view-grade`}
+                      style={{
+                        textDecoration: "none",
+                        height: "100%",
+                      }}
+                    />
+                  )}
+                  label="Điểm"
+                />
+              )}
               <Tab
                 sx={{ textTransform: "none" }}
                 className={classes.style}
-                value={2}
+                value={4}
                 component={(props) => (
                   <Button
                     {...props}
                     component={Link}
-                    to={`/course/${courseId}/grades`}
+                    to={`/course/${courseId}/grade-structure`}
                     style={{
                       textDecoration: "none",
                       height: "100%",
                     }}
                   />
                 )}
-                label="Điểm"
+                label="Cấu trúc điểm"
               />
-            )}
-            {!isTeacher && (
               <Tab
                 sx={{ textTransform: "none" }}
                 className={classes.style}
-                value={3}
+                value={5}
                 component={(props) => (
                   <Button
                     {...props}
                     component={Link}
-                    to={`/course/${courseId}/student-view-grade`}
+                    to={`/course/${courseId}/grade-review`}
                     style={{
                       textDecoration: "none",
                       height: "100%",
                     }}
                   />
                 )}
-                label="Điểm"
+                label="Danh sách phúc khảo"
               />
-            )}
-            <Tab
-              sx={{ textTransform: "none" }}
-              className={classes.style}
-              value={4}
-              component={(props) => (
-                <Button
-                  {...props}
-                  component={Link}
-                  to={`/course/${courseId}/grade-structure`}
-                  style={{
-                    textDecoration: "none",
-                    height: "100%",
-                  }}
-                />
-              )}
-              label="Cấu trúc điểm"
-            />
-            <Tab
-              sx={{ textTransform: "none" }}
-              className={classes.style}
-              value={5}
-              component={(props) => (
-                <Button
-                  {...props}
-                  component={Link}
-                  to={`/course/${courseId}/grade-review`}
-                  style={{
-                    textDecoration: "none",
-                    height: "100%",
-                  }}
-                />
-              )}
-              label="Danh sách phúc khảo"
-            />
-          </Tabs>
-        </Box>
+            </Tabs>
+          </Box>
+        )}
+
         <Outlet />
       </Box>
       {/* <SettingClassComponent

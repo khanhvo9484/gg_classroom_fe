@@ -4,7 +4,7 @@ import { ICourse } from "@/models/class.model";
 const coursesSlice = createSlice({
   name: "courses",
   initialState: {
-    courses : []
+    courses: [],
   },
   reducers: {
     setCourses(state, action) {
@@ -16,6 +16,7 @@ const coursesSlice = createSlice({
   },
 });
 
-export const selectCourses = (state: any) : ICourse[]=> state.courses.courses;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const selectCourses = (state: any): ICourse[] => state.courses.courses;
 export const { setCourses, deleteCourses } = coursesSlice.actions;
 export default coursesSlice.reducer;

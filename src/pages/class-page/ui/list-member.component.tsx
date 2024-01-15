@@ -72,6 +72,7 @@ const MemberListComponent: React.FC<Props> = ({
 
       handleAddMemberInvite(response.data, isTeacherList);
     } catch (error) {
+      console.log("error: ", error);
       toast.error("Đã có lỗi trong quá trình gởi lời mời tham gia.");
     } finally {
       setLoadingInvitation(false);

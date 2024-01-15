@@ -14,6 +14,9 @@ import useHomeCourses from "@/hooks/home-courses.hook";
 import LoadingContext from "@/context/loading.contenxt";
 import { useSelector } from "react-redux";
 import { selectUser } from "@/redux/auth.slice";
+import { useDispatch } from "react-redux";
+import { selectCourses } from "@/redux/courses.slice";
+import { useNavigate } from "react-router-dom";
 
 const easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {
@@ -37,12 +40,16 @@ export default function AddCourseDialog(props: SimpleDialogProps) {
   const [signUpError, setSignUpError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const { courses, coursesMutate } = useHomeCourses();
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
+  // const courses = useSelector(selectCourses);
+  const navigate = useNavigate();
+
   const CreateCourseSchema = Yup.object().shape({
     name: Yup.string().required("Bạn cần nhập tên lớp học của mình"),
     description: Yup.string(),
   });
   const { stopLoading, startLoading } = useContext(LoadingContext);
-  const user = useSelector(selectUser);
 
   const formik = useFormik({
     initialValues: {
@@ -60,10 +67,12 @@ export default function AddCourseDialog(props: SimpleDialogProps) {
         // 👇️ const data: CreateUserResponse
         const response = await customAxios.post("/courses/create", payload);
         if (response.status) {
-          const newCourse = {...response.data.data, courseOwner: user};
+          const newCourse = { ...response.data.data, courseOwner: user };
           coursesMutate([...courses, newCourse]);
           toast.success("Tạo lớp học mới thành công");
+          formik.resetForm();
           updateCourses(response.data.data.id);
+          navigate(`/course/${response.data.data.id}`);
           onClose();
         } else {
           setSignUpError(true);

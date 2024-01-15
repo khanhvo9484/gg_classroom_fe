@@ -73,7 +73,7 @@ const GradeReviewPost: React.FC<Props> = () => {
   const { reviewId } = useParams();
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const [review, setReview] = useState<IGradeReviewResponseKZ>(null);
-  const { isTeacher, setIsTeacher } = useContext(RoleContext);
+  const { isTeacher } = useContext(RoleContext);
   const user = useSelector(selectUser);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);

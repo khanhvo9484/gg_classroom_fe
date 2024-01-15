@@ -13,6 +13,7 @@ import ContentCopy from "@mui/icons-material/ContentCopy";
 import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 import ContentCut from "@mui/icons-material/ContentCut";
 import toast from "react-hot-toast";
+import { useParams } from "react-router-dom";
 
 const options = [
   "Sao chép đường liên kết mời tham gia lớp học",
@@ -32,6 +33,7 @@ interface Props {
 
 const ClassCodeComponent: React.FC<Props> = ({ code }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const { courseId } = useParams();
 
   const open = Boolean(anchorEl);
 
@@ -54,8 +56,10 @@ const ClassCodeComponent: React.FC<Props> = ({ code }) => {
   };
 
   const handleCopyInviteLinkJoinCourse = () => {
-    console.log("Invite code: ", code);
-    navigator.clipboard.writeText(code.trim());
+    const currentDomain = window.location.origin;
+    const strLink = currentDomain + `/course/${courseId}?code=${code}`;
+
+    navigator.clipboard.writeText(strLink.trim());
     toast.success("Đã sao chép đường liên kết", {
       position: "bottom-left",
     });
