@@ -166,11 +166,13 @@ function Header() {
     if (elements[1] == "home") {
       setCurrentPage("Màn hình chính");
     } else if (elements[1] == "course") {
-      const name = courses.find((course) => (course.id == elements[2]) ? course.name : false)?.name;
+      const name = courses.find((course) =>
+        course.id == elements[2] ? course.name : false
+      )?.name;
       setCurrentPage(name);
     }
     return;
-  }
+  };
 
   useEffect(() => {
     getCurrentPageFromURL();
@@ -195,7 +197,6 @@ function Header() {
     }
     stopLoading();
   }, []);
-
 
   return (
     <>
@@ -593,7 +594,7 @@ function Header() {
           style: {
             background: "#363636",
             color: "#fff",
-            fontFamily: "Roboto",
+            fontFamily: '"Google Sans", Roboto, Arial, sans-serif',
           },
         }}
       />

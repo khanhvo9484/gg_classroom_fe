@@ -448,13 +448,20 @@ const GradeStructurePage = () => {
               />
             )}
           </CardContent>
-          <Box sx={{ display: "flex", p: 3, justifyContent: "space-between" }}>
+          <Box
+            sx={{
+              display: "flex",
+              p: 3,
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
             <Box>
               <Box>
                 {listScoreType && listScoreType.length > 0 && (
                   <Typography
                     variant="subtitle2"
-                    sx={{ color: "rgb(179,20,18)", pl: 1 }}
+                    sx={{ color: "rgb(179,20,18)", pl: 1, mb: 0 }}
                   >
                     Phần trăm còn lại: {remainingPercent}
                   </Typography>
@@ -468,7 +475,7 @@ const GradeStructurePage = () => {
                   sx={{ color: "rgb(25,103,210)", mr: 3 }}
                   onClick={() => addNewScoreType()}
                 >
-                  <Typography variant="subtitle2" gutterBottom>
+                  <Typography variant="subtitle2" gutterBottom sx={{ mb: 0 }}>
                     Thêm loại điểm
                   </Typography>
                 </Button>

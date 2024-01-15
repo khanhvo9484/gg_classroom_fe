@@ -73,25 +73,25 @@ const HeaderItemTableComponent: React.FC<Props> = ({
     handleClose();
   };
 
-  const uploadGrade = async (event) => {
+  const uploadGrade = (event) => {
     handleClose();
 
-    try {
-      const response = await gradeFileService.uploadStudentGradeById(
-        event.target.files[0],
-        courseId,
-        idParent
-      );
-      event.target.value = null;
-      console.log("Resposne: ", response.data.data);
-      updateBoard(response.data.data);
+    const response = gradeFileService.uploadStudentGradeById(
+      event.target.files[0],
+      courseId,
+      idParent
+    );
+    event.target.value = null;
 
-      toast.success("Upload điểm thành công");
-    } catch (error) {
-      toast.error("Tải lên bảng học sinh thất bại.");
-      console.log(error);
-      // throw error;
-    }
+    toast
+      .promise(response, {
+        loading: "Đang xử lí...",
+        success: "Upload điểm thành công",
+        error: "Có lỗi xảy ra. Upload điểm thất bại!",
+      })
+      .then((response) => {
+        updateBoard(response.data.data);
+      });
   };
 
   const handleOpenMore = (event: MouseEvent<HTMLElement>) => {
@@ -106,19 +106,23 @@ const HeaderItemTableComponent: React.FC<Props> = ({
     setIsShowMoreButton(false);
   };
 
-  const handleMarkFinalizeGrade = async () => {
+  const handleMarkFinalizeGrade = () => {
     handleClose();
-    try {
-      const response = await classService.markFinalizeGrade({
-        courseId,
-        gradeComponentId: idParent,
-      });
-      handleMakeFinallize(response);
 
-      toast.success("Công bố điểm thành công");
-    } catch (error) {
-      toast.error("Thất bại, đã có lỗi xảy ra!");
-    }
+    const response = classService.markFinalizeGrade({
+      courseId,
+      gradeComponentId: idParent,
+    });
+
+    toast
+      .promise<IGradeStructureResponse>(response, {
+        loading: "Đang xử lí...",
+        success: "Công bố điểm thành công",
+        error: "Thất bại, đã có lỗi xảy ra!",
+      })
+      .then((response) => {
+        handleMakeFinallize(response);
+      });
   };
 
   return (

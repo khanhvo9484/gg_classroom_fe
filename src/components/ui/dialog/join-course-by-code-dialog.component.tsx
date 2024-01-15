@@ -51,7 +51,7 @@ const JoinCodeByCodeDialog: React.FC<SimpleDialogProps> = ({
   const dispatch = useDispatch();
 
   useEffect(() => {
-    codeValueSubject.pipe(debounceTime(1000)).subscribe((value: string) => {
+    codeValueSubject.pipe(debounceTime(700)).subscribe((value: string) => {
       if (value == "") {
         setIsCodeValid(true);
       } else {
@@ -73,7 +73,7 @@ const JoinCodeByCodeDialog: React.FC<SimpleDialogProps> = ({
         inviteCode: code,
       });
 
-      const {data: newCourses} = await classService.getAllCourse();
+      const { data: newCourses } = await classService.getAllCourse();
 
       dispatch(
         setCourses({
