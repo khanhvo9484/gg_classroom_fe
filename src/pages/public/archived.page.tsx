@@ -2,48 +2,39 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import ClassCard from "@/components/ui/card/class.card.component";
 import { Stack } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { ClassService } from "@/service/class.service";
 import LoadingContext from "@/context/loading.contenxt";
 import toast from "react-hot-toast";
 import { customAxios } from "@/api/custom-axios";
 import { ICourse } from "@/models/class.model";
 import useHomeCourses from "@/hooks/home-courses.hook";
+import useArchivedCourses from "@/hooks/archived-courses.hook";
 
 const ArchivedCoursesPage = () => {
     document.title = "E-learning | Trang lưu trữ lớp học";
     const classService = new ClassService();
     const { startLoading, stopLoading } = useContext(LoadingContext);
-    const [archivedCourses, setArchivedCourses] = useState<ICourse[]>([])
+    const { courses, coursesArchivedMutate } = useArchivedCourses();
     const { coursesMutate } = useHomeCourses();
 
 
     useEffect(() => {
         startLoading();
+
         const getAllArchivedCourse = async () => {
             try {
-                const response = await classService.getAllArchivedCourse();
-                setArchivedCourses(response.data)
-
+                coursesArchivedMutate([]);
             } catch (error) {
                 console.log(error);
                 // throw error;
             }
         };
 
-        const getAllCourse = async () => {
-            if (courseStillActivate.length ==0) {
-                const response = await classService.getAllCourse();
-                dispatch(
-                    setCourses({
-                    courses : response.data
-                    })
-                );
-            }
+        if (courses?.length == 0 || !courses) {
+            getAllArchivedCourse();
         }
 
-        getAllArchivedCourse();
-        getAllCourse();
         stopLoading();
     }, []);
 
@@ -59,7 +50,7 @@ const ArchivedCoursesPage = () => {
 
         if (response) {
             toast.success("Xóa lớp học thành công.");
-            setArchivedCourses(archivedCourses.filter((course) => course.id !== courseId));
+            coursesArchivedMutate([]);
             coursesMutate([]);
         } else {
             toast.error("Xóa lớp học không thành công. Lỗi dữ liệu nhận về.");
@@ -89,7 +80,7 @@ const ArchivedCoursesPage = () => {
 
             if (response) {
                 toast.success("Khôi phục lớp học thành công.");
-                setArchivedCourses(archivedCourses.filter((courseFilter) => courseFilter.id !== course.id));
+                coursesArchivedMutate([]);
                 coursesMutate([]);
             } else {
                 toast.error("Khôi phục lớp học không thành công.");
@@ -119,8 +110,8 @@ const ArchivedCoursesPage = () => {
                 spacing={{ xs: 1, sm: 2 }}
                 justifyContent={"space-around"}
                 >
-                {archivedCourses &&
-                    archivedCourses.map((course, index) => {
+                {courses &&
+                    courses.map((course, index) => {
                     return (
                         <ClassCard
                             key={index}

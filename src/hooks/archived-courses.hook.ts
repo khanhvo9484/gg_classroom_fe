@@ -1,23 +1,23 @@
 import useSWR from 'swr'
 import { ClassService } from '@/service/class.service';
 
-function useAllCourses() {
+function useArchivedCourses() {
     const classService = new ClassService();
 
     const fetcher = async (key: string) => {
         console.log(key);
-        const response = await classService.getAllCourses();
+        const response = await classService.getAllArchivedCourse();
         return response.data;
     }
 
-    const { data, error, isLoading, mutate } = useSWR("all-courses", fetcher)
+    const { data, error, isLoading, mutate } = useSWR("archived-courses", fetcher)
 
     return {
       courses: data,
       coursesIsLoading: isLoading,
       coursesError: error,
-      coursesMutate: mutate
+      coursesArchivedMutate: mutate
     }
 }
 
-export default useAllCourses;
+export default useArchivedCourses;
