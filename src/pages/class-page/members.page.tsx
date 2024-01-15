@@ -44,18 +44,34 @@ const MembersPage = () => {
     isTeacherInvite: boolean
   ) => {
     if (isTeacherInvite) {
-      const newList = [...teachersInvite, member];
 
-      console.log(newList);
-      setListTeacherInvite(newList);
-      membersMutate(members);
+      if (teachersInvite) {
+        const newList = [...teachersInvite, member];
+
+        setListTeacherInvite(newList);
+      }
+      const newMembers = {
+        memberList: {
+          students: members.memberList.students,
+          teachers: members.memberList.teachers,
+        },
+        invitationList: [...members.invitationList, member]
+      }
+      membersMutate(newMembers);
     } else {
-      const newList = [...studentsInvite, member];
+      if (teachersInvite) {
+        const newList = [...studentsInvite, member];
 
-      console.log(newList);
-
-      setListStudentInvite(newList);
-      membersMutate(members);
+        setListStudentInvite(newList);
+      }
+      const newMembers = {
+        memberList: {
+          students: members.memberList.students,
+          teachers: members.memberList.teachers,
+        },
+        invitationList: [...members.invitationList, member]
+      }
+      membersMutate(newMembers);
     }
   };
 

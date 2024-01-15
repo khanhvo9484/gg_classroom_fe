@@ -12,6 +12,8 @@ import { useContext, useState } from "react";
 import toast from "react-hot-toast";
 import useHomeCourses from "@/hooks/home-courses.hook";
 import LoadingContext from "@/context/loading.contenxt";
+import { useSelector } from "react-redux";
+import { selectUser } from "@/redux/auth.slice";
 
 const easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {
@@ -40,6 +42,7 @@ export default function AddCourseDialog(props: SimpleDialogProps) {
     description: Yup.string(),
   });
   const { stopLoading, startLoading } = useContext(LoadingContext);
+  const user = useSelector(selectUser);
 
   const formik = useFormik({
     initialValues: {
@@ -57,7 +60,8 @@ export default function AddCourseDialog(props: SimpleDialogProps) {
         // 👇️ const data: CreateUserResponse
         const response = await customAxios.post("/courses/create", payload);
         if (response.status) {
-          coursesMutate(courses);
+          const newCourse = {...response.data.data, courseOwner: user};
+          coursesMutate([...courses, newCourse]);
           toast.success("Tạo lớp học mới thành công");
           updateCourses(response.data.data.id);
           onClose();

@@ -65,6 +65,7 @@ export default function EditCourseDialog(props: SimpleDialogProps) {
           payload
         );
         if (response) {
+          console.log(response);
           coursesMutate(courses);
           toast.success("Chỉnh sửa thông tin lớp thành công");
           onClose();
