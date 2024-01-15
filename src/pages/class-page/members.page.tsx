@@ -71,7 +71,7 @@ const MembersPage = () => {
 
         // filterMemberInvite(response.data.invitationList);
 
-        membersMutate();
+        membersMutate(members);
         setListTeacher(members?.memberList.teachers);
         setListStudent(members?.memberList.students);
 

@@ -37,7 +37,7 @@ const NewsClassPage = () => {
         // const response = await classService.getCourseById(courseId);
 
         // setCourse(response.data);
-        courseMutate();
+        courseMutate(course);
       } catch (error) {
         console.log(error);
         // throw error;
