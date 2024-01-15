@@ -1,9 +1,12 @@
 import useSWR from 'swr'
 import { ClassService } from '@/service/class.service';
+import { useContext } from 'react';
+import LoadingContext from '@/context/loading.contenxt';
 
 function useHomeCourses() {
     const classService = new ClassService();
-
+    const { startLoading, stopLoading } = useContext(LoadingContext);
+    startLoading();
     const fetcher = async (key: string) => {
         console.log(key);
         const response = await classService.getAllCourse();
@@ -14,6 +17,7 @@ function useHomeCourses() {
 
     const returnData = data?.filter((course) => !course.isDeleted);
 
+    stopLoading();
     return {
       courses: returnData,
       coursesIsLoading: isLoading,

@@ -56,7 +56,7 @@ const ReviewRequestListComponent: React.FC<Props> = () => {
   // const [reviews, setReviews] = useState([]);
   // const [isLoading, setIsLoading] = useState(true);
   const { isTeacher } = useContext(RoleContext);
-  const { reviews, reviewsMutate } = useReviews(courseId, isTeacher);
+  const { reviewsIsLoading, reviews, reviewsMutate } = useReviews(courseId, isTeacher);
   const { isLoading, startLoading, stopLoading } = useContext(LoadingContext)
 
   useEffect(() => {
@@ -104,9 +104,11 @@ const ReviewRequestListComponent: React.FC<Props> = () => {
     });
   };
 
+  console.log(reviews);
+
   return (
     <>
-      {(isLoading || !reviews) && <LinearProgress sx={{ top: -36 }} />}
+      {(isLoading || !reviews || reviewsIsLoading) && <LinearProgress sx={{ top: -36 }} />}
       {!isLoading && reviews && (
         <Box sx={{ marginBottom: 10 }}>
           <Box
@@ -170,7 +172,7 @@ const ReviewRequestListComponent: React.FC<Props> = () => {
             </Grid>
           </Box>
           <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-            {!isLoading && reviews?.length === 0 && (
+            {!reviewsIsLoading && !isLoading && reviews?.length === 0 && (
               <Typography
                 sx={{ margin: "2rem auto", textAlign: "center" }}
                 variant="body1"
