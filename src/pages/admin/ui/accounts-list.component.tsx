@@ -13,10 +13,10 @@ const AccountListComponent: React.FC<Props> = () => {
 
   const [currentPageNumber, setCurrentPageNumber] = useState(1);
 
-  const usersPagination = users?.slice(
-    (currentPageNumber - 1) * 15,
-    currentPageNumber * 15
-  );
+  // const usersPagination = users?.slice(
+  //   (currentPageNumber - 1) * 15,
+  //   currentPageNumber * 15
+  // );
 
   const handlePageChange = (
     event: ChangeEvent<unknown>,
@@ -87,16 +87,19 @@ const AccountListComponent: React.FC<Props> = () => {
           </Grid>
         </Grid>
       </Box>
-      <List sx={{ width: "100%", bgcolor: "background.paper" }}>
+      <List sx={{ width: "100%", bgcolor: "background.paper", minHeight: 460 }}>
         {users &&
-          usersPagination.map((user) => {
+          users?.slice(
+            (currentPageNumber - 1) * 8,
+            currentPageNumber * 8
+          ).map((user) => {
             return <AccountComponent account={user} />;
           })}
       </List>
       {users && (
         <Stack alignItems="center">
           <Pagination
-            count={Math.ceil(users?.length / 15)}
+            count={Math.ceil(users?.length / 8)}
             color="primary"
             onChange={(event, pageNumber) =>
               handlePageChange(event, pageNumber)

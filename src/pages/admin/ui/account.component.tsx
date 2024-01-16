@@ -6,12 +6,13 @@ import { Grid, IconButton, Tooltip, TextField } from "@mui/material";
 import GppGoodIcon from "@mui/icons-material/GppGood";
 import GppBadIcon from "@mui/icons-material/GppBad";
 import UserModel from "@/models/user.model";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import LoadingContext from "@/context/loading.contenxt";
 import { AdminService } from "@/service/admin.service";
 import { Edit as EditIcon, Save as SaveIcon } from "@mui/icons-material";
 import toast from "react-hot-toast";
 import useAllUser from "@/hooks/all-users.hook";
+import StudentGradeReviewItem from "@/pages/class-page/review-request-list/ui/review-item";
 
 function convertDob(dob: string) {
   return new Date(dob).toDateString();
@@ -74,6 +75,14 @@ const AccountComponent: React.FC<Props> = ({ account }) => {
     }
     stopLoading();
   };
+
+  useEffect(() => {
+    if (account?.studentOfficialId) {
+      setMSSV(account.studentOfficialId);
+    } else {
+      setMSSV("Chưa cập nhật")
+    }
+  }, [account])
 
   return (
     <>

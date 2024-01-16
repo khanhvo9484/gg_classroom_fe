@@ -80,10 +80,10 @@ const CourseListComponent: React.FC<Props> = () => {
   };
 
   const coursesPagination =
-    courses?.filter(filterFunction).length > 15
+    courses?.filter(filterFunction).length > 8
       ? courses
           ?.filter(filterFunction)
-          .slice((currentPageNumber - 1) * 15, currentPageNumber * 15)
+          .slice((currentPageNumber - 1) * 8, currentPageNumber * 8)
       : courses?.filter(filterFunction);
 
   const handleFilterChange = (event: ChangeEvent<unknown>) => {
@@ -243,7 +243,7 @@ const CourseListComponent: React.FC<Props> = () => {
           </Grid>
         </Grid>
       </Box>
-      <List sx={{ width: "100%", bgcolor: "background.paper" }}>
+      <List sx={{ width: "100%", bgcolor: "background.paper", minHeight: 400 }}>
         {courses &&
           coursesPagination.map((course) => {
             return <CourseComponent course={course} key={course.id} />;
@@ -252,7 +252,7 @@ const CourseListComponent: React.FC<Props> = () => {
       {courses && (
         <Stack alignItems="center">
           <Pagination
-            count={Math.ceil(courses?.filter(filterFunction).length / 15)}
+            count={Math.ceil(courses?.filter(filterFunction).length / 8)}
             color="primary"
             onChange={(event, pageNumber) =>
               handlePageChange(event, pageNumber)

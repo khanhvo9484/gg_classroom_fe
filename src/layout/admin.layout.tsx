@@ -108,6 +108,8 @@ function AdminLayout() {
   const [sidebarState, setSidebarState] = useState(true);
   const [sidebarStateHover, setSidebarStateHover] = useState(false);
 
+  const { startLoading, stopLoading } = useContext(LoadingContext);
+
   const [currentPage, setCurrentPage] = useState("");
   const user: UserModel = useSelector(selectUser);
   const location = useLocation();
@@ -134,14 +136,16 @@ function AdminLayout() {
   };
 
   const handleUploadStudentMapping = async (event) => {
+    startLoading();
     try {
       const response = await adminService.uploadStudentMapping(
         event.target.files[0]
       );
 
       if (response.status == 201) {
-        await usersMutate(users);
+        usersMutate(users, {revalidate: true});
         toast.success("Tải lên bảng đăng ký MSSV thành công.");
+        console.log(users);
       } else {
         toast.error("Tải lên bảng đăng ký MSSV thất bại.");
       }
@@ -150,6 +154,7 @@ function AdminLayout() {
       toast.error("Tải lên bảng đăng ký MSSV thất bại.");
       event.target.value = null;
     }
+    stopLoading();
   };
 
   useEffect(() => {

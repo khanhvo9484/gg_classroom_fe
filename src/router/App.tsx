@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import DefaultLayout from "../layout/default.layout";
 import LandingPage from "../pages/public/home/landing.page";
 import SignInLayout from "../layout/sign-in.layout";
@@ -64,8 +64,9 @@ function App() {
       </Route>
 
       <Route element={<RequiredAuth />}>
-        <Route path="admin" element={<RequiredAdmin />}>
-          <Route element={<AdminLayout />}>
+        <Route element={<RequiredAdmin />}>
+          <Route path="admin" element={<AdminLayout />}>
+            <Route path="" element={<Navigate to="home" replace />} />
             <Route path="home" element={<AdminHome />} />
             <Route path="accounts" element={<AdminAcountsPage />} />
             <Route path="courses" element={<AdminCoursesPage />} />
