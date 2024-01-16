@@ -6,7 +6,6 @@ import { useState, useMemo, useEffect } from "react";
 import { Box } from "@mui/material";
 import {
   CellEditingStoppedEvent,
-  CellValueChangedEvent,
   ColDef,
   ColGroupDef,
 } from "ag-grid-community";
@@ -15,6 +14,7 @@ import { ClassService } from "@/service/class.service";
 import { IUpdateStudentGradeRequest } from "@/models/grade.model";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
+import { calculateAllGrade } from "@/utils/common.util";
 
 interface Props {
   colGrid: (ColDef | ColGroupDef)[];
@@ -60,15 +60,21 @@ const GradeTableComponent: React.FC<Props> = ({
       grade: event.newValue,
       studentOfficialId: event.data.studentOfficialId,
     };
-    // const rowNode = gridRef.current!.api.getRowNode(event.node.id)!;
+
+    const rowNode = gridRef.current!.api.getRowNode(event.node.id)!;
 
     try {
-      await classService.updateStudentGrade(request);
-      // rowNode.setDataValue(event.column.getColId(), event.newValue);
+      if (event.newValue) {
+        const res = await classService.updateStudentGrade(request);
+        const summaryGrade = calculateAllGrade(res.data.grade);
 
-      toast.success("Cập nhật điểm thành công");
+        rowNode.setDataValue("summary", summaryGrade);
+        toast.success("Cập nhật điểm thành công");
+      } else {
+        toast.error("Cập nhật không thành công. Số điểm vượt quá giới hạn!");
+        rowNode.setDataValue(event.column.getColId(), oldValue);
+      }
     } catch (error) {
-      const rowNode = gridRef.current!.api.getRowNode(event.node.id)!;
       rowNode.setDataValue(event.column.getColId(), oldValue);
       toast.error("Có lỗi xảy ra, cập nhật thất bại");
     }
