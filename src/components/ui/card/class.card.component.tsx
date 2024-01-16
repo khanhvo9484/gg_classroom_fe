@@ -23,6 +23,7 @@ import ImageLearnLang from "@/assets/images/img_learnlanguage.jpg";
 import ImageGrad from "@/assets/images/img_graduation.jpg";
 import AvatarHelper from "@/utils/avatar-helper/avatar.helper";
 import { useNavigate } from "react-router-dom";
+import { replace } from "formik";
 
 function stringToColor(string: string) {
   let hash = 0;
@@ -92,7 +93,7 @@ const ClassCard: React.FC<Props> = ({
 
   const handleNavigation = () => {
     // Use the history.push method to navigate to the desired page
-    navigate(`/course/${course.id}`);
+    navigate(`/course/${course.id}`, {replace: true});
   };
 
   function updateCourses() {

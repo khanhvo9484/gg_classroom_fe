@@ -154,11 +154,10 @@ function Header() {
 
   const location = useLocation();
   const path = location.pathname;
-  const { courses, coursesMutate } = useHomeCourses();
+  const { courses, coursesMutate, coursesIsLoading } = useHomeCourses();
 
   const getCurrentPageFromURL = () => {
     const elements = path.split("/");
-    console.log(elements[1]);
     if (elements[1] == "home") {
       setCurrentPage("Màn hình chính");
     } else if (elements[1] == "course") {
@@ -186,7 +185,7 @@ function Header() {
       getAllCourse();
     }
     stopLoading();
-  }, []);
+  }, [coursesIsLoading, location]);
 
   return (
     <>
