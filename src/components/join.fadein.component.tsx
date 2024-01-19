@@ -52,7 +52,7 @@ const FadeInJoin = ({ onFadeClose }) => {
 
         if (response.status) {
           toast.success("Tham gia vào lớp học thành công");
-          coursesMutate(courses);
+          await coursesMutate(courses);
           onFadeClose();
         } else {
           toast.error("Có lỗi trong quá trình tham gia lớp. Thử lại sau.");
